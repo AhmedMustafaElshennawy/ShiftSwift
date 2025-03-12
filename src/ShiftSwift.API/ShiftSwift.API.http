@@ -1,0 +1,6 @@
+@ShiftSwift.API_HostAddress = http://localhost:5243
+
+GET {{ShiftSwift.API_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

@@ -1,0 +1,62 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.12.35506.116
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.API", "src\ShiftSwift.API\ShiftSwift.API.csproj", "{3B337105-670A-42AC-A13D-58B3ABE971A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Domain", "src\ShiftSwift.Domain\ShiftSwift.Domain.csproj", "{26F8C776-5043-45E3-B1CC-E9818784BF26}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Application", "src\ShiftSwift.Application\ShiftSwift.Application.csproj", "{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Infrastructure", "src\ShiftSwift.Infrastructure\ShiftSwift.Infrastructure.csproj", "{C03C89FB-053F-4819-AFA1-25BC3167D074}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Presistence", "src\ShiftSwift.Presistence\ShiftSwift.Presistence.csproj", "{2E76C217-2A1C-4835-9773-1D1905DCA6EF}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Shared", "src\ShiftSwift.Shared\ShiftSwift.Shared.csproj", "{BB381A3E-767D-4570-A2F0-C81706C44916}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3B337105-670A-42AC-A13D-58B3ABE971A8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{3B337105-670A-42AC-A13D-58B3ABE971A8}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{3B337105-670A-42AC-A13D-58B3ABE971A8}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{3B337105-670A-42AC-A13D-58B3ABE971A8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26F8C776-5043-45E3-B1CC-E9818784BF26}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26F8C776-5043-45E3-B1CC-E9818784BF26}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26F8C776-5043-45E3-B1CC-E9818784BF26}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26F8C776-5043-45E3-B1CC-E9818784BF26}.Release|Any CPU.Build.0 = Release|Any CPU
+		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C03C89FB-053F-4819-AFA1-25BC3167D074}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C03C89FB-053F-4819-AFA1-25BC3167D074}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C03C89FB-053F-4819-AFA1-25BC3167D074}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C03C89FB-053F-4819-AFA1-25BC3167D074}.Release|Any CPU.Build.0 = Release|Any CPU
+		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB381A3E-767D-4570-A2F0-C81706C44916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB381A3E-767D-4570-A2F0-C81706C44916}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB381A3E-767D-4570-A2F0-C81706C44916}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB381A3E-767D-4570-A2F0-C81706C44916}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{3B337105-670A-42AC-A13D-58B3ABE971A8} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+		{26F8C776-5043-45E3-B1CC-E9818784BF26} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+		{C03C89FB-053F-4819-AFA1-25BC3167D074} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+		{2E76C217-2A1C-4835-9773-1D1905DCA6EF} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+		{BB381A3E-767D-4570-A2F0-C81706C44916} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
+	EndGlobalSection
+EndGlobal
