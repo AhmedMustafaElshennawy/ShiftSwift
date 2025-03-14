@@ -19,6 +19,7 @@ namespace ShiftSwift.API.Controllers
                 success => Ok(result.Value),
                 error => Problem(error));
 
+
             return response;
         }
     }
