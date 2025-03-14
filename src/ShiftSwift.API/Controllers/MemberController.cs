@@ -12,7 +12,6 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
-using ShiftSwift.Application.Features.job.Queries.GetRandomJobs;
 
 
 namespace ShiftSwift.API.Controllers
