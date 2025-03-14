@@ -4,7 +4,6 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.Extentions;
-using ShiftSwift.Domain.shared;
 using ShiftSwift.Shared.paging;
 
 namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs

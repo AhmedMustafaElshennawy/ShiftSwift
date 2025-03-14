@@ -176,17 +176,5 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
-        [HttpGet("GetRandomJobs")]
-        public async Task<IActionResult> GetRandomJobs(CancellationToken cancellationToken)
-        {
-            var query = new GetRandomJobsQuery();
-
-            var result = await _sender.Send(query, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
-
-            return response;
-        }
     }
 }
