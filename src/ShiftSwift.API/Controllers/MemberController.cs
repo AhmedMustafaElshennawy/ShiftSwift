@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+using ShiftSwift.Application.Features.job.Queries.GetRandomJobs;
 
 
 namespace ShiftSwift.API.Controllers
@@ -167,6 +168,18 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> GetAllSaveedJobs(string MemberId, CancellationToken cancellationToken)
         {
             var query = new GetSavedJobsQuery(MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+        [HttpGet("GetRandomJobs")]
+        public async Task<IActionResult> GetRandomJobs(CancellationToken cancellationToken)
+        {
+            var query = new GetRandomJobsQuery();
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(

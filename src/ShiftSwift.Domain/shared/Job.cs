@@ -1,11 +1,5 @@
 ﻿using ShiftSwift.Domain.identity;
 using ShiftSwift.Domain.memberprofil;
-using ShiftSwift.Domain.models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace ShiftSwift.Domain.shared
 {
