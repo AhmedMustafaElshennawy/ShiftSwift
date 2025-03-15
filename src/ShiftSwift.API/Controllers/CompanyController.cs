@@ -8,6 +8,8 @@ using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
+using ShiftSwift.Shared.ApiBaseResponse;
+using ErrorOr;
 
 
 namespace ShiftSwift.API.Controllers
