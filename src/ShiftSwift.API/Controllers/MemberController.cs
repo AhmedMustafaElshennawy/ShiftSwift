@@ -12,6 +12,12 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+using ShiftSwift.Application.Features.accomplishment.Commands.AddAccomplishment;
+using ShiftSwift.Application.Features.accomplishment.Commands.DeleteAccomplishment;
+using ShiftSwift.Application.Features.accomplishment.Queries.GetAccomplishment;
+using ShiftSwift.Application.Features.skill.Commands.AddSkill;
+using ShiftSwift.Application.Features.skill.Commands.DeleteSkill;
+using ShiftSwift.Application.Features.skill.Queries.GetSkill;
 
 
 namespace ShiftSwift.API.Controllers
@@ -124,6 +130,90 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
+        [HttpPost("AddOrUpdateSkill/{MemberId}")]
+        public async Task<IActionResult> AddOrUpdateSkill([FromRoute] string MemberId, [FromBody] SkillDTO request, CancellationToken cancellationToken)
+        {
+            var command = new AddSkillCommand(
+                MemberId,
+                request.Name);
+
+            var result = await _sender.Send(command, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetSkills/{MemberId}")]
+        public async Task<IActionResult> GetSkill([FromRoute] string MemberId, CancellationToken cancellationToken)
+        {
+            var query = new GetSkillQuery(MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpDelete("DeleteSkill/{MemberId}")]
+        public async Task<IActionResult> DeleteSkill([FromRoute] string MemberId, CancellationToken cancellationToken)
+        {
+            var command = new DeleteSkillCommand(MemberId);
+
+            var result = await _sender.Send(command, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpPost("AddOrUpdateAccomplishment/{MemberId}")]
+        public async Task<IActionResult> AddOrUpdateAccomplishment([FromRoute] string MemberId, [FromBody] AccomplishmentDTO request, CancellationToken cancellationToken)
+        {
+            var command = new AddAccomplishmentCommand(
+                MemberId,
+                request.Title,
+                request.Description,
+                request.DateAchieved);
+
+            var result = await _sender.Send(command, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetAccomplishments/{MemberId}")]
+        public async Task<IActionResult> GetAccomplishments([FromRoute] string MemberId, CancellationToken cancellationToken)
+        {
+            var query = new GetAccomplishmentQuery(MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpDelete("DeleteAccomplishment/{MemberId}")]
+        public async Task<IActionResult> DeleteAccomplishment([FromRoute] string MemberId, CancellationToken cancellationToken)
+        {
+            var command = new DeleteAccomplishmentCommand(MemberId);
+
+            var result = await _sender.Send(command, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
 
         [HttpPost("AddJobApplication")]
         public async Task<IActionResult> AddJobApplication(JobApplicationDTO request, CancellationToken cancellationToken)
