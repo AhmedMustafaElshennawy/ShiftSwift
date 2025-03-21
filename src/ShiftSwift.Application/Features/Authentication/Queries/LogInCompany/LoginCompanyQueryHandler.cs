@@ -29,22 +29,35 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany
                         .FirstOrDefaultAsync(u => u.UserName == request.UserName,cancellationToken);
             
             if (company is null)
-                return Error.NotFound("Account.NotFound", "Invalid email or password.");
+                return Error.NotFound(
+                    code:"Account.NotFound",
+                    description:"Invalid email or password.");
+            
 
-            if (!await _userManager.CheckPasswordAsync(company, request.Password))
-                return Error.Unauthorized("Account.InvalidCredentials", "Invalid email or password.");
+            //var identityResult = await _signInManager.PasswordSignInAsync(company, request.Password, true, true);
+            //if (!identityResult.Succeeded)
+            //{
+            //    return Error.Unauthorized(
+            //        code: "Account.InvalidCredentials",
+            //        description: "Invalid username or password.");
+            //}
 
-            var identityResult = await _signInManager.PasswordSignInAsync(company, request.Password, true, true);
-            if (!identityResult.Succeeded)
+            if (company is null || !await _userManager.CheckPasswordAsync(company, request.Password))
             {
-                return Error.Unauthorized(
-                    code: "Account.InvalidCredentials",
-                    description: "Invalid username or password.");
+                return Error.NotFound(
+                    code:"GymOwner.NotFound", 
+                    description:"Login Process failed, password or UserName is wrong");
             }
 
+            await _signInManager.SignInAsync(company, isPersistent: false);
+
             var roles = await _userManager.GetRolesAsync(company);
-            if (!await _userManager.CheckPasswordAsync(company, request.Password))
-                return Error.Forbidden("Account.InvalidCredentials", "No  roles for this account.");
+            if (roles == null || !roles.Any())
+            {
+                return Error.Forbidden(
+                    code: "Account.NoRoles",
+                    description: "No roles assigned to this account.");
+            }
 
             var token = await _tokenGenerator.GenerateToken(company, roles.FirstOrDefault()!);
 

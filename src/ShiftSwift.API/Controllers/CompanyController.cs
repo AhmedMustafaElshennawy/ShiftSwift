@@ -8,8 +8,11 @@ using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
-using ShiftSwift.Shared.ApiBaseResponse;
 using ErrorOr;
+using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
+
 
 
 namespace ShiftSwift.API.Controllers
@@ -111,6 +114,19 @@ namespace ShiftSwift.API.Controllers
             var command = new GetAllJobPostsForSpecificCompanyQuery(CompanyId);
 
             var result = await _sender.Send(command, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpPost("ChangeCompanyEmail/{CompanyId}")]
+        public async Task<IActionResult> ChangeEmail(string CompanyId, string Email, CancellationToken cancellationToken)
+        {
+            var query = new ChangeCompanyEmailCommand(CompanyId, Email);
+
+            var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
                 error => Problem(error));
