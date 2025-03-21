@@ -45,7 +45,9 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
             var user = await _userManager.FindByNameAsync(request.UserName);
             if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return Error.NotFound("GymOwner.NotFound", "Login Process failed, password or UserName is wrong");
+                return Error.NotFound(
+                    code:"GymOwner.NotFound",
+                    description: "Login Process failed, password or UserName is wrong");
             }
 
             await _signInManager.SignInAsync(user, isPersistent: false);

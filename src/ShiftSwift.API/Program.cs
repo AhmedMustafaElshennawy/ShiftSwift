@@ -23,7 +23,11 @@ app.UseSwaggerUI();
 
 
 app.UseStaticFiles();
-app.UseCors(c => c.AllowAnyOrigin().AllowAnyMethod().AllowAnyHeader());
+app.UseCors(c => c.SetIsOriginAllowed(_ => true) 
+                  .AllowAnyMethod()
+                  .AllowAnyHeader()
+                  .AllowCredentials()); // Enables credentials (cookies, tokens)
+
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
