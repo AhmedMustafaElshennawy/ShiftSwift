@@ -14,6 +14,7 @@ using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 
 
+
 namespace ShiftSwift.API.Controllers
 {
     public class CompanyController : ApiController
