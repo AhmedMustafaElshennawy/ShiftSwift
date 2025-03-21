@@ -6,12 +6,13 @@ using ShiftSwift.Application.Features.experience.Commands.DeleteEducation;
 using ShiftSwift.Application.Features.experience.Queries.GetExperience;
 using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication;
 using ShiftSwift.Application.Features.jobApplication.Query.ListMyJobApplicaions;
+using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
+using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
 using ShiftSwift.Application.DTOs.member;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
-using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
 using ShiftSwift.Application.Features.accomplishment.Commands.AddAccomplishment;
 using ShiftSwift.Application.Features.accomplishment.Commands.DeleteAccomplishment;
 using ShiftSwift.Application.Features.accomplishment.Queries.GetAccomplishment;
@@ -19,14 +20,12 @@ using ShiftSwift.Application.Features.skill.Commands.AddSkill;
 using ShiftSwift.Application.Features.skill.Commands.DeleteSkill;
 using ShiftSwift.Application.Features.skill.Queries.GetSkill;
 
-
 namespace ShiftSwift.API.Controllers
 {
     public class MemberController : ApiController
     {
         private readonly ISender _sender;
         public MemberController(ISender sender) => _sender = sender;
-
 
         [HttpPost("AddOrUpdateMamberProfileData/{MemberId}")]
         public async Task<IActionResult> AddOMamberProfileData([FromRoute] string MemberId, [FromBody] ProfileDTO request, CancellationToken cancellationToken)
@@ -46,7 +45,7 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("AddOrUpdateEducation/{MemberId}")]
-        public async Task<IActionResult> RegisterMember([FromRoute]string MemberId, [FromBody] EducationDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterMember([FromRoute] string MemberId, [FromBody] EducationDTO request, CancellationToken cancellationToken)
         {
             var command = new AddEducationCommand(
                 MemberId,
@@ -218,7 +217,7 @@ namespace ShiftSwift.API.Controllers
         [HttpPost("AddJobApplication")]
         public async Task<IActionResult> AddJobApplication(JobApplicationDTO request, CancellationToken cancellationToken)
         {
-            var command = new CreateJobApplicationCommand(request.JobId,request.MemberId);
+            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId);
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
@@ -243,7 +242,7 @@ namespace ShiftSwift.API.Controllers
         [HttpPost("SaveJob")]
         public async Task<IActionResult> GetJobApplications(Guid JobId, string MemberId, CancellationToken cancellationToken)
         {
-            var query = new SaveJobCommand(JobId,MemberId);
+            var query = new SaveJobCommand(JobId, MemberId);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
@@ -257,6 +256,18 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> GetAllSaveedJobs(string MemberId, CancellationToken cancellationToken)
         {
             var query = new GetSavedJobsQuery(MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+        [HttpPost("ChangeMemberEmail/{MemberId}")]
+        public async Task<IActionResult> ChangeEmail(string MemberId, string Email, CancellationToken cancellationToken)
+        {
+            var query = new ChangeMemberEmailCommand(MemberId, Email);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
