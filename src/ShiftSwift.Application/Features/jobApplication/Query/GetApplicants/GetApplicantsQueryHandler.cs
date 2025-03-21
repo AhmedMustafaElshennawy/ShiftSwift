@@ -41,7 +41,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
             .AsQueryable()
             .AsNoTracking()
             .Include(m => m.JobApplications)
-            .ThenInclude(ja => ja.Job) // Include Job to access CompanyId
+            .ThenInclude(ja => ja.Job)
             .Where(m => m.JobApplications.Any(ja =>
                  ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId)) // Filter by JobId & CompanyId
             .Select(m => new GetApplicantsResponse(

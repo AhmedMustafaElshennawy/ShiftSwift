@@ -7,18 +7,19 @@ using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 
-namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData
+
+namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail
 {
-    public sealed class AddCompanyProfileDataCommandHandler : IRequestHandler<AddCompanyProfileDataCommand, ErrorOr<ApiResponse<CompanyResponse>>>
+    public sealed class ChangeCompanyEmailCommandHandler : IRequestHandler<ChangeCompanyEmailCommand, ErrorOr<ApiResponse<CompanyResponse>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserProvider _currentUserProvider;
-        public AddCompanyProfileDataCommandHandler(IUnitOfWork unitOfWork, ICurrentUserProvider currentUserProvider)
+        public ChangeCompanyEmailCommandHandler(IUnitOfWork unitOfWork, ICurrentUserProvider currentUserProvider)
         {
             _unitOfWork = unitOfWork;
             _currentUserProvider = currentUserProvider;
         }
-        public async Task<ErrorOr<ApiResponse<CompanyResponse>>> Handle(AddCompanyProfileDataCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ApiResponse<CompanyResponse>>> Handle(ChangeCompanyEmailCommand request, CancellationToken cancellationToken)
         {
             var currentUserResult = await _currentUserProvider.GetCurrentUser();
             if (currentUserResult.IsError)
@@ -51,8 +52,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
                     code: "User.NotFound",
                     description: $"Access denied. The MemberId You Entered Is Wrong {request.CompanyId}");
             }
-            company.Description =request.Description;
-            company.CompanyName = request.CompanyName;
+            company.Description = request.Email;
             await _unitOfWork.Companies.UpdateAsync(company);
             await _unitOfWork.CompleteAsync(cancellationToken);
 

@@ -33,13 +33,22 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
                     code: "Account.NotFound",
                     description: "Invalid username or password.");
             }
-            var identityResult = await _signInManager.PasswordSignInAsync(member, request.Password, true, true);
-            if (!identityResult.Succeeded)
+            //var identityResult = await _signInManager.PasswordSignInAsync(member, request.Password, false, false);
+            //if (!identityResult.Succeeded)
+            //{
+            //    return Error.Unauthorized(
+            //        code: "Account.InvalidCredentials",
+            //        description: "Invalid username or password.");
+            //}
+
+
+            var user = await _userManager.FindByNameAsync(request.UserName);
+            if (user is null || !await _userManager.CheckPasswordAsync(user, request.Password))
             {
-                return Error.Unauthorized(
-                    code: "Account.InvalidCredentials",
-                    description: "Invalid username or password.");
+                return Error.NotFound("GymOwner.NotFound", "Login Process failed, password or UserName is wrong");
             }
+
+            await _signInManager.SignInAsync(user, isPersistent: false);
 
             var roles = await _userManager.GetRolesAsync(member);
             if (roles == null || !roles.Any())

@@ -6,13 +6,13 @@ using ShiftSwift.Application.Features.experience.Commands.DeleteEducation;
 using ShiftSwift.Application.Features.experience.Queries.GetExperience;
 using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication;
 using ShiftSwift.Application.Features.jobApplication.Query.ListMyJobApplicaions;
+using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
+using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
 using ShiftSwift.Application.DTOs.member;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
-using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
-
 
 namespace ShiftSwift.API.Controllers
 {
@@ -20,7 +20,6 @@ namespace ShiftSwift.API.Controllers
     {
         private readonly ISender _sender;
         public MemberController(ISender sender) => _sender = sender;
-
 
         [HttpPost("AddOrUpdateMamberProfileData/{MemberId}")]
         public async Task<IActionResult> AddOMamberProfileData([FromRoute] string MemberId, [FromBody] ProfileDTO request, CancellationToken cancellationToken)
@@ -167,6 +166,18 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> GetAllSaveedJobs(string MemberId, CancellationToken cancellationToken)
         {
             var query = new GetSavedJobsQuery(MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+        [HttpPost("ChangeMemberEmail/{MemberId}")]
+        public async Task<IActionResult> ChangeEmail(string MemberId, string Email, CancellationToken cancellationToken)
+        {
+            var query = new ChangeMemberEmailCommand(MemberId, Email);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
