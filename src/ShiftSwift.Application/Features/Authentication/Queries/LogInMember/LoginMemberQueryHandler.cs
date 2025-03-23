@@ -7,6 +7,7 @@ using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using System.Security.Claims;
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
 {
@@ -50,7 +51,7 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
                     description: "Login Process failed, password or UserName is wrong");
             }
 
-            await _signInManager.SignInAsync(user, isPersistent: false);
+            //await _signInManager.SignInAsync(user, isPersistent: false);
 
             var roles = await _userManager.GetRolesAsync(member);
             if (roles == null || !roles.Any())
@@ -65,7 +66,8 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
                 member.FullName,
                 member.UserName!,
                 member.PhoneNumber!,
-                member.Email!);
+                member.Email!,
+                member.GenderId);
 
             var loginCompanyResponse = new LoginMemberResult(
                 MemberResponse: MemberResponse,

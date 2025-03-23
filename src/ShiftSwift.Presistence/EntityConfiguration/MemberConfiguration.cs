@@ -2,6 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Domain.identity;
 
+
 namespace ShiftSwift.Presistence.EntityConfiguration
 {
     public class MemberConfiguration : IEntityTypeConfiguration<Member>
@@ -12,9 +13,12 @@ namespace ShiftSwift.Presistence.EntityConfiguration
                    .HasMaxLength(100)
                    .IsRequired();
 
-            builder.Property(m => m.MiddleName)
-                   .HasMaxLength(100)
+            builder.Property(m => m.GenderId)
+                   .HasConversion<int>()
                    .IsRequired();
+
+            builder.Property(m => m.MiddleName)
+                   .HasMaxLength(10);
 
             builder.Property(m => m.LastName)
                    .HasMaxLength(100)

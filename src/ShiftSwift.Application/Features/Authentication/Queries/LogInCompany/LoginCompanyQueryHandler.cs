@@ -33,23 +33,12 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany
                     code:"Account.NotFound",
                     description:"Invalid email or password.");
             
-
-            //var identityResult = await _signInManager.PasswordSignInAsync(company, request.Password, true, true);
-            //if (!identityResult.Succeeded)
-            //{
-            //    return Error.Unauthorized(
-            //        code: "Account.InvalidCredentials",
-            //        description: "Invalid username or password.");
-            //}
-
             if (company is null || !await _userManager.CheckPasswordAsync(company, request.Password))
             {
                 return Error.NotFound(
                     code:"GymOwner.NotFound", 
                     description:"Login Process failed, password or UserName is wrong");
             }
-
-            await _signInManager.SignInAsync(company, isPersistent: false);
 
             var roles = await _userManager.GetRolesAsync(company);
             if (roles == null || !roles.Any())
@@ -60,7 +49,6 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany
             }
 
             var token = await _tokenGenerator.GenerateToken(company, roles.FirstOrDefault()!);
-
             var companyResponse = new CompanyResponse(company.Id,
                 company.CompanyName,
                 company.UserName!,
