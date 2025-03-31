@@ -11,7 +11,10 @@ namespace ShiftSwift.Application.Features.accomplishment.Commands.AddAccomplishm
 
             RuleFor(x => x.Title)
                 .NotEmpty().WithMessage("Title is required.")
-                .MaximumLength(120).WithMessage("Title must not exceed 120 characters.");
+                .MaximumLength(150).WithMessage("Title must not exceed 150 characters.");
+
+            RuleFor(x => x.Description)
+                .MaximumLength(500).WithMessage("Description must not exceed 500 characters.");
         }
     }
 }
