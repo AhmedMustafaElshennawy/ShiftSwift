@@ -11,7 +11,7 @@ namespace ShiftSwift.Application.Features.skill.Commands.AddSkill
 
             RuleFor(x => x.Name)
                 .NotEmpty().WithMessage("Skill name is required.")
-                .MaximumLength(120).WithMessage("Skill name must not exceed 120 characters.");
+                .MaximumLength(100).WithMessage("Skill name must not exceed 100 characters.");
         }
     }
 }
