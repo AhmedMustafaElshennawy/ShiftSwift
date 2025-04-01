@@ -35,9 +35,8 @@ namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs
             return paginatedJobs.Data.Count > 0
             ? paginatedJobs
             : Error.NotFound(
-                code: "jobs.NotFound", 
-                description:"No jobs found.");
-
+                code: "jobs.NotFound",
+                description: "No jobs found.");
         }
     }
 }

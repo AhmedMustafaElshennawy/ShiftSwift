@@ -17,7 +17,7 @@ namespace ShiftSwift.API.Controllers
                      message: "An unknown error occurred.",
                      statusCode: HttpStatusCode.InternalServerError);
             }
-
+            
             if (errors.All(error => error.Type is ErrorType.Validation)) return ValidationProblem(errors);
 
             var statusCode = MapErrorToStatusCode(errors.First().Type);

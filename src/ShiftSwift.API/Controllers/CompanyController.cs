@@ -8,9 +8,6 @@ using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
-using ErrorOr;
-using ShiftSwift.Shared.ApiBaseResponse;
-using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 
 

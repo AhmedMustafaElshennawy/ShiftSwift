@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MediatR;
-using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;

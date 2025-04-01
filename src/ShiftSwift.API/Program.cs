@@ -23,6 +23,7 @@ app.UseSwaggerUI();
 
 
 app.UseStaticFiles();
+
 //app.UseCors(c => c.SetIsOriginAllowed(_ => true) 
 //                  .AllowAnyMethod()
 //                  .AllowAnyHeader()
