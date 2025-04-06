@@ -10,13 +10,13 @@ using System.Net;
 
 namespace ShiftSwift.Application.Features.rating.Queries.GetRating
 {
-    public sealed class GetAverageRatingQueryHandler
-        : IRequestHandler<GetAverageRatingQuery, ErrorOr<ApiResponse<AverageRatingResponse>>>
+    public sealed class GetRatingQueryHandler
+        : IRequestHandler<GetRatingQuery, ErrorOr<ApiResponse<AverageRatingResponse>>>
     {
         private readonly IBaseRepository<Company> _companyRepository;
         private readonly IBaseRepository<Rating> _ratingRepository;
 
-        public GetAverageRatingQueryHandler(
+        public GetRatingQueryHandler(
             IBaseRepository<Company> companyRepository,
             IBaseRepository<Rating> ratingRepository)
         {
@@ -25,7 +25,7 @@ namespace ShiftSwift.Application.Features.rating.Queries.GetRating
         }
 
         public async Task<ErrorOr<ApiResponse<AverageRatingResponse>>> Handle(
-            GetAverageRatingQuery request, CancellationToken cancellationToken)
+            GetRatingQuery request, CancellationToken cancellationToken)
         {
             var companyExists = await _companyRepository.Entites()
                 .AnyAsync(c => c.Id == request.CompanyId, cancellationToken);
@@ -49,9 +49,23 @@ namespace ShiftSwift.Application.Features.rating.Queries.GetRating
                     Message = "No ratings found for this company.",
                     Data = new AverageRatingResponse(
                         CompanyId: request.CompanyId,
-                        AverageScore: null)
+                        AverageScore: null,
+                        Ratings: new List<CompanyRatingResponse>())
                 };
             }
+
+             var ratings = await _ratingRepository.Entites()
+                 .Where(r => r.CompanyId == request.CompanyId)
+                 .OrderByDescending(r => r.CreatedAt)
+                 .Include(r => r.RatedBy)  
+                 .Select(r => new CompanyRatingResponse(
+                        r.Score,                   
+                        r.Comment,                 
+                        r.CreatedAt,
+                        r.RatedBy.UserName!,
+                        r.RatedBy.ImageUrl))
+                 .ToListAsync(cancellationToken);
+
 
             var averageRating = await _ratingRepository.Entites()
                 .Where(x => x.CompanyId == request.CompanyId)
@@ -59,6 +73,7 @@ namespace ShiftSwift.Application.Features.rating.Queries.GetRating
 
             var averageRatingResponse = new AverageRatingResponse(
                 CompanyId: request.CompanyId,
+                Ratings: ratings,
                 AverageScore: averageRating.HasValue ? Math.Round(averageRating.Value, 1) : null
             );
 
@@ -66,7 +81,7 @@ namespace ShiftSwift.Application.Features.rating.Queries.GetRating
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
-                Message = "Average company rating retrieved successfully.",
+                Message = "company rating retrieved successfully.",
                 Data = averageRatingResponse
             };
         }

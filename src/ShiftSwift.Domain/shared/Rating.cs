@@ -8,6 +8,7 @@ namespace ShiftSwift.Domain.shared
         public string RatedById { get; set; }
         public string CompanyId { get; set; }
         public decimal Score { get; set; }
+        public string? Comment { get; set; }
         public DateTime CreatedAt { get; set; }
 
         public Member RatedBy { get; set; }

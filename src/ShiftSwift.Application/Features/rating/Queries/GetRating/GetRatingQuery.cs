@@ -5,6 +5,6 @@ using ShiftSwift.Shared.ApiBaseResponse;
 
 namespace ShiftSwift.Application.Features.rating.Queries.GetRating 
 {
-    public sealed record GetAverageRatingQuery(string CompanyId)
+    public sealed record GetRatingQuery(string CompanyId)
         : IRequest<ErrorOr<ApiResponse<AverageRatingResponse>>>;
 }
