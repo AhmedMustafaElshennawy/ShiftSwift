@@ -9,6 +9,8 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
+using ShiftSwift.Application.Features.rating.Queries.GetRating;
 
 
 
@@ -129,6 +131,33 @@ namespace ShiftSwift.API.Controllers
                 error => Problem(error));
 
             return response;
+        }  
+
+        [HttpPost("AddRating/{CompanyId}")]
+        public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById, [FromBody] RatingDTO request, CancellationToken cancellationToken)
+        {
+            var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
+            var result = await _sender.Send(command, cancellationToken);
+
+            return result.Match(
+                success => Ok(success),
+                error => Problem(error)
+            );
         }
+
+        [HttpGet("GetRating/{CompanyId}")]
+        public async Task<IActionResult> GetAverageRating([FromRoute] string CompanyId, CancellationToken cancellationToken)
+        {
+            var query = new GetRatingQuery(CompanyId);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+
     }
 }
