@@ -16,6 +16,9 @@ namespace ShiftSwift.Application.Features.rating.Commands.AddRating
             RuleFor(x => x.Score)
                 .InclusiveBetween(1.0m, 5.0m)
                 .WithMessage("Score must be between 1.0 and 5.0.");
+
+            RuleFor(x => x.Comment)
+               .MaximumLength(500).WithMessage("Comment must not exceed 500 characters.");
         }
     }
 }

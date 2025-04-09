@@ -137,7 +137,7 @@ namespace ShiftSwift.API.Controllers
         [HttpPost("AddRating/{CompanyId}")]
         public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById, [FromBody] RatingDTO request, CancellationToken cancellationToken)
         {
-            var command = new AddRatingCommand(CompanyId, RatedById, request.Score);
+            var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
             var result = await _sender.Send(command, cancellationToken);
 
             return result.Match(
@@ -146,10 +146,10 @@ namespace ShiftSwift.API.Controllers
             );
         }
 
-        [HttpGet("GetAverageRating/{CompanyId}")]
+        [HttpGet("GetRating/{CompanyId}")]
         public async Task<IActionResult> GetAverageRating([FromRoute] string CompanyId, CancellationToken cancellationToken)
         {
-            var query = new GetAverageRatingQuery(CompanyId);
+            var query = new GetRatingQuery(CompanyId);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
