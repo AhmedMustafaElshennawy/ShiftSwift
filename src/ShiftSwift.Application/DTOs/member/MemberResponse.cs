@@ -5,7 +5,8 @@
        string FullName,
        string UserName,
        string PhoneNumber,
-       string Email);
+       string Email,
+       int GenderId);
 
     public record GetApplicantsResponse(
        string MemberId,

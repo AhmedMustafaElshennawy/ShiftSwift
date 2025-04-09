@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftSwift.Presistence.Context;
 
@@ -11,9 +12,11 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    partial class ShiftSwiftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250330021520_UpdateGenderIdToBeNullable")]
+    partial class UpdateGenderIdToBeNullable
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -440,10 +443,6 @@ namespace ShiftSwift.Presistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Comment")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
                     b.Property<string>("CompanyId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -453,19 +452,14 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.Property<string>("RatedById")
                         .IsRequired()
-                        .HasColumnType("nvarchar(450)");
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Score")
-                        .ValueGeneratedOnAdd()
-                        .HasPrecision(2, 1)
-                        .HasColumnType("decimal(2,1)")
-                        .HasDefaultValue(1m);
+                    b.Property<double>("Score")
+                        .HasColumnType("float");
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
-
-                    b.HasIndex("RatedById");
 
                     b.ToTable("Ratings");
                 });
@@ -665,21 +659,11 @@ namespace ShiftSwift.Presistence.Migrations
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Rating", b =>
                 {
-                    b.HasOne("ShiftSwift.Domain.identity.Company", "Company")
+                    b.HasOne("ShiftSwift.Domain.identity.Company", null)
                         .WithMany("Ratings")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
-
-                    b.HasOne("ShiftSwift.Domain.identity.Member", "RatedBy")
-                        .WithMany()
-                        .HasForeignKey("RatedById")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Company");
-
-                    b.Navigation("RatedBy");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>

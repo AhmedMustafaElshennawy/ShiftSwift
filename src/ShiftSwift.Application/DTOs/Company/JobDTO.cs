@@ -4,7 +4,6 @@
         string Description,
         string Location);
 
-
     public sealed record PostedJobResponse(string CompanyId,
         Guid JobId,
         string Title,
@@ -17,5 +16,4 @@
         string Description,
         string Location,
         DateTime PostedOn);
-
 }

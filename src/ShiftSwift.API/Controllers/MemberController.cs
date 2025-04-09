@@ -34,7 +34,8 @@ namespace ShiftSwift.API.Controllers
                 MemberId,
                 request.FirstName,
                 request.MiddileName,
-                request.LastName);
+                request.LastName,
+                request.GenderId);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(

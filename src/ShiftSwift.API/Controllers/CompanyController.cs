@@ -8,7 +8,6 @@ using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
-
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.rating.Commands.AddRating;
 using ShiftSwift.Application.Features.rating.Queries.GetRating;

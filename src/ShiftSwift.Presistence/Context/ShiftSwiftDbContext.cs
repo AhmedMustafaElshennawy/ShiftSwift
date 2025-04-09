@@ -11,8 +11,6 @@ namespace ShiftSwift.Presistence.Context
 {
     public class ShiftSwiftDbContext : IdentityDbContext<Account, IdentityRole, string>
     {
-        
-
         public ShiftSwiftDbContext (DbContextOptions<ShiftSwiftDbContext> options) : base(options) { }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
