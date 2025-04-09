@@ -38,7 +38,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
             {
                 return Error.Forbidden(
                     code: "User.Forbidden",
-                    description: "Access denied. Only members can add education.");
+                    description: "Access denied. Only members can add Job Application.");
             }
 
             var job = await _unitOfWork.Jobs.Entites()

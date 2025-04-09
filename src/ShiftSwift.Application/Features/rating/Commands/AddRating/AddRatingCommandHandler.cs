@@ -82,7 +82,7 @@ namespace ShiftSwift.Application.Features.rating.Commands.AddRating
                 newRating.CompanyId, 
                 newRating.RatedById,
                 newRating.Score,
-            newRating.CreatedAt);
+                newRating.CreatedAt);
 
             return new ApiResponse<RatingResponse>
             {

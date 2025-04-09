@@ -71,7 +71,7 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Register
                 company.UserName,
                 company.PhoneNumber,
                 company.Email,
-                company.Description);
+                company.Description!);
 
             var registrationCompanyResponse = new RegisterationCompanyResult(
                 CompanyResponse: companyResponse,
