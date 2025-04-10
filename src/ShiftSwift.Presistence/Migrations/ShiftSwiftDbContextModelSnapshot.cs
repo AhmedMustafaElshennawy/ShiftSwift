@@ -293,19 +293,24 @@ namespace ShiftSwift.Presistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<string>("Degree")
+                    b.Property<string>("FieldOfStudy")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("Institution")
+                    b.Property<string>("LevelOfEducation")
                         .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
 
                     b.Property<string>("MemberId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SchoolName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
 
                     b.HasKey("Id");
 
@@ -386,6 +391,13 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
+                    b.Property<int>("JobType")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Keywords")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("Location")
                         .IsRequired()
                         .HasMaxLength(200)
@@ -394,10 +406,23 @@ namespace ShiftSwift.Presistence.Migrations
                     b.Property<DateTime>("PostedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<string>("Requirements")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<decimal?>("Salary")
+                        .HasColumnType("decimal(18,4)");
+
+                    b.Property<int?>("SalaryType")
+                        .HasColumnType("int");
+
                     b.Property<string>("Title")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("WorkMode")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -418,12 +443,16 @@ namespace ShiftSwift.Presistence.Migrations
                     b.Property<Guid>("JobId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Location")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("MemberId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
 
-                    b.Property<bool>("Status")
-                        .HasColumnType("bit");
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
 
                     b.HasKey("Id");
 
@@ -440,6 +469,10 @@ namespace ShiftSwift.Presistence.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<string>("Comment")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
                     b.Property<string>("CompanyId")
                         .IsRequired()
                         .HasColumnType("nvarchar(450)");
@@ -449,14 +482,19 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.Property<string>("RatedById")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(450)");
 
-                    b.Property<double>("Score")
-                        .HasColumnType("float");
+                    b.Property<decimal>("Score")
+                        .ValueGeneratedOnAdd()
+                        .HasPrecision(2, 1)
+                        .HasColumnType("decimal(2,1)")
+                        .HasDefaultValue(1m);
 
                     b.HasKey("Id");
 
                     b.HasIndex("CompanyId");
+
+                    b.HasIndex("RatedById");
 
                     b.ToTable("Ratings");
                 });
@@ -484,10 +522,16 @@ namespace ShiftSwift.Presistence.Migrations
                 {
                     b.HasBaseType("ShiftSwift.Domain.identity.Account");
 
+                    b.Property<DateTime>("BirthDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
+
+                    b.Property<int>("GenderId")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -496,8 +540,8 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.Property<string>("MiddleName")
                         .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
 
                     b.Property<int>("ProfileViews")
                         .ValueGeneratedOnAdd()
@@ -653,11 +697,21 @@ namespace ShiftSwift.Presistence.Migrations
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Rating", b =>
                 {
-                    b.HasOne("ShiftSwift.Domain.identity.Company", null)
+                    b.HasOne("ShiftSwift.Domain.identity.Company", "Company")
                         .WithMany("Ratings")
                         .HasForeignKey("CompanyId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("ShiftSwift.Domain.identity.Member", "RatedBy")
+                        .WithMany()
+                        .HasForeignKey("RatedById")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Company");
+
+                    b.Navigation("RatedBy");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>

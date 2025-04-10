@@ -18,39 +18,42 @@ namespace ShiftSwift.Infrastructure.Extention
     {
         public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
         {
-   
-            services.AddTransient<IEmailService, EmailService>();
-            var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
-            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
 
             services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
             JwtSettings _jwtSettings = new JwtSettings();
             configuration.Bind(JwtSettings.SectionName, _jwtSettings);
 
+            services.AddScoped<ITokenGenerator, TokenGenerator>();
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            }).AddJwtBearer(o =>
+            })
+            .AddJwtBearer(options =>
             {
-                o.RequireHttpsMetadata = false;
-                o.SaveToken = true;
-                o.TokenValidationParameters = new TokenValidationParameters
+                options.RequireHttpsMetadata = false;
+                options.SaveToken = false;
+                options.TokenValidationParameters = new TokenValidationParameters()
                 {
-                    ValidateIssuerSigningKey = true,
                     ValidateIssuer = false,
-                    ValidateAudience = false,
-                    ValidateLifetime = true,
                     ValidIssuer = configuration[_jwtSettings.Issuer],
+                    ValidateAudience = false,
                     ValidAudience = configuration[_jwtSettings.Audience],
+                    ValidateIssuerSigningKey = true,
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
+                    ValidateLifetime = true,
                     ClockSkew = TimeSpan.Zero
                 };
             });
 
+
+            services.AddTransient<IEmailService, EmailService>();
+            var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
+            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+
             services.AddScoped<ICacheService, RedisCacheService>();
             services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+
             return services;
         }
     }

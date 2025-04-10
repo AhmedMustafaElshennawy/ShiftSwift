@@ -70,7 +70,6 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
                 Message = "Company Data Added successfully",
                 Data = companyResponse
             };
-
         }
     }
 }

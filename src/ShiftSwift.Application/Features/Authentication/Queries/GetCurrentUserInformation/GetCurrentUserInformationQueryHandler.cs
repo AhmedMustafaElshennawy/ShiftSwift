@@ -68,7 +68,8 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserI
                         member.FullName, 
                         member.UserName!,
                         member.PhoneNumber!, 
-                        member.Email!);
+                        member.Email!,
+                        member.GenderId);
 
                     return new ApiResponse<object>
                     {

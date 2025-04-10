@@ -75,7 +75,6 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
                     description: $"User creation failed: {errorMessages}");
             }
 
-            // Assign the "Member" role to the user
             var roleAssignmentResult = await _userManager.AddToRoleAsync(member, _defaultMemberRole);
             if (!roleAssignmentResult.Succeeded)
             {
@@ -90,7 +89,8 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
                 member.FullName,
                 member.UserName,
                 member.PhoneNumber!,
-                member.Email);
+                member.Email,
+                member.GenderId);
 
             var registerationMemberResponse = new RegisterationMemberResult(
                 MemberResponse: MemberResponse,

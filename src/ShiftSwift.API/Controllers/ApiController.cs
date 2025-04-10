@@ -17,7 +17,7 @@ namespace ShiftSwift.API.Controllers
                      message: "An unknown error occurred.",
                      statusCode: HttpStatusCode.InternalServerError);
             }
-
+            
             if (errors.All(error => error.Type is ErrorType.Validation)) return ValidationProblem(errors);
 
             var statusCode = MapErrorToStatusCode(errors.First().Type);
@@ -45,8 +45,7 @@ namespace ShiftSwift.API.Controllers
             return Problem(
                 message: "Validation failed for one or more fields.",
                 statusCode: HttpStatusCode.BadRequest,
-                data: groupedErrors
-            );
+                data: groupedErrors);
         }
 
         private IActionResult Problem(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError, object? data = null)

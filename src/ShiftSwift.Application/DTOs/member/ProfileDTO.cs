@@ -2,6 +2,7 @@
 {
     public  sealed record ProfileDTO(string FirstName,
         string MiddileName,
-        string LastName);
+        string LastName,
+        int GenderId);
     
 }

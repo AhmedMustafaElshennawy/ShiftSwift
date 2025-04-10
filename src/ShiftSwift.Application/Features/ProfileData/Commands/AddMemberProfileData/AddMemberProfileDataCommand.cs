@@ -8,5 +8,6 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
     public sealed record AddMemberProfileDataCommand(string MemberId,
         string FirstName,
         string MeddileName,
-        string LastName) : IRequest<ErrorOr<ApiResponse<MemberResponse>>>;
+        string LastName,
+        int GenderId) : IRequest<ErrorOr<ApiResponse<MemberResponse>>>;
 }

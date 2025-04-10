@@ -41,8 +41,9 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
                     code: "User.Unauthorized",
                     description: $"Access denied. The MemberId You Entered Is Wrong {request.MemberId}");
             }
+
             var member = await _unitOfWork.Members.Entites()
-                .Where(M => M.Id == request.MemberId)
+                .Where(M => M.Id == currentUser.UserId)
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (member is null)
@@ -55,16 +56,17 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
             member.FirstName = request.FirstName;
             member.LastName = request.LastName;
             member.MiddleName = request.MeddileName;
+            member.GenderId = request.GenderId;
 
             await _unitOfWork.Members.UpdateAsync(member);
             await _unitOfWork.CompleteAsync(cancellationToken);
-
 
             var MemberResponse = new MemberResponse(member.Id,
               member.FullName,
               member.UserName!,
               member.PhoneNumber!,
-              member.Email!);
+              member.Email!,
+              member.GenderId);
 
             return new ApiResponse<MemberResponse>
             {
