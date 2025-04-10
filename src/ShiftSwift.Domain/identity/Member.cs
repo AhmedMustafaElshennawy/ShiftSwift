@@ -17,6 +17,7 @@ namespace ShiftSwift.Domain.identity
         public ICollection<SavedJob> SavedJobs { get; set; } = new HashSet<SavedJob>();
         public int ProfileViews { get; set; }
         public int GenderId { get; set; }
+        public DateTime BirthDate { get; set; }
         public string FullName => $"{FirstName} {MiddleName} {LastName}";
     }
 }

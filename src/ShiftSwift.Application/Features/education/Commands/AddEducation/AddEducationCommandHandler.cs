@@ -31,13 +31,6 @@ namespace ShiftSwift.Application.Features.education.Commands.AddEducation
         }
         public async Task<ErrorOr<ApiResponse<EducationRespone>>> Handle(AddEducationCommand request, CancellationToken cancellationToken)
         {
-            //var currentUserResult = await _currentUserProvider.GetCurrentUser();
-            //if (currentUserResult.IsError)
-            //{
-            //    return Error.Unauthorized(
-            //        code: "User.Unauthorized",
-            //        description: currentUserResult.Errors.FirstOrDefault().Description ?? "User is not authenticated.");
-            //}
             var currentUserResult = _httpContextAccessor.HttpContext?.User;
 
             if (currentUserResult == null || !currentUserResult.Identity?.IsAuthenticated == true)
@@ -76,8 +69,9 @@ namespace ShiftSwift.Application.Features.education.Commands.AddEducation
             bool isUpdate = currentUserEducation is not null;
             if (isUpdate)
             {
-                currentUserEducation!.Institution = request.Institution;
-                currentUserEducation.Degree = request.Degree;
+                currentUserEducation!.LevelOfEducation = request.LevelOfEducation;
+                currentUserEducation.FieldOfStudy = request.FieldOfStudy;
+                currentUserEducation.SchoolName = request.SchoolName;
 
                 await _unitOfWork.Educations.UpdateAsync(currentUserEducation);
             }
@@ -87,8 +81,9 @@ namespace ShiftSwift.Application.Features.education.Commands.AddEducation
                 {
                     Id = Guid.NewGuid(),
                     MemberId = userId,
-                    Institution = request.Institution,
-                    Degree = request.Degree
+                    SchoolName = request.SchoolName,
+                    FieldOfStudy = request.FieldOfStudy,
+                    LevelOfEducation = request.LevelOfEducation
                 };
 
                 await _unitOfWork.Educations.AddEntityAsync(currentUserEducation);
@@ -97,9 +92,9 @@ namespace ShiftSwift.Application.Features.education.Commands.AddEducation
             await _unitOfWork.CompleteAsync(cancellationToken);
             var educationResponse = new EducationRespone(
                 currentUserEducation.Id,
-                userId,
-                request.Institution,
-                request.Degree);
+                request.SchoolName,
+                request.LevelOfEducation,
+                request.FieldOfStudy);
 
             return new ApiResponse<EducationRespone>
             {

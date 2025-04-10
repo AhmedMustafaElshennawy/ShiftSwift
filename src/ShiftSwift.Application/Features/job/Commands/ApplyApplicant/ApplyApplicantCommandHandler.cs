@@ -63,7 +63,7 @@ namespace ShiftSwift.Application.Features.job.Commands.ApplyApplicant
                     description: "No job application found for this job and member.");
             }
 
-            jobApplication.Status = true;
+            jobApplication.Status = request.ApplicationStatus;
 
             await _unitOfWork.JobApplications.UpdateAsync(jobApplication);
             await _unitOfWork.CompleteAsync(cancellationToken);

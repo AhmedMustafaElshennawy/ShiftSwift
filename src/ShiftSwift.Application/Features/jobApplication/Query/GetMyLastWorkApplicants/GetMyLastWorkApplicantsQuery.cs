@@ -4,22 +4,26 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 
-namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
+namespace ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants
 {
-    public sealed class GetApplicantsQueryHandler : IRequestHandler<GetApplicantsQuery, ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>>
+    public sealed record GetMyLastWorkApplicantsQuery( string CompanyId) :IRequest<ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>>;
+
+    internal sealed class GetMyLastWorkApplicantsQueryHandler : IRequestHandler<GetMyLastWorkApplicantsQuery, ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>>
     {
         private readonly ICurrentUserProvider _currentUserProvider;
         private readonly IBaseRepository<Member> _memberRepository;
-        public GetApplicantsQueryHandler(ICurrentUserProvider currentUserProvider, IBaseRepository<Member> memberRepository)
+        public GetMyLastWorkApplicantsQueryHandler(ICurrentUserProvider currentUserProvider, IBaseRepository<Member> memberRepository)
         {
             _currentUserProvider = currentUserProvider;
             _memberRepository = memberRepository;
         }
-        public async Task<ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>> Handle(GetApplicantsQuery request, CancellationToken cancellationToken)
+
+        public async Task<ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>> Handle(GetMyLastWorkApplicantsQuery request, CancellationToken cancellationToken)
         {
             var currentUserResult = await _currentUserProvider.GetCurrentUser();
             if (currentUserResult.IsError)
@@ -43,7 +47,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
             .Include(m => m.JobApplications)
             .ThenInclude(ja => ja.Job)
             .Where(m => m.JobApplications.Any(ja =>
-                 ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId))
+                 ja.Status == ApplicationStatus.Accepted && ja.Job.CompanyId == currentUser.UserId))
             .Select(m => new GetApplicantsResponse(
                 m.Id,
                 m.FullName,
@@ -67,7 +71,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
-                Message = "Employed Applicants retrieved successfully.",
+                Message = "Applicants retrieved successfully.",
                 Data = response
             };
         }

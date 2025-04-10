@@ -11,6 +11,8 @@ using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.rating.Commands.AddRating;
 using ShiftSwift.Application.Features.rating.Queries.GetRating;
+using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
+using ShiftSwift.Domain.Enums;
 
 
 
@@ -37,12 +39,13 @@ namespace ShiftSwift.API.Controllers
             return response;
         }
 
-        [HttpPost("CreateJobPost")]
-        public async Task<IActionResult> CreateJobPost([FromBody] JobDTO request, CancellationToken cancellationToken)
+        [HttpPost("CreateJobPost/{CompanyId}")]
+        public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId,[FromBody] JobDTO request, CancellationToken cancellationToken)
         {
             var command = new PostJobCommand(request.Title,
                 request.Description, 
-                request.Location);
+                request.Location,
+                request.JobType);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -95,9 +98,9 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("ApplyApplicant/{JobId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute]ApplicationStatus status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
         {
-            var command = new ApplyApplicantCommand(JobId, MemberId);
+            var command = new ApplyApplicantCommand(JobId, MemberId,status);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -158,6 +161,17 @@ namespace ShiftSwift.API.Controllers
             return response;
         }
 
+        [HttpGet("GetMyLastWorkApplicants/{CompanyId}")]
+        public async Task<IActionResult> GetMyLastWorkApplicants([FromRoute] string CompanyId, CancellationToken cancellationToken)
+        {
+            var query = new GetMyLastWorkApplicantsQuery(CompanyId);
 
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
     }
 }

@@ -50,8 +50,9 @@ namespace ShiftSwift.API.Controllers
         {
             var command = new AddEducationCommand(
                 MemberId,
-                request.Institution,
-                request.Degree);
+                request.SchoolName,
+                request.LevelOfEducation,
+                request.FieldOfStudy);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -218,7 +219,7 @@ namespace ShiftSwift.API.Controllers
         [HttpPost("AddJobApplication")]
         public async Task<IActionResult> AddJobApplication(JobApplicationDTO request, CancellationToken cancellationToken)
         {
-            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId);
+            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId,request.Status);
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),

@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ShiftSwift.Domain.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -22,6 +23,13 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
             RuleFor(x => x.Location)
                 .NotEmpty().WithMessage("Location is required.")
                 .MaximumLength(200).WithMessage("Location must not exceed 200 characters.");
+
+
+            RuleFor(x => x.JobType)
+                .IsInEnum()
+                .WithMessage("Invalid job type. Allowed values are: " +
+                    string.Join(", ", Enum.GetNames(typeof(JobTypeEnum))));
+
         }
     }
 }

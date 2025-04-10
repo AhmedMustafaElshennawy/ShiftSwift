@@ -60,9 +60,9 @@ namespace ShiftSwift.Application.Features.education.Queries.GetEducation
 
             var educationResponse = new EducationRespone(
                 currentUserEducation.Id,
-                currentUser.UserId,
-                currentUserEducation.Institution,
-                currentUserEducation.Degree);
+                currentUserEducation.SchoolName,
+                currentUserEducation.LevelOfEducation,
+                currentUserEducation.FieldOfStudy);
 
             return new ApiResponse<EducationRespone>
             {
