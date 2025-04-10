@@ -1,4 +1,6 @@
-﻿namespace ShiftSwift.Application.DTOs.member
+﻿using ShiftSwift.Domain.Enums;
+
+namespace ShiftSwift.Application.DTOs.member
 {
     public record MemberResponse(
        string memberId,
@@ -20,5 +22,5 @@
        string UserName,
        string PhoneNumber,
        string Email,
-       bool status);
+       ApplicationStatus status);
 }

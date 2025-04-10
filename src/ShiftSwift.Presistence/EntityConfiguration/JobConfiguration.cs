@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Domain.shared;
+using System.Reflection.Emit;
 
 namespace ShiftSwift.Presistence.EntityConfiguration
 {
@@ -25,15 +26,27 @@ namespace ShiftSwift.Presistence.EntityConfiguration
             builder.Property(j => j.PostedOn)
                 .IsRequired();
 
+            builder.Property(j => j.JobType)
+                .HasConversion<int>();
+
+            builder.Property(j => j.WorkMode)
+                .HasConversion<int>();
+
+            builder.Property(j => j.SalaryType)
+                .HasConversion<int>();
+
+            builder.Property(j => j.Salary)
+                    .HasColumnType("decimal(18,4)"); 
+
             builder.HasOne(j => j.Company)
                    .WithMany(c => c.Jobs)
                    .HasForeignKey(j => j.CompanyId)
                    .OnDelete(DeleteBehavior.Restrict);
 
             builder.HasMany(j => j.JobApplications)
-                           .WithOne(ja => ja.Job)
-                           .HasForeignKey(ja => ja.JobId)
-                           .OnDelete(DeleteBehavior.Cascade);
+                    .WithOne(ja => ja.Job)
+                    .HasForeignKey(ja => ja.JobId)
+                    .OnDelete(DeleteBehavior.Cascade);
 
             builder.HasMany(j => j.SavedJobs)
                    .WithOne(sj => sj.Job)

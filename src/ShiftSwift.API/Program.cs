@@ -2,10 +2,16 @@ using GymManagement.Application.Extention;
 using ShiftSwift.API.Extention;
 using ShiftSwift.Infrastructure.Extention;
 using ShiftSwift.Presistence.Extentions;
+using System.Text.Json.Serialization;
 
 var builder = WebApplication.CreateBuilder(args);
-// Add services to the container.
-builder.Services.AddControllers();
+
+builder.Services.AddControllers()
+    .AddJsonOptions(options =>
+    {
+        options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+    });
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 builder.Services.AddApplicaion(builder.Configuration);
@@ -24,10 +30,6 @@ app.UseSwaggerUI();
 
 app.UseStaticFiles();
 
-//app.UseCors(c => c.SetIsOriginAllowed(_ => true) 
-//                  .AllowAnyMethod()
-//                  .AllowAnyHeader()
-//                  .AllowCredentials()); // Enables credentials (cookies, tokens)
 
 app.UseCors(c => c
     .AllowAnyOrigin()

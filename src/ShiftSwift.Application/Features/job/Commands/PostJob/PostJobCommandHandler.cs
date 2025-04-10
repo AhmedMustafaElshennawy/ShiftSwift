@@ -44,6 +44,7 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 Location = request.Location,
                 PostedOn = DateTime.UtcNow,
                 Title = request.Title,
+                JobType = request.JobType,
             };
               
             await _unitOfWork.Jobs.AddEntityAsync(postJob);
@@ -54,7 +55,8 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 postJob.Title,
                 postJob.Description,
                 postJob.Location,
-                postJob.PostedOn);   
+                postJob.PostedOn,
+                postJob.JobType);   
 
             return new ApiResponse<PostedJobResponse>
             {
