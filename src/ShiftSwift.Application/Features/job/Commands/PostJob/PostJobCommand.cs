@@ -9,5 +9,10 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
     public sealed record PostJobCommand(string Title,
         string Description,
         string Location,
-        JobTypeEnum JobType):IRequest<ErrorOr<ApiResponse<PostedJobResponse>>>;
+        int JobType,
+        int WorkMode,
+        decimal Salary,
+        int SalaryType,
+        string Requirements,
+        string Keywords):IRequest<ErrorOr<ApiResponse<PostedJobResponse>>>;
 }

@@ -43,9 +43,14 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId,[FromBody] JobDTO request, CancellationToken cancellationToken)
         {
             var command = new PostJobCommand(request.Title,
-                request.Description, 
+                request.Description,
                 request.Location,
-                request.JobType);
+                request.JobType,
+                request.WorkMode,
+                request.Salary,
+                request.SalaryType,
+                request.Requirements,
+                request.Keywords);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -61,7 +66,13 @@ namespace ShiftSwift.API.Controllers
             var command = new UpdatePostJobCommand(JobId,
                 request.Title,
                 request.Description,
-                request.Location);
+                request.Location,
+                request.JobType,
+                request.WorkMode,
+                request.Salary,
+                request.SalaryType,
+                request.Requirements,
+                request.Keywords);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
