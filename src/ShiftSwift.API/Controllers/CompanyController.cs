@@ -109,7 +109,7 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("ApplyApplicant/{JobId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute]ApplicationStatus status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute]int status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
         {
             var command = new ApplyApplicantCommand(JobId, MemberId,status);
 

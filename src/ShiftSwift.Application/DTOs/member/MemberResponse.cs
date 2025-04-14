@@ -22,5 +22,5 @@ namespace ShiftSwift.Application.DTOs.member
        string UserName,
        string PhoneNumber,
        string Email,
-       ApplicationStatus status);
+       int status);
 }

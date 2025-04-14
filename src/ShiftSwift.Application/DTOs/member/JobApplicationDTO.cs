@@ -4,7 +4,7 @@ namespace ShiftSwift.Application.DTOs.member
 {
     public sealed record JobApplicationDTO(Guid JobId,
         string MemberId,
-        ApplicationStatus Status);
+        int Status);
 
     public sealed record JobApplicationResponse(Guid Id,
         Guid JobId, 
