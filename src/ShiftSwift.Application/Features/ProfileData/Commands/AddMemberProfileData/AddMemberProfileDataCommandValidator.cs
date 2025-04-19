@@ -13,8 +13,8 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
                 .NotEmpty().WithMessage("FirstName is required.")
                 .MaximumLength(50).WithMessage("FirstName cannot exceed 50 characters.");
 
-            RuleFor(x => x.MeddileName)
-                .MaximumLength(50).WithMessage("MiddleName cannot exceed 50 characters.");
+            RuleFor(x => x.Location)
+                .MaximumLength(50).WithMessage("Location cannot exceed 50 characters.");
 
             RuleFor(x => x.LastName)
                 .NotEmpty().WithMessage("LastName is required.")

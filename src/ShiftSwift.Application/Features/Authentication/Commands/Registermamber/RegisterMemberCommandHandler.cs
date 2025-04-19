@@ -90,7 +90,8 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
                 member.UserName,
                 member.PhoneNumber!,
                 member.Email,
-                member.GenderId);
+                member.GenderId,
+                member.Location);
 
             var registerationMemberResponse = new RegisterationMemberResult(
                 MemberResponse: MemberResponse,

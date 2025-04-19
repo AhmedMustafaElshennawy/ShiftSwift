@@ -5,7 +5,7 @@ namespace ShiftSwift.Application.Extentions
 {
     public static class QuerableExtension
     {
-        public static async Task<PaginatedResponse<TEntity>> ToPaginatedListAsync<TEntity>(
+        internal static async Task<PaginatedResponse<TEntity>> ToPaginatedListAsync<TEntity>(
             this IQueryable<TEntity> source,
             int pageNumber,
             int pageSize,

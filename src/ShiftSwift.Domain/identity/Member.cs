@@ -7,7 +7,6 @@ namespace ShiftSwift.Domain.identity
     public class Member : Account
     {
         public string FirstName { get; set; }
-        public string MiddleName { get; set; }
         public string LastName { get; set; }
         public ICollection<Experience> Experiences { get; set; } = new HashSet<Experience>();
         public ICollection<Education> Educations { get; set; } = new HashSet<Education>();
@@ -17,7 +16,8 @@ namespace ShiftSwift.Domain.identity
         public ICollection<SavedJob> SavedJobs { get; set; } = new HashSet<SavedJob>();
         public int ProfileViews { get; set; }
         public int GenderId { get; set; }
+        public string Location { get; set; }
         public DateTime BirthDate { get; set; }
-        public string FullName => $"{FirstName} {MiddleName} {LastName}";
+        public string FullName => $"{FirstName} {LastName}";
     }
 }

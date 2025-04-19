@@ -13,6 +13,6 @@ namespace ShiftSwift.Domain.shared
         public Member Member { get; set; }
         public DateTime AppliedOn { get; set; } = DateTime.UtcNow;
         public string Location { get; set; }
-        public ApplicationStatus Status { get; set; } = ApplicationStatus.Pending;
+        public int Status { get; set; }
     }
 }

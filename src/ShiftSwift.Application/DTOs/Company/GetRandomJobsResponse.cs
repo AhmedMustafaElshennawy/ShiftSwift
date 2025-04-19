@@ -1,10 +1,15 @@
 ﻿namespace ShiftSwift.Application.DTOs.Company
 {
-    public record GetRandomJobsResponse(Guid Id,
-        string CompanyId, 
-        string CompanyName, 
+    public sealed record GetRandomJobsResponse(
+        Guid Id,
+        string CompanyId,
+        string CompanyName,
         string Title,
         string Description,
         string Location,
-        DateTime PostedOn);
+        DateTime PostedOn,
+        int SalaryTypeId,
+        decimal Salary,
+        int JobTypeTd
+    );
 }
