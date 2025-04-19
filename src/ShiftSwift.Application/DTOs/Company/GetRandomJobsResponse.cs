@@ -9,6 +9,7 @@
         string Location,
         DateTime PostedOn,
         int SalaryTypeId,
+        decimal Salary,
         int JobTypeTd
     );
 }

@@ -81,6 +81,7 @@ namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs
                 x.Location,
                 x.PostedOn,
                 x.SalaryTypeId,
+                x.Salary,
                 x.JobTypeId
             )).ToList();
 

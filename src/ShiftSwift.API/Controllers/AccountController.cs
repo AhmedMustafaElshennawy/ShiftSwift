@@ -9,6 +9,8 @@ using ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImage
 using ShiftSwift.Application.DTOs.identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ShiftSwift.Application.Features.Authentication.Queries.GetCompanyInfo;
+using ShiftSwift.Application.Features.Authentication.Queries.GetMemberInfo;
 
 namespace ShiftSwift.API.Controllers
 {
@@ -124,6 +126,31 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> GetProfilePicture(string Id, CancellationToken cancellationToken)
         {
             var query = new GetCurrentUserImageURLQuery(Id);
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+        [HttpGet("GetCompanyInfoById/{Id}")]
+        public async Task<IActionResult> GetCompanyInfoById(string Id, CancellationToken cancellationToken)
+        {
+            var query = new GetCompanyInfoById(Id); 
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetMemberInfoById/{Id}")]
+        public async Task<IActionResult> GetMemberInfoById(string Id, CancellationToken cancellationToken)
+        {
+            var query = new GetMemberInfoById(Id);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(

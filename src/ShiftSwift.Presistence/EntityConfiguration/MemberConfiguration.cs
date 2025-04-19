@@ -16,9 +16,6 @@ namespace ShiftSwift.Presistence.EntityConfiguration
             builder.Property(m => m.GenderId)
                    .HasConversion<int>();
 
-            builder.Property(m => m.MiddleName)
-                   .HasMaxLength(10);
-
             builder.Property(m => m.LastName)
                    .HasMaxLength(100)
                    .IsRequired();
