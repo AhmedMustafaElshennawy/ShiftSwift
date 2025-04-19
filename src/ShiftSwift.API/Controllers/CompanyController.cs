@@ -3,17 +3,15 @@ using ShiftSwift.Application.Features.job.Commands.DeletePostJob;
 using ShiftSwift.Application.Features.job.Commands.PostJob;
 using ShiftSwift.Application.Features.job.Commands.UpdatePostJob;
 using ShiftSwift.Application.Features.job.Queries.GetAllJobPosts;
+using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
+using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.jobApplication.Query.GetApplicants;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
+using ShiftSwift.Application.Features.rating.Queries.GetRating;
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
-using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
-using ShiftSwift.Application.Features.rating.Commands.AddRating;
-using ShiftSwift.Application.Features.rating.Queries.GetRating;
-using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
-using ShiftSwift.Domain.Enums;
-
 
 
 namespace ShiftSwift.API.Controllers

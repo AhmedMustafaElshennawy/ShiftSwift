@@ -23,16 +23,16 @@ namespace ShiftSwift.Presistence.Context
             modelBuilder.Entity<IdentityUserToken<string>>().ToTable("UserTokens");
             modelBuilder.ApplyConfigurationsFromAssembly(typeof(ShiftSwiftDbContext).Assembly);
         }
-        public DbSet<Member> Members { get; set; }
-        public DbSet<Company> Companies { get; set; }
-        public DbSet<Job> Jobs { get; set; }
-        public DbSet<JobApplication> JobApplications { get; set; }
-        public DbSet<SavedJob> SavedJobs { get; set; }
-        public DbSet<Rating> Ratings { get; set; }
-        public DbSet<Experience> Experiences { get; set; }
-        public DbSet<Education> Educations { get; set; }
-        public DbSet<Skill> Skills { get; set; }
-        public DbSet<Accomplishment> Accomplishments { get; set; }
-        public DbSet<Account> Accounts { get; set; }
+        public virtual DbSet<Member> Members { get; set; }
+        public virtual DbSet<Company> Companies { get; set; }
+        public virtual DbSet<Job> Jobs { get; set; }
+        public virtual DbSet<JobApplication> JobApplications { get; set; }
+        public virtual DbSet<SavedJob> SavedJobs { get; set; }
+        public virtual DbSet<Rating> Ratings { get; set; }
+        public virtual DbSet<Experience> Experiences { get; set; }
+        public virtual DbSet<Education> Educations { get; set; }
+        public virtual DbSet<Skill> Skills { get; set; }
+        public virtual DbSet<Accomplishment> Accomplishments { get; set; }
+        public virtual DbSet<Account> Accounts { get; set; }
     }
 }

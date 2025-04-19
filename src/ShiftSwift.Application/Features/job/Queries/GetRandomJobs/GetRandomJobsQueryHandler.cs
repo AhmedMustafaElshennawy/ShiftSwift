@@ -1,12 +1,13 @@
-﻿using ErrorOr;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using ShiftSwift.Application.Common.Repository;
+﻿using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
+using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Extentions;
 using ShiftSwift.Shared.ApiBaseResponse;
 using ShiftSwift.Shared.paging;
 using System.Net;
+using ErrorOr;
+using MediatR;
+
 
 namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs
 {
