@@ -43,7 +43,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmai
                     description: $"Access denied. The MemberId You Entered Is Wrong {request.CompanyId}");
             }
             var company = await _unitOfWork.Companies.Entites()
-                .Where(M => M.Id == request.CompanyId)
+                .Where(m => m.Id == request.CompanyId)
                 .SingleOrDefaultAsync(cancellationToken);
 
             if (company is null)
@@ -52,7 +52,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmai
                     code: "User.NotFound",
                     description: $"Access denied. The MemberId You Entered Is Wrong {request.CompanyId}");
             }
-            company.Description = request.Email;
+            company.Email = request.Email;
             await _unitOfWork.Companies.UpdateAsync(company);
             await _unitOfWork.CompleteAsync(cancellationToken);
 
@@ -61,7 +61,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmai
                 company.UserName!,
                 company.PhoneNumber!,
                 company.Email!,
-                company.Description);
+                company.Description!);
 
             return new ApiResponse<CompanyResponse>
             {
