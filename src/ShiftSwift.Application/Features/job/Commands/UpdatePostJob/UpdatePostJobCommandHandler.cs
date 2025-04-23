@@ -70,7 +70,8 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
                 job.Title,
                 job.Description,
                 job.Location,
-                job.PostedOn);
+                job.PostedOn,
+                job.JobTypeId);
 
             return new ApiResponse<PostedJobResponse>
             {

@@ -1,13 +1,17 @@
-﻿namespace ShiftSwift.Application.DTOs.member
+﻿using ShiftSwift.Domain.Enums;
+
+namespace ShiftSwift.Application.DTOs.member
 {
-    public record MemberResponse(
+    public sealed record MemberResponse(
        string memberId,
        string FullName,
        string UserName,
        string PhoneNumber,
-       string Email);
+       string Email,
+       int GenderId,
+       string Location);
 
-    public record GetApplicantsResponse(
+    public sealed record GetApplicantsResponse(
        string MemberId,
        string FullName,
        string UserName,
@@ -19,5 +23,15 @@
        string UserName,
        string PhoneNumber,
        string Email,
-       bool status);
+       int status);
+
+
+    public sealed record MemberResponseInfo(
+        string memberId,
+        string FullName,
+        string UserName,
+        string PhoneNumber,
+        string Email,
+        int GenderId,
+        string Location);
 }

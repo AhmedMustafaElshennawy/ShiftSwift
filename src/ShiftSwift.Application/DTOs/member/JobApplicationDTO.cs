@@ -1,7 +1,10 @@
-﻿namespace ShiftSwift.Application.DTOs.member
+﻿using ShiftSwift.Domain.Enums;
+
+namespace ShiftSwift.Application.DTOs.member
 {
     public sealed record JobApplicationDTO(Guid JobId,
-        string MemberId);
+        string MemberId,
+        int Status);
 
     public sealed record JobApplicationResponse(Guid Id,
         Guid JobId, 

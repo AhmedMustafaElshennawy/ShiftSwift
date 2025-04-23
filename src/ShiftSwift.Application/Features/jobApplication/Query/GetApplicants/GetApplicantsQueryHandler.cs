@@ -43,7 +43,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
             .Include(m => m.JobApplications)
             .ThenInclude(ja => ja.Job)
             .Where(m => m.JobApplications.Any(ja =>
-                 ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId)) // Filter by JobId & CompanyId
+                 ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId))
             .Select(m => new GetApplicantsResponse(
                 m.Id,
                 m.FullName,
@@ -67,7 +67,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
-                Message = "Applicants retrieved successfully.",
+                Message = "Employed Applicants retrieved successfully.",
                 Data = response
             };
         }

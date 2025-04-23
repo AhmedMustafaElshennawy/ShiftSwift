@@ -54,7 +54,8 @@ namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts
                 job.Title,
                 job.Description,
                 job.Location ,
-                job.PostedOn
+                job.PostedOn,
+                job.JobTypeId
             )).ToList();
 
             return new ApiResponse<IReadOnlyList<PostedJobResponse>>

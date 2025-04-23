@@ -5,6 +5,8 @@ using ShiftSwift.Shared.ApiBaseResponse;
 
 namespace ShiftSwift.Application.Features.job.Commands.ApplyApplicant
 {
-    public sealed record ApplyApplicantCommand(Guid JobId, string MemberId)
-        : IRequest<ErrorOr<ApiResponse<ApplyApplicantResponse>>>;
+    public sealed record ApplyApplicantCommand(
+        Guid JobId,
+        string MemberId,
+        int ApplicationStatus): IRequest<ErrorOr<ApiResponse<ApplyApplicantResponse>>>;
 }

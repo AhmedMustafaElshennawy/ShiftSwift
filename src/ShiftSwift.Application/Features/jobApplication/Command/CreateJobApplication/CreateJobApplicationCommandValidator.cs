@@ -1,4 +1,5 @@
 ﻿using FluentValidation;
+using ShiftSwift.Domain.Enums;
 
 namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication
 {
@@ -13,6 +14,11 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
             RuleFor(x => x.MemberId)
                 .NotEmpty().WithMessage("MemberId is required.")
                 .Must(id => Guid.TryParse(id, out _)).WithMessage("MemberId must be a valid GUID.");
+
+            RuleFor(x => x.ApplicationStatus)
+                .NotEmpty().WithMessage("Job type is required.")
+                .Must(g => g == 1 || g == 2 || g == 3)
+                .WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected).");
         }
     }
 }

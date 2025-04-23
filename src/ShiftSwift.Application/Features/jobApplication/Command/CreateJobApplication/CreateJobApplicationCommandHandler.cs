@@ -70,7 +70,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
                 AppliedOn = DateTime.UtcNow,
                 JobId = request.JobId,
                 MemberId = request.MemberId ?? currentUser.UserId,
-                Status = false,
+                Status =request.ApplicationStatus,
             };
             await _jobApplicationRepository.AddEntityAsync(jobApplicaion);
             await _unitOfWork.CompleteAsync(cancellationToken);

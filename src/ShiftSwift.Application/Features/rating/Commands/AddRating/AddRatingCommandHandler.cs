@@ -71,6 +71,7 @@ namespace ShiftSwift.Application.Features.rating.Commands.AddRating
                 CompanyId = request.CompanyId,
                 RatedById = currentUser.UserId,
                 Score = roundedScore,
+                Comment = request.Comment,
                 CreatedAt = DateTime.UtcNow
             };
 
@@ -82,7 +83,9 @@ namespace ShiftSwift.Application.Features.rating.Commands.AddRating
                 newRating.CompanyId, 
                 newRating.RatedById,
                 newRating.Score,
+                newRating.Comment,
                 newRating.CreatedAt);
+
 
             return new ApiResponse<RatingResponse>
             {
@@ -94,4 +97,3 @@ namespace ShiftSwift.Application.Features.rating.Commands.AddRating
         }
     }
 }
-

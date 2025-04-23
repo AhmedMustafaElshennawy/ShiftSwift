@@ -15,6 +15,9 @@ namespace ShiftSwift.Presistence.EntityConfiguration
                 .HasPrecision(2, 1)
                 .HasDefaultValue(1.0);
 
+            builder.Property(r => r.Comment)
+                .HasMaxLength(500);
+
             builder.Property(r => r.CreatedAt)
                 .IsRequired();
 

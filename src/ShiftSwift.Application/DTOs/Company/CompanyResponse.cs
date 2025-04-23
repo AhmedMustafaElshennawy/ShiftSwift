@@ -1,11 +1,4 @@
-﻿using ShiftSwift.Domain.identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ShiftSwift.Application.DTOs.Company
+﻿namespace ShiftSwift.Application.DTOs.Company
 {
     public sealed record CompanyResponse(string CompanyId,
         string CompanyName,
@@ -13,4 +6,11 @@ namespace ShiftSwift.Application.DTOs.Company
         string PhoneNumber,
         string Email,
         string Description);
+
+    public sealed record CompanyResponseInfo(string CompanyId,
+    string CompanyName,
+    string UserName,
+    string PhoneNumber,
+    string Email,
+    string Description);
 }

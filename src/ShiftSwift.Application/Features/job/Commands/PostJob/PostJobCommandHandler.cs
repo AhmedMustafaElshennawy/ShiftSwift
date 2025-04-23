@@ -44,8 +44,14 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 Location = request.Location,
                 PostedOn = DateTime.UtcNow,
                 Title = request.Title,
+                JobTypeId = request.JobType,
+                WorkModeId = request.WorkMode,
+                Salary = request.Salary,
+                Requirements = request.Requirements,
+                Keywords = request.Keywords,
+                SalaryTypeId = request.SalaryType
             };
-              
+
             await _unitOfWork.Jobs.AddEntityAsync(postJob);
             await _unitOfWork.CompleteAsync(cancellationToken);
 
@@ -54,7 +60,8 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 postJob.Title,
                 postJob.Description,
                 postJob.Location,
-                postJob.PostedOn);   
+                postJob.PostedOn,
+                postJob.JobTypeId);
 
             return new ApiResponse<PostedJobResponse>
             {
