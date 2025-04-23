@@ -71,7 +71,7 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
                 job.Description,
                 job.Location,
                 job.PostedOn,
-                job.JobType);
+                job.JobTypeId);
 
             return new ApiResponse<PostedJobResponse>
             {

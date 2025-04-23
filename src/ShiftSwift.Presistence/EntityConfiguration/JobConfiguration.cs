@@ -26,13 +26,13 @@ namespace ShiftSwift.Presistence.EntityConfiguration
             builder.Property(j => j.PostedOn)
                 .IsRequired();
 
-            builder.Property(j => j.JobType)
+            builder.Property(j => j.JobTypeId)
                 .HasConversion<int>();
 
-            builder.Property(j => j.WorkMode)
+            builder.Property(j => j.WorkModeId)
                 .HasConversion<int>();
 
-            builder.Property(j => j.SalaryType)
+            builder.Property(j => j.SalaryTypeId)
                 .HasConversion<int>();
 
             builder.Property(j => j.Salary)

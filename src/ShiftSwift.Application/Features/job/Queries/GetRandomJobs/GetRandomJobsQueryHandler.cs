@@ -1,42 +1,103 @@
-﻿using ErrorOr;
-using MediatR;
-using Microsoft.EntityFrameworkCore;
-using ShiftSwift.Application.Common.Repository;
+﻿using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
+using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Extentions;
+using ShiftSwift.Shared.ApiBaseResponse;
 using ShiftSwift.Shared.paging;
+using System.Net;
+using ErrorOr;
+using MediatR;
+
 
 namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs
 {
-    public sealed class GetRandomJobsQueryHandler : IRequestHandler<GetRandomJobsQuery, ErrorOr<PaginatedResponse<GetRandomJobsResponse>>>
+    public sealed class GetRandomJobsQueryHandler : IRequestHandler<GetRandomJobsQuery, ErrorOr<ApiResponse<PaginatedResponse<GetRandomJobsResponse>>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         public GetRandomJobsQueryHandler(IUnitOfWork unitOfWork) => _unitOfWork = unitOfWork;
-        public async Task<ErrorOr<PaginatedResponse<GetRandomJobsResponse>>> Handle(GetRandomJobsQuery request, CancellationToken cancellationToken)
-        {
-            var jobRepository = _unitOfWork.Jobs.Entites();
 
-            var query = jobRepository
-            .AsQueryable()
-            .Include(x => x.Company)
-            .OrderBy(x => Guid.NewGuid())
-            .Select(x => new GetRandomJobsResponse(
+        public async Task<ErrorOr<ApiResponse<PaginatedResponse<GetRandomJobsResponse>>>> Handle(GetRandomJobsQuery request, CancellationToken cancellationToken)
+        {
+            var query = _unitOfWork.Jobs.Entites()
+                .Include(x => x.Company)
+                .AsQueryable();
+
+            if (request.JobTypeIdFilterValue > 0)
+            {
+                query = query.Where(x => x.JobTypeId == request.JobTypeIdFilterValue);
+            }
+
+            if (request.SalaryTypeIdFilterValue > 0)
+            {
+                query = query.Where(x => x.SalaryTypeId == request.SalaryTypeIdFilterValue);
+            }
+
+            switch (request.SortBy?.ToLower())
+            {
+                case "jobtype":
+                    query = request.SortOrder?.ToLower() == "desc"
+                        ? query.OrderByDescending(x => x.JobTypeId)
+                        : query.OrderBy(x => x.JobTypeId);
+                    break;
+
+                case "salarytype":
+                    query = request.SortOrder?.ToLower() == "desc"
+                        ? query.OrderByDescending(x => x.SalaryTypeId)
+                        : query.OrderBy(x => x.SalaryTypeId);
+                    break;
+
+                default:
+                    query = query.OrderBy(x => Guid.NewGuid());
+                    break;
+            }
+
+            var paginatedJobs = await query.ToPaginatedListAsync(
+                request.PageNumber,
+                request.PageSize,
+                cancellationToken);
+
+            if (paginatedJobs is null || !paginatedJobs.Data.Any())
+            {
+                var filterMessage = new List<string>();
+                if (request.JobTypeIdFilterValue > 0)
+                    filterMessage.Add($"job type: {request.JobTypeIdFilterValue}");
+
+                if (request.SalaryTypeIdFilterValue > 0)
+                    filterMessage.Add($"salary type: {request.SalaryTypeIdFilterValue}");
+
+                return Error.NotFound(
+                    code: "jobs.NotFound",
+                    description: filterMessage.Any()
+                        ? $"No jobs found with {string.Join(" and ", filterMessage)}."
+                        : "No jobs found.");
+            }
+
+            var jobs = paginatedJobs.Data.Select(x => new GetRandomJobsResponse(
                 x.Id,
                 x.CompanyId,
-                x.Company != null ? x.Company.CompanyName : "Unknown",
+                x.Company?.CompanyName ?? "Unknown",
                 x.Title,
                 x.Description,
                 x.Location,
-                x.PostedOn
-            ));
+                x.PostedOn,
+                x.SalaryTypeId,
+                x.Salary,
+                x.JobTypeId
+            )).ToList();
 
-            var paginatedJobs = await query.ToPaginatedListAsync(request.PageNumber, request.PageSize, cancellationToken);
+            var response = PaginatedResponse<GetRandomJobsResponse>.Create(
+                jobs,
+                paginatedJobs.TotalCount,
+                paginatedJobs.CurrentPage,
+                paginatedJobs.PageSize);
 
-            return paginatedJobs.Data.Count > 0
-            ? paginatedJobs
-            : Error.NotFound(
-                code: "jobs.NotFound",
-                description: "No jobs found.");
+            return new ApiResponse<PaginatedResponse<GetRandomJobsResponse>>
+            {
+                IsSuccess = true,
+                StatusCode = HttpStatusCode.OK,
+                Message = "Jobs retrieved successfully.",
+                Data = response
+            };
         }
     }
 }

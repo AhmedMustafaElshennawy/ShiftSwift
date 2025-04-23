@@ -3,17 +3,15 @@ using ShiftSwift.Application.Features.job.Commands.DeletePostJob;
 using ShiftSwift.Application.Features.job.Commands.PostJob;
 using ShiftSwift.Application.Features.job.Commands.UpdatePostJob;
 using ShiftSwift.Application.Features.job.Queries.GetAllJobPosts;
+using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
+using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.jobApplication.Query.GetApplicants;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
+using ShiftSwift.Application.Features.rating.Queries.GetRating;
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData;
-using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
-using ShiftSwift.Application.Features.rating.Commands.AddRating;
-using ShiftSwift.Application.Features.rating.Queries.GetRating;
-using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
-using ShiftSwift.Domain.Enums;
-
 
 
 namespace ShiftSwift.API.Controllers
@@ -43,9 +41,14 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId,[FromBody] JobDTO request, CancellationToken cancellationToken)
         {
             var command = new PostJobCommand(request.Title,
-                request.Description, 
+                request.Description,
                 request.Location,
-                request.JobType);
+                request.JobType,
+                request.WorkMode,
+                request.Salary,
+                request.SalaryType,
+                request.Requirements,
+                request.Keywords);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -61,7 +64,13 @@ namespace ShiftSwift.API.Controllers
             var command = new UpdatePostJobCommand(JobId,
                 request.Title,
                 request.Description,
-                request.Location);
+                request.Location,
+                request.JobType,
+                request.WorkMode,
+                request.Salary,
+                request.SalaryType,
+                request.Requirements,
+                request.Keywords);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -98,7 +107,7 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("ApplyApplicant/{JobId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute]ApplicationStatus status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute]int status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
         {
             var command = new ApplyApplicantCommand(JobId, MemberId,status);
 

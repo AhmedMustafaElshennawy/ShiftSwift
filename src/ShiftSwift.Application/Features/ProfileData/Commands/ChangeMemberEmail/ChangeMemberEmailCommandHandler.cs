@@ -58,11 +58,12 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail
 
 
             var MemberResponse = new MemberResponse(member.Id,
-              member.FullName,
-              member.UserName!,
-              member.PhoneNumber!,
-              member.Email!,
-              member.GenderId);
+               member.FullName,
+               member.UserName!,
+               member.PhoneNumber!,
+               member.Email!,
+               member.GenderId,
+               member.Location);
 
             return new ApiResponse<MemberResponse>
             {

@@ -5,7 +5,12 @@ namespace ShiftSwift.Application.DTOs.Company
     public sealed record JobDTO(string Title,
         string Description,
         string Location,
-        JobTypeEnum JobType);
+        int JobType,
+        int WorkMode,
+        decimal Salary, 
+        int SalaryType, 
+        string Requirements,
+        string Keywords);
 
     public sealed record PostedJobResponse(string CompanyId,
         Guid JobId,
@@ -13,7 +18,7 @@ namespace ShiftSwift.Application.DTOs.Company
         string Description,
         string Location,
         DateTime PostedOn,
-        JobTypeEnum JobType);
+        int JobType);
 
     public sealed record ListMyJobApplicaionsResponse(Guid JobId,
         string Title,

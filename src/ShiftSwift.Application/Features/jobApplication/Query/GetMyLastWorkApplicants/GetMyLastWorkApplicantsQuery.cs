@@ -47,7 +47,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkAppl
             .Include(m => m.JobApplications)
             .ThenInclude(ja => ja.Job)
             .Where(m => m.JobApplications.Any(ja =>
-                 ja.Status == ApplicationStatus.Accepted && ja.Job.CompanyId == currentUser.UserId))
+                 ja.Status == 2 && ja.Job.CompanyId == currentUser.UserId))
             .Select(m => new GetApplicantsResponse(
                 m.Id,
                 m.FullName,

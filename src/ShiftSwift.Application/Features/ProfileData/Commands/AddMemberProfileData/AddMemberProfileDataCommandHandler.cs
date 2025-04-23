@@ -55,8 +55,8 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
 
             member.FirstName = request.FirstName;
             member.LastName = request.LastName;
-            member.MiddleName = request.MeddileName;
             member.GenderId = request.GenderId;
+            member.Location = request.Location;
 
             await _unitOfWork.Members.UpdateAsync(member);
             await _unitOfWork.CompleteAsync(cancellationToken);
@@ -66,7 +66,8 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
               member.UserName!,
               member.PhoneNumber!,
               member.Email!,
-              member.GenderId);
+              member.GenderId,
+              member.Location);
 
             return new ApiResponse<MemberResponse>
             {

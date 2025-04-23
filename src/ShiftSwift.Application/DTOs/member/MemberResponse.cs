@@ -2,15 +2,16 @@
 
 namespace ShiftSwift.Application.DTOs.member
 {
-    public record MemberResponse(
+    public sealed record MemberResponse(
        string memberId,
        string FullName,
        string UserName,
        string PhoneNumber,
        string Email,
-       int GenderId);
+       int GenderId,
+       string Location);
 
-    public record GetApplicantsResponse(
+    public sealed record GetApplicantsResponse(
        string MemberId,
        string FullName,
        string UserName,
@@ -22,5 +23,15 @@ namespace ShiftSwift.Application.DTOs.member
        string UserName,
        string PhoneNumber,
        string Email,
-       ApplicationStatus status);
+       int status);
+
+
+    public sealed record MemberResponseInfo(
+        string memberId,
+        string FullName,
+        string UserName,
+        string PhoneNumber,
+        string Email,
+        int GenderId,
+        string Location);
 }
