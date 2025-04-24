@@ -16,7 +16,9 @@ using ShiftSwift.Application.Features.skill.Commands.DeleteSkill;
 using ShiftSwift.Application.Features.skill.Queries.GetSkill;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
+using ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs;
 using ShiftSwift.Application.DTOs.member;
+
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
@@ -219,7 +221,7 @@ namespace ShiftSwift.API.Controllers
         [HttpPost("AddJobApplication")]
         public async Task<IActionResult> AddJobApplication(JobApplicationDTO request, CancellationToken cancellationToken)
         {
-            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId,request.Status);
+            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Status);
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
@@ -277,6 +279,48 @@ namespace ShiftSwift.API.Controllers
                 error => Problem(error));
 
             return response;
+
+
+
+
         }
+
+        [HttpGet("SearchJobs")]
+        public async Task<IActionResult> SearchJobs(
+    [FromQuery(Name = "search")] string? search,
+    [FromQuery(Name = "area")] string? area,
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? sortBy = "latest",
+    [FromQuery] int jobTypeIdFilterValue = 0,
+    [FromQuery] decimal? minSalary = null,
+    [FromQuery] decimal? maxSalary = null,
+    CancellationToken cancellationToken = default)
+        {
+            var query = new SearchJobsQuery
+            {
+                Search = search,
+                Location = area,
+                PageNumber = pageNumber,
+                PageSize = pageSize,
+                SortBy = sortBy!,
+                JobTypeIdFilterValue = jobTypeIdFilterValue,
+                MinSalary = minSalary,
+                MaxSalary = maxSalary
+            };
+
+            var result = await _sender.Send(query, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error)
+            );
+
+            return response;
+        }
+
+
     }
+
 }
+    
