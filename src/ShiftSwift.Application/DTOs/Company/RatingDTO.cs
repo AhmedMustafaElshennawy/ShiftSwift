@@ -13,18 +13,16 @@
         DateTime CreatedAt);
     
     public sealed record CompanyRatingResponse(
-    decimal Score,        
-    string? Comment,       
-    DateTime CreatedAt,    
-    string RatedByUserName,
-    string? RatedByImageUrl);
+        decimal Score,        
+        string? Comment,       
+        DateTime CreatedAt,    
+        string RatedByUserName,
+        string? RatedByImageUrl);
 
     public sealed record AverageRatingResponse(
         string CompanyId,
         decimal? AverageScore,
-        List<CompanyRatingResponse>? Ratings
-
-        );
+        List<CompanyRatingResponse>? Ratings);
 
 }
 

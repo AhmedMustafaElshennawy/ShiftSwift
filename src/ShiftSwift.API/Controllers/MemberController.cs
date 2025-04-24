@@ -35,7 +35,7 @@ namespace ShiftSwift.API.Controllers
             var command = new AddMemberProfileDataCommand(
                 MemberId,
                 request.FirstName,
-                request.MiddileName,
+                request.Location,
                 request.LastName,
                 request.GenderId);
 
