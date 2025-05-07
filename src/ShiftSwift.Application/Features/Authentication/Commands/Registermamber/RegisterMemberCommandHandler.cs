@@ -22,7 +22,6 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
         public RegisterMemberCommandHandler(
             UserManager<Account> userManager,
             IEmailService emailService,
-            ICacheService cacheService,
             ITokenGenerator tokenGenerator,
             RoleManager<IdentityRole> roleManager)
         {
