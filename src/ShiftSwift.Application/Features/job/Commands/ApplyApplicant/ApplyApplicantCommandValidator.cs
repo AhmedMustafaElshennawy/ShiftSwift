@@ -15,8 +15,8 @@ namespace ShiftSwift.Application.Features.job.Commands.ApplyApplicant
 
             RuleFor(x => x.ApplicationStatus)
                  .NotEmpty().WithMessage("Job type is required.")
-                 .Must(g => g == 1 || g == 2 || g == 3)
-                 .WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected).");
+                 .Must(g => g == 1 || g == 2 || g == 3 || g == 4 || g == 5)
+                 .WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected), 4 (Shortlisted), 5 (RemovedFromShortlist).");
         }
     }
 }

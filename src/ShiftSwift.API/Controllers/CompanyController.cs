@@ -12,6 +12,8 @@ using ShiftSwift.Application.Features.rating.Queries.GetRating;
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ShiftSwift.Application.Features.job.Commands.RemoveFromShortlist;
+using ShiftSwift.Application.Features.job.Queries.GetShortlistedMembers;
 
 
 namespace ShiftSwift.API.Controllers
@@ -107,7 +109,7 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("ApplyApplicant/{JobId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute]int status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute] Guid JobId, [FromQuery] string MemberId, [FromQuery] int status , CancellationToken cancellationToken)
         {
             var command = new ApplyApplicantCommand(JobId, MemberId,status);
 
@@ -128,6 +130,35 @@ namespace ShiftSwift.API.Controllers
             var response = result.Match(
                 success => Ok(result.Value),
                 error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetShortlistedMembers/{jobId}")]
+        public async Task<IActionResult> GetShortlistedMembers([FromRoute] Guid jobId, CancellationToken cancellationToken)
+        {
+            var query = new GetShortlistedMembersQuery(jobId);
+
+            var result = await _sender.Send(query, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(success),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpPost("RemoveMemberFromShortlist/{JobId}")]
+        public async Task<IActionResult> RemoveFromShortlist([FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        {
+            var command = new RemoveFromShortlistCommand(JobId, MemberId);
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(success),
+                error => Problem(error)
+            );
 
             return response;
         }
