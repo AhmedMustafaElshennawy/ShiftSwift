@@ -18,7 +18,6 @@ using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
 using ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs;
 using ShiftSwift.Application.DTOs.member;
-
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 
@@ -292,23 +291,19 @@ namespace ShiftSwift.API.Controllers
                 error => Problem(error));
 
             return response;
-
-
-
-
         }
 
         [HttpGet("SearchJobs")]
         public async Task<IActionResult> SearchJobs(
-    [FromQuery(Name = "search")] string? search,
-    [FromQuery(Name = "area")] string? area,
-    [FromQuery] int pageNumber = 1,
-    [FromQuery] int pageSize = 10,
-    [FromQuery] string? sortBy = "latest",
-    [FromQuery] int jobTypeIdFilterValue = 0,
-    [FromQuery] decimal? minSalary = null,
-    [FromQuery] decimal? maxSalary = null,
-    CancellationToken cancellationToken = default)
+            [FromQuery(Name = "search")] string? search,
+            [FromQuery(Name = "area")] string? area,
+            [FromQuery] int pageNumber = 1,
+            [FromQuery] int pageSize = 10,
+            [FromQuery] string? sortBy = "latest",
+            [FromQuery] int jobTypeIdFilterValue = 0,
+            [FromQuery] decimal? minSalary = null,
+            [FromQuery] decimal? maxSalary = null,
+            CancellationToken cancellationToken = default)
         {
             var query = new SearchJobsQuery
             {
@@ -331,9 +326,5 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
-
-
     }
-
 }
-    

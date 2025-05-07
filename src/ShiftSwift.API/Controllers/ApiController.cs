@@ -14,10 +14,10 @@ namespace ShiftSwift.API.Controllers
             if (errors is null || errors.Count is 0)
             {
                 return Problem(
-                     message: "An unknown error occurred.",
-                     statusCode: HttpStatusCode.InternalServerError);
+                    message: "An unknown error occurred.",
+                    statusCode: HttpStatusCode.InternalServerError);
             }
-            
+
             if (errors.All(error => error.Type is ErrorType.Validation)) return ValidationProblem(errors);
 
             var statusCode = MapErrorToStatusCode(errors.First().Type);
@@ -48,7 +48,8 @@ namespace ShiftSwift.API.Controllers
                 data: groupedErrors);
         }
 
-        private IActionResult Problem(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError, object? data = null)
+        private IActionResult Problem(string message, HttpStatusCode statusCode = HttpStatusCode.InternalServerError,
+            object? data = null)
         {
             var response = new ApiErrorResponse
             {
