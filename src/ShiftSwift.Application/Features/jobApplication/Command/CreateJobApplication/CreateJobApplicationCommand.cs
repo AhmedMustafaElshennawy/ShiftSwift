@@ -9,5 +9,4 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
         Guid JobId, 
         string MemberId,
         int ApplicationStatus) :IRequest<ErrorOr<ApiResponse<JobApplicationResponse>>>;
-
 }

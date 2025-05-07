@@ -1,6 +1,8 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
+using ShiftSwift.Domain.memberprofil;
 
 
 namespace ShiftSwift.Presistence.EntityConfiguration
@@ -14,11 +16,10 @@ namespace ShiftSwift.Presistence.EntityConfiguration
                    .IsRequired();
 
             builder.Property(m => m.GenderId)
-                   .HasConversion<int>();
+                .HasConversion<int>();
 
             builder.Property(m => m.LastName)
-                   .HasMaxLength(100)
-                   .IsRequired();
+                .HasMaxLength(100);
 
             builder.Property(m => m.ProfileViews)
                    .HasDefaultValue(0);

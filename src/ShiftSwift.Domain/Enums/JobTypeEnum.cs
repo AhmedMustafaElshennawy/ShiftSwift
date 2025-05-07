@@ -7,6 +7,13 @@
         Freelance = 3
     }
 
+    public enum GenderType
+    {
+        Male = 1,
+        Female = 2,
+        Other = 3
+    }
+
     public enum WorkModeEnum
     {
         OnSite = 1,
