@@ -66,7 +66,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileD
               member.UserName!,
               member.PhoneNumber!,
               member.Email!,
-              member.GenderId,
+              member.GenderId.Value,
               member.Location);
 
             return new ApiResponse<MemberResponse>

@@ -8,6 +8,7 @@ using ShiftSwift.Application.services.Email;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.Enums;
 
 namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
 {
@@ -63,7 +64,8 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
                 Id = Guid.NewGuid().ToString(),
                 Email = request.Email,
                 UserName = request.UserName,
-                PhoneNumber = request.PhoneNumber
+                PhoneNumber = request.PhoneNumber,
+                GenderId = 3
             };
 
             var result = await _userManager.CreateAsync(member, request.Password);
@@ -90,7 +92,7 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
                 member.UserName,
                 member.PhoneNumber!,
                 member.Email,
-                member.GenderId,
+                member.GenderId.Value,
                 member.Location);
 
             var registerationMemberResponse = new RegisterationMemberResult(

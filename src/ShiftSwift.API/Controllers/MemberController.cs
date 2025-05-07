@@ -30,7 +30,8 @@ namespace ShiftSwift.API.Controllers
         public MemberController(ISender sender) => _sender = sender;
 
         [HttpPost("AddOrUpdateMamberProfileData/{MemberId}")]
-        public async Task<IActionResult> AddOMamberProfileData([FromRoute] string MemberId, [FromBody] ProfileDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddOMamberProfileData([FromRoute] string MemberId,
+            [FromBody] ProfileDTO request, CancellationToken cancellationToken)
         {
             var command = new AddMemberProfileDataCommand(
                 MemberId,
@@ -48,7 +49,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("AddOrUpdateEducation/{MemberId}")]
-        public async Task<IActionResult> RegisterMember([FromRoute] string MemberId, [FromBody] EducationDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterMember([FromRoute] string MemberId, [FromBody] EducationDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new AddEducationCommand(
                 MemberId,
@@ -78,7 +80,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpDelete("DeleteEducation/{MemberId}")]
-        public async Task<IActionResult> DeleteEducation([FromRoute] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteEducation([FromRoute] string MemberId,
+            CancellationToken cancellationToken)
         {
             var command = new DeleteEducationCommand(MemberId);
 
@@ -91,7 +94,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("AddOrUpdateExperience/{MemberId}")]
-        public async Task<IActionResult> AddExperience([FromRoute] string MemberId, [FromBody] ExperienceDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddExperience([FromRoute] string MemberId, [FromBody] ExperienceDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new AddExperienceCommand(MemberId,
                 request.Title,
@@ -122,7 +126,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpDelete("DeleteExperience/{MemberId}")]
-        public async Task<IActionResult> DeleteExperience([FromRoute] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteExperience([FromRoute] string MemberId,
+            CancellationToken cancellationToken)
         {
             var command = new DeleteExperienceCommand(MemberId);
 
@@ -133,8 +138,10 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
+
         [HttpPost("AddOrUpdateSkill/{MemberId}")]
-        public async Task<IActionResult> AddOrUpdateSkill([FromRoute] string MemberId, [FromBody] SkillDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddOrUpdateSkill([FromRoute] string MemberId, [FromBody] SkillDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new AddSkillCommand(
                 MemberId,
@@ -175,7 +182,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("AddOrUpdateAccomplishment/{MemberId}")]
-        public async Task<IActionResult> AddOrUpdateAccomplishment([FromRoute] string MemberId, [FromBody] AccomplishmentDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddOrUpdateAccomplishment([FromRoute] string MemberId,
+            [FromBody] AccomplishmentDTO request, CancellationToken cancellationToken)
         {
             var command = new AddAccomplishmentCommand(
                 MemberId,
@@ -192,7 +200,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpGet("GetAccomplishments/{MemberId}")]
-        public async Task<IActionResult> GetAccomplishments([FromRoute] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAccomplishments([FromRoute] string MemberId,
+            CancellationToken cancellationToken)
         {
             var query = new GetAccomplishmentQuery(MemberId);
 
@@ -205,7 +214,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpDelete("DeleteAccomplishment/{MemberId}")]
-        public async Task<IActionResult> DeleteAccomplishment([FromRoute] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> DeleteAccomplishment([FromRoute] string MemberId,
+            CancellationToken cancellationToken)
         {
             var command = new DeleteAccomplishmentCommand(MemberId);
 
@@ -219,7 +229,8 @@ namespace ShiftSwift.API.Controllers
 
 
         [HttpPost("AddJobApplication")]
-        public async Task<IActionResult> AddJobApplication(JobApplicationDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Status);
             var result = await _sender.Send(command, cancellationToken);
@@ -244,7 +255,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("SaveJob")]
-        public async Task<IActionResult> GetJobApplications(Guid JobId, string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetJobApplications(Guid JobId, string MemberId,
+            CancellationToken cancellationToken)
         {
             var query = new SaveJobCommand(JobId, MemberId);
 
@@ -268,6 +280,7 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
+
         [HttpPost("ChangeMemberEmail/{MemberId}")]
         public async Task<IActionResult> ChangeEmail(string MemberId, string Email, CancellationToken cancellationToken)
         {

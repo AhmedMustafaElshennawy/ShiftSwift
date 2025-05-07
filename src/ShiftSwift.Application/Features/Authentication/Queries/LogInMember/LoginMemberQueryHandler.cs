@@ -56,7 +56,7 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInMember
                 member.UserName!,
                 member.PhoneNumber!,
                 member.Email!,
-                member.GenderId,
+                member.GenderId.Value,
                 member.Location);
 
             var loginCompanyResponse = new LoginMemberResult(

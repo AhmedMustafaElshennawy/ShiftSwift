@@ -12,7 +12,7 @@ namespace ShiftSwift.Domain.shared
         public string MemberId { get; set; }
         public Member Member { get; set; }
         public DateTime AppliedOn { get; set; } = DateTime.UtcNow;
-        public string Location { get; set; }
+        public string? Location { get; set; }
         public int Status { get; set; }
     }
 }
