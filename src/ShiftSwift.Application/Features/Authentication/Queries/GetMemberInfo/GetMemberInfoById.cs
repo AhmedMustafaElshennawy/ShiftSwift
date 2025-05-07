@@ -55,7 +55,7 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.GetMemberInfo
                 UserName: member.UserName!,
                 PhoneNumber: member.PhoneNumber!,
                 Email: member.Email!,
-                GenderId: member.GenderId,
+                GenderId: member.GenderId.Value,
                 Location: member.Location
             );
 
