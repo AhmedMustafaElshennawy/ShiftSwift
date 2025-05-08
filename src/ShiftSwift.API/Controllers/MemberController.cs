@@ -231,7 +231,7 @@ namespace ShiftSwift.API.Controllers
         public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
             CancellationToken cancellationToken)
         {
-            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Status);
+            var command = new CreateJobApplicationCommand(request.JobId, request.MemberId);
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
