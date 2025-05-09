@@ -1,11 +1,14 @@
 ﻿using FluentValidation;
 
-namespace ShiftSwift.Application.Features.experience.Commands.AddExperience;
+namespace ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
 
-public sealed class AddExperienceCommandValidator : AbstractValidator<AddExperienceCommand>
+public sealed class UpdateExperienceCommandValidator : AbstractValidator<UpdateExperienceCommand>
 {
-    public AddExperienceCommandValidator()
+    public UpdateExperienceCommandValidator()
     {
+        RuleFor(x => x.ExperienceId)
+            .NotEmpty().WithMessage("Experience ID is required.");
+
         RuleFor(x => x.MemberId)
             .NotEmpty().WithMessage("Member ID is required.")
             .MaximumLength(100).WithMessage("Member ID cannot exceed 450 characters.");
