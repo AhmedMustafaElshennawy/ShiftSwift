@@ -16,6 +16,7 @@ using ShiftSwift.Application.Features.skill.Commands.DeleteSkill;
 using ShiftSwift.Application.Features.skill.Queries.GetSkill;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
 using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
+using ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs;
 using ShiftSwift.Application.DTOs.member;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
@@ -135,6 +136,7 @@ public class MemberController(ISender sender) : ApiController
         [FromBody] UpdateExperienceDTO request,
         CancellationToken cancellationToken)
     {
+
         var command = new UpdateExperienceCommand(request.ExperienceId,
             MemberId,
             request.Title,
@@ -349,5 +351,6 @@ public class MemberController(ISender sender) : ApiController
             error => Problem(error));
 
         return response;
+
     }
 }

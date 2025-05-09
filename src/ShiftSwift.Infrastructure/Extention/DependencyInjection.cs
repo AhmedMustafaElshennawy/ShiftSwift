@@ -12,49 +12,47 @@ using ShiftSwift.Infrastructure.services.caching;
 using ShiftSwift.Infrastructure.services.Email;
 using System.Text;
 
-namespace ShiftSwift.Infrastructure.Extention
+namespace ShiftSwift.Infrastructure.Extention;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddInfrastructure(this IServiceCollection services, IConfiguration configuration)
-        {
+        services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
+        JwtSettings jwtSettings = new JwtSettings();
+        configuration.Bind(JwtSettings.SectionName, jwtSettings);
 
-            services.Configure<JwtSettings>(configuration.GetSection(JwtSettings.SectionName));
-            JwtSettings _jwtSettings = new JwtSettings();
-            configuration.Bind(JwtSettings.SectionName, _jwtSettings);
-
-            services.AddScoped<ITokenGenerator, TokenGenerator>();
-            services.AddAuthentication(options =>
+        services.AddScoped<ITokenGenerator, TokenGenerator>();
+        services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
             })
-            .AddJwtBearer(options =>
+        .AddJwtBearer(options =>
+        {
+            options.RequireHttpsMetadata = false;
+            options.SaveToken = false;
+            options.TokenValidationParameters = new TokenValidationParameters()
             {
-                options.RequireHttpsMetadata = false;
-                options.SaveToken = false;
-                options.TokenValidationParameters = new TokenValidationParameters()
-                {
-                    ValidateIssuer = false,
-                    ValidIssuer = configuration[_jwtSettings.Issuer],
-                    ValidateAudience = false,
-                    ValidAudience = configuration[_jwtSettings.Audience],
-                    ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_jwtSettings.Key)),
-                    ValidateLifetime = true,
-                    ClockSkew = TimeSpan.Zero
-                };
-            });
+                ValidateIssuer = false,
+                ValidIssuer = configuration[jwtSettings.Issuer],
+                ValidateAudience = false,
+                ValidAudience = configuration[jwtSettings.Audience],
+                ValidateIssuerSigningKey = true,
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtSettings.Key)),
+                ValidateLifetime = true,
+                ClockSkew = TimeSpan.Zero
+            };
+        });
 
 
-            services.AddTransient<IEmailService, EmailService>();
-            var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
-            services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+        services.AddTransient<IEmailService, EmailService>();
+        var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
+        services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
-            services.AddScoped<ICacheService, RedisCacheService>();
-            services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
+        //services.AddScoped<ICacheService, RedisCacheService>();
+        services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
-            return services;
-        }
+        return services;
     }
 }

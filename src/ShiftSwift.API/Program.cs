@@ -1,5 +1,5 @@
-using GymManagement.Application.Extention;
 using ShiftSwift.API.Extention;
+using ShiftSwift.Application.Extentions;
 using ShiftSwift.Infrastructure.Extention;
 using ShiftSwift.Presistence.Extentions;
 

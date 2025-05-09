@@ -20,7 +20,8 @@ namespace ShiftSwift.API.Controllers
         public AccountController(ISender sender) => _sender = sender;
 
         [HttpPost("RegisterMember")]
-        public async Task<IActionResult> RegisterMember([FromForm]RegisterMemberRequest request,CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterMember([FromForm] RegisterMemberRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new RegisterMemberCommand(
                 request.Email,
@@ -30,14 +31,15 @@ namespace ShiftSwift.API.Controllers
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
-                success=>Ok(result.Value),
-                error=>Problem(error));
+                success => Ok(result.Value),
+                error => Problem(error));
 
             return response;
         }
 
         [HttpPost("RegisterCompany")]
-        public async Task<IActionResult> RegisterCompany([FromForm]RegisterCompanyRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> RegisterCompany([FromForm] RegisterCompanyRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new RegisterCompanyCommand(
                 request.Email,
@@ -54,11 +56,12 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("LoginCompany")]
-        public async Task<IActionResult> LoginCompany([FromBody]LoginAccountRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> LoginCompany([FromBody] LoginAccountRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new LoginCompanyQuery(
-               request.UserName,
-               request.Password);
+                request.UserName,
+                request.Password);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -69,7 +72,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("LoginMember")]
-        public async Task<IActionResult> LoginMember([FromBody]LoginAccountRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> LoginMember([FromBody] LoginAccountRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new LoginMemberQuery(
                 request.UserName,
@@ -110,7 +114,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("AddOrUpdateProfilePicture")]
-        public async Task<IActionResult> AddProfilePicture([FromForm]AddProfilePictureRequest request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddProfilePicture([FromForm] AddProfilePictureRequest request,
+            CancellationToken cancellationToken)
         {
             var command = new AddProfilePictureCommand(request.FormFile);
 
@@ -134,10 +139,11 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
+
         [HttpGet("GetCompanyInfoById/{Id}")]
         public async Task<IActionResult> GetCompanyInfoById(string Id, CancellationToken cancellationToken)
         {
-            var query = new GetCompanyInfoById(Id); 
+            var query = new GetCompanyInfoById(Id);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(

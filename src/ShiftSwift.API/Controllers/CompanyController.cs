@@ -12,6 +12,8 @@ using ShiftSwift.Application.Features.rating.Queries.GetRating;
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ShiftSwift.Application.Features.job.Commands.RemoveFromShortlist;
+using ShiftSwift.Application.Features.job.Queries.GetShortlistedMembers;
 
 
 namespace ShiftSwift.API.Controllers
@@ -22,7 +24,8 @@ namespace ShiftSwift.API.Controllers
         public CompanyController(ISender sender) => _sender = sender;
 
         [HttpPost("AddOrUpdateCompanyProfileData/{CompanyId}")]
-        public async Task<IActionResult> AddOrCompanyProfileData([FromRoute] string CompanyId, [FromBody] CompanyProfileDataDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddOrCompanyProfileData([FromRoute] string CompanyId,
+            [FromBody] CompanyProfileDataDTO request, CancellationToken cancellationToken)
         {
             var command = new AddCompanyProfileDataCommand(
                 CompanyId,
@@ -38,7 +41,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("CreateJobPost/{CompanyId}")]
-        public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId,[FromBody] JobDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId, [FromBody] JobDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new PostJobCommand(request.Title,
                 request.Description,
@@ -59,7 +63,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPut("UpdateJobPost/{JobId}")]
-        public async Task<IActionResult> UpdateJobPost(Guid JobId, [FromBody] JobDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> UpdateJobPost(Guid JobId, [FromBody] JobDTO request,
+            CancellationToken cancellationToken)
         {
             var command = new UpdatePostJobCommand(JobId,
                 request.Title,
@@ -107,9 +112,10 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPost("ApplyApplicant/{JobId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute]int status ,[FromRoute] Guid JobId, [FromQuery] string MemberId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute] Guid JobId, [FromQuery] string MemberId,
+            [FromQuery] int status, CancellationToken cancellationToken)
         {
-            var command = new ApplyApplicantCommand(JobId, MemberId,status);
+            var command = new ApplyApplicantCommand(JobId, MemberId, status);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -120,7 +126,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpGet("GetAllJobPostsForCompany/{CompanyId}")]
-        public async Task<IActionResult> ApplyApplicant([FromRoute] string CompanyId, CancellationToken cancellationToken)
+        public async Task<IActionResult> ApplyApplicant([FromRoute] string CompanyId,
+            CancellationToken cancellationToken)
         {
             var command = new GetAllJobPostsForSpecificCompanyQuery(CompanyId);
 
@@ -132,8 +139,40 @@ namespace ShiftSwift.API.Controllers
             return response;
         }
 
+        [HttpGet("GetShortlistedMembers/{jobId}")]
+        public async Task<IActionResult> GetShortlistedMembers([FromRoute] Guid jobId,
+            CancellationToken cancellationToken)
+        {
+            var query = new GetShortlistedMembersQuery(jobId);
+
+            var result = await _sender.Send(query, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(success),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpPost("RemoveMemberFromShortlist/{JobId}")]
+        public async Task<IActionResult> RemoveFromShortlist([FromRoute] Guid JobId, [FromQuery] string MemberId,
+            CancellationToken cancellationToken)
+        {
+            var command = new RemoveFromShortlistCommand(JobId, MemberId);
+
+            var result = await _sender.Send(command, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(success),
+                error => Problem(error)
+            );
+
+            return response;
+        }
+
         [HttpPost("ChangeCompanyEmail/{CompanyId}")]
-        public async Task<IActionResult> ChangeEmail(string CompanyId, string Email, CancellationToken cancellationToken)
+        public async Task<IActionResult> ChangeEmail(string CompanyId, string Email,
+            CancellationToken cancellationToken)
         {
             var query = new ChangeCompanyEmailCommand(CompanyId, Email);
 
@@ -143,10 +182,11 @@ namespace ShiftSwift.API.Controllers
                 error => Problem(error));
 
             return response;
-        }  
+        }
 
         [HttpPost("AddRating/{CompanyId}")]
-        public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById, [FromBody] RatingDTO request, CancellationToken cancellationToken)
+        public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById,
+            [FromBody] RatingDTO request, CancellationToken cancellationToken)
         {
             var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
             var result = await _sender.Send(command, cancellationToken);
@@ -158,7 +198,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpGet("GetRating/{CompanyId}")]
-        public async Task<IActionResult> GetAverageRating([FromRoute] string CompanyId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetAverageRating([FromRoute] string CompanyId,
+            CancellationToken cancellationToken)
         {
             var query = new GetRatingQuery(CompanyId);
 
@@ -171,7 +212,8 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpGet("GetMyLastWorkApplicants/{CompanyId}")]
-        public async Task<IActionResult> GetMyLastWorkApplicants([FromRoute] string CompanyId, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetMyLastWorkApplicants([FromRoute] string CompanyId,
+            CancellationToken cancellationToken)
         {
             var query = new GetMyLastWorkApplicantsQuery(CompanyId);
 

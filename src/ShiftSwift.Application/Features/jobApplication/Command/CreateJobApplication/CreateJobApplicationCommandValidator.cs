@@ -15,10 +15,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
                 .NotEmpty().WithMessage("MemberId is required.")
                 .Must(id => Guid.TryParse(id, out _)).WithMessage("MemberId must be a valid GUID.");
 
-            RuleFor(x => x.ApplicationStatus)
-                .NotEmpty().WithMessage("Job type is required.")
-                .Must(g => g == 1 || g == 2 || g == 3)
-                .WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected).");
+            //WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected).");
         }
     }
 }
