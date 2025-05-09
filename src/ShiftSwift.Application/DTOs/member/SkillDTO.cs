@@ -2,6 +2,8 @@
 {
     public sealed record SkillDTO(
         string Name);
+    public sealed record UpdateSkillDTO(Guid SkillId,
+        string Name);
 
     public sealed record AddSkillResponse(
         string MemberId,

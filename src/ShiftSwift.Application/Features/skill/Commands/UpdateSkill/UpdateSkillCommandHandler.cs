@@ -1,24 +1,24 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using Microsoft.EntityFrameworkCore;
 
-namespace ShiftSwift.Application.Features.skill.Commands.AddSkill;
+namespace ShiftSwift.Application.Features.skill.Commands.UpdateSkill;
 
-public sealed class AddSkillCommandHandler(
+public sealed class UpdateSkillCommandHandler(
     IUnitOfWork unitOfWork,
-    ICurrentUserProvider currentUserProvider)
-    : IRequestHandler<AddSkillCommand, ErrorOr<ApiResponse<SkillResponse>>>
+    ICurrentUserProvider currentUserProvider,
+    IBaseRepository<Skill> skillRepository)
+    : IRequestHandler<UpdateSkillCommand, ErrorOr<ApiResponse<SkillResponse>>>
 {
     public async Task<ErrorOr<ApiResponse<SkillResponse>>> Handle(
-        AddSkillCommand request,
+        UpdateSkillCommand request,
         CancellationToken cancellationToken)
     {
-        // 1. Authentication & Authorization
         var currentUserResult = await currentUserProvider.GetCurrentUser();
         if (currentUserResult.IsError)
         {
@@ -32,7 +32,7 @@ public sealed class AddSkillCommandHandler(
         {
             return Error.Forbidden(
                 code: "User.Forbidden",
-                description: "Access denied. Only members can add skills.");
+                description: "Access denied. Only members can update skills.");
         }
 
         if (currentUser.UserId != request.MemberId)
@@ -42,14 +42,21 @@ public sealed class AddSkillCommandHandler(
                 description: "Access denied. Invalid MemberId.");
         }
 
-        var newSkill = new Skill
-        {
-            Id = Guid.NewGuid(),
-            MemberId = currentUser.UserId,
-            Name = request.Name
-        };
+        var existingSkill = await skillRepository.Entites()
+            .FirstOrDefaultAsync(s =>
+                    s.Id == request.SkillId &&
+                    s.MemberId == currentUser.UserId,
+                cancellationToken);
 
-        await unitOfWork.Skills.AddEntityAsync(newSkill);
+        if (existingSkill == null)
+        {
+            return Error.NotFound(
+                code: "Skill.NotFound",
+                description: "Skill not found or you don't have permission to update it.");
+        }
+
+        existingSkill.Name = request.Name;
+        await unitOfWork.Skills.UpdateAsync(existingSkill);
         await unitOfWork.CompleteAsync(cancellationToken);
 
         var response = new SkillResponse(
@@ -59,8 +66,8 @@ public sealed class AddSkillCommandHandler(
         return new ApiResponse<SkillResponse>
         {
             IsSuccess = true,
-            StatusCode = HttpStatusCode.Created,
-            Message = "Skill added successfully.",
+            StatusCode = HttpStatusCode.OK,
+            Message = "Skill updated successfully.",
             Data = response
         };
     }
