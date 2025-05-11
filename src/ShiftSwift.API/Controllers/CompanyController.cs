@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.job.Commands.RemoveFromShortlist;
 using ShiftSwift.Application.Features.job.Queries.GetShortlistedMembers;
+using ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplicant;
 
 
 namespace ShiftSwift.API.Controllers
@@ -30,7 +31,12 @@ namespace ShiftSwift.API.Controllers
             var command = new AddCompanyProfileDataCommand(
                 CompanyId,
                 request.CompanyName,
-                request.Description);
+                request.Overview,   
+                request.Field,
+                request.DateOfEstablish,
+                request.Country,    
+                request.City,       
+                request.Area);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -106,6 +112,20 @@ namespace ShiftSwift.API.Controllers
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetSpecificApplicantForSpecificJob/{JobId}/{MemberId}")]
+        public async Task<IActionResult> GetSpecificApplicantForSpecificJob(Guid JobId, string MemberId, CancellationToken cancellationToken)
+        {
+            var query = new GetSpecificApplicantQuery(JobId, MemberId);
+
+            var result = await _sender.Send(query, cancellationToken);
+
+            var response = result.Match(
+                success => Ok(success),
                 error => Problem(error));
 
             return response;

@@ -7,5 +7,10 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
 {
     public sealed record AddCompanyProfileDataCommand(string CompanyId,
        string CompanyName,
-       string Description) : IRequest<ErrorOr<ApiResponse<CompanyResponse>>>;
+       string? Overview,
+        string? Field,
+        DateTime? DateOfEstablish,
+        string? Country,
+        string? City,
+        string? Area) : IRequest<ErrorOr<ApiResponse<CompanyResponseInfo>>>;
 }

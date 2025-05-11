@@ -53,8 +53,7 @@ namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany
                 company.CompanyName,
                 company.UserName!,
                 company.PhoneNumber!,
-                company.Email!,
-                company.Description!);
+                company.Email!);
 
             var loginCompanyResponse = new LoginCompanyResult(
                 CompanyResponse: companyResponse,
