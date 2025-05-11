@@ -2,6 +2,11 @@
 {
     public record CompanyProfileDataDTO(
         string CompanyName,
-        string Description);
+        string? Overview,
+        string? Field,
+        DateTime? DateOfEstablish,
+        string? Country,
+        string? City,
+        string? Area);
 
 }

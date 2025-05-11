@@ -44,17 +44,25 @@ namespace ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs
             }
 
             var savedJobs = await _unitOfWork.SavedJobs
-            .Entites()
-            .Include(s => s.Job)
-            .ThenInclude(j => j.Company)
-            .Where(s => s.MemberId == request.MemberId)
-            .Select(s => new SavedJobsResponse(
-                s.Id,
-                s.JobId,
-                s.Job.Title,
-                s.Job.Company.CompanyName,
-                s.SavedOn))
-            .ToListAsync(cancellationToken);
+                .Entites()
+                .Include(s => s.Job)
+                .ThenInclude(j => j.Company)
+                .Where(s => s.MemberId == request.MemberId)
+                .Select(s => new SavedJobsResponse(
+                    s.Id,
+                    s.JobId,
+                    s.Job.Title,
+                    s.Job.Company.CompanyName,
+                    s.SavedOn,
+                    s.Job.CompanyId,
+                    s.Job.Title,
+                    s.Job.Description,
+                    s.Job.Location,
+                    s.Job.PostedOn,
+                    s.Job.SalaryTypeId,
+                    s.Job.Salary,
+                    s.Job.JobTypeId))
+                .ToListAsync(cancellationToken);
 
             return new ApiResponse<IReadOnlyList<SavedJobsResponse>>
             {

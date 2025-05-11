@@ -27,6 +27,9 @@ namespace ShiftSwift.Presistence.Configurations
 
             builder.Property(ja => ja.Status)
                    .IsRequired();
+
+            builder.Property(j => j.Location)
+                .IsRequired(false);
         }
     }
 }

@@ -12,8 +12,8 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    [Migration("20250419130628_AddLocaionColumn.")]
-    partial class AddLocaionColumn
+    [Migration("20250511072608_AddCompanyProfileFields")]
+    partial class AddCompanyProfileFields
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -447,7 +447,6 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberId")
@@ -506,12 +505,31 @@ namespace ShiftSwift.Presistence.Migrations
                 {
                     b.HasBaseType("ShiftSwift.Domain.identity.Account");
 
+                    b.Property<string>("Area")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("City")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
                     b.Property<string>("CompanyName")
                         .IsRequired()
                         .HasMaxLength(255)
                         .HasColumnType("nvarchar(255)");
 
-                    b.Property<string>("Description")
+                    b.Property<string>("Country")
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<DateTime?>("DateOfEstablish")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Field")
+                        .HasMaxLength(155)
+                        .HasColumnType("nvarchar(155)");
+
+                    b.Property<string>("Overview")
                         .HasMaxLength(500)
                         .HasColumnType("nvarchar(500)");
 
@@ -533,7 +551,7 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")

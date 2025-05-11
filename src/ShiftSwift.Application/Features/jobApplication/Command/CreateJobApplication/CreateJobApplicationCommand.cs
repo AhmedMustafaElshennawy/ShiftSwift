@@ -7,7 +7,5 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
 {
     public sealed record CreateJobApplicationCommand(
         Guid JobId, 
-        string MemberId,
-        int ApplicationStatus) :IRequest<ErrorOr<ApiResponse<JobApplicationResponse>>>;
-
+        string MemberId) :IRequest<ErrorOr<ApiResponse<JobApplicationResponse>>>;
 }

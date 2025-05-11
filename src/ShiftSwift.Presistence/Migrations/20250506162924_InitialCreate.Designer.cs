@@ -12,8 +12,8 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    [Migration("20250411081403_UpdateJobDomainModel")]
-    partial class UpdateJobDomainModel
+    [Migration("20250506162924_InitialCreate")]
+    partial class InitialCreate
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -533,7 +533,7 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -541,10 +541,9 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("MiddleName")
+                    b.Property<string>("Location")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProfileViews")
                         .ValueGeneratedOnAdd()

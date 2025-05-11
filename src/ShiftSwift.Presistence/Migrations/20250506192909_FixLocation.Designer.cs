@@ -12,8 +12,8 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    [Migration("20250410054310_InitialCreate.")]
-    partial class InitialCreate
+    [Migration("20250506192909_FixLocation")]
+    partial class FixLocation
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -394,7 +394,7 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(1000)
                         .HasColumnType("nvarchar(1000)");
 
-                    b.Property<int>("JobType")
+                    b.Property<int>("JobTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Keywords")
@@ -413,10 +413,10 @@ namespace ShiftSwift.Presistence.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal?>("Salary")
+                    b.Property<decimal>("Salary")
                         .HasColumnType("decimal(18,4)");
 
-                    b.Property<int?>("SalaryType")
+                    b.Property<int>("SalaryTypeId")
                         .HasColumnType("int");
 
                     b.Property<string>("Title")
@@ -424,7 +424,7 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("WorkMode")
+                    b.Property<int>("WorkModeId")
                         .HasColumnType("int");
 
                     b.HasKey("Id");
@@ -447,7 +447,6 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasColumnType("uniqueidentifier");
 
                     b.Property<string>("Location")
-                        .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("MemberId")
@@ -533,7 +532,7 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<int>("GenderId")
+                    b.Property<int?>("GenderId")
                         .HasColumnType("int");
 
                     b.Property<string>("LastName")
@@ -541,10 +540,9 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasMaxLength(100)
                         .HasColumnType("nvarchar(100)");
 
-                    b.Property<string>("MiddleName")
+                    b.Property<string>("Location")
                         .IsRequired()
-                        .HasMaxLength(10)
-                        .HasColumnType("nvarchar(10)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("ProfileViews")
                         .ValueGeneratedOnAdd()

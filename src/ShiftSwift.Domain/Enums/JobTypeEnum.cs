@@ -7,6 +7,13 @@
         Freelance = 3
     }
 
+    public enum GenderType
+    {
+        Male = 1,
+        Female = 2,
+        Other = 3
+    }
+
     public enum WorkModeEnum
     {
         OnSite = 1,
@@ -25,7 +32,10 @@
     {
         Pending = 1,
         Accepted = 2,
-        Rejected = 3
+        Rejected = 3,
+        Shortlisted = 4,
+        RemovedFromShortlist = 5
+
     }
 
 }
