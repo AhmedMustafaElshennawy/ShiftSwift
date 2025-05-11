@@ -42,31 +42,43 @@ public sealed class DeleteExperienceCommandHandler(
                 description: $"Access denied. The MemberId You Entered Is Wrong {request.MemberId}");
         }
 
-        var currentUserEducation = await experienceRepository.Entites()
-            .Where(x => x.MemberId == currentUser.UserId)
-            .FirstOrDefaultAsync(cancellationToken);
 
-        if (currentUserEducation is null)
+        if (currentUser.UserId != request.MemberId)
+        {
+            return Error.Unauthorized(
+                code: "User.Unauthorized",
+                description: $"Access denied. The MemberId you entered is invalid: {request.MemberId}");
+        }
+
+        var experience = await experienceRepository.Entites()
+            .FirstOrDefaultAsync(x =>
+                    x.MemberId == request.MemberId &&
+                    x.Id == request.ExperienceId,
+                cancellationToken);
+
+        if (experience is null)
         {
             return Error.NotFound(
                 code: "Experience.NotFound",
-                description: "No Experience Found to Current User.");
+                description: "Experience not found for the specified ID and user.");
         }
 
-        var deletionResult = await unitOfWork.Experiences.DeleteAsync(currentUserEducation);
-        if (deletionResult is not true)
+        // Attempt deletion
+        var deletionResult = await unitOfWork.Experiences.DeleteAsync(experience);
+        if (!deletionResult)
         {
             return Error.Failure(
                 code: "Experience.Failure",
-                description: "Failed To Delete Experience For Current User.");
+                description: "Failed to delete experience.");
         }
 
         await unitOfWork.CompleteAsync(cancellationToken);
+
         return new ApiResponse<Deleted>
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.NoContent,
-            Message = "Experience Deleted successfully.",
+            Message = "Experience deleted successfully.",
             Data = null
         };
     }

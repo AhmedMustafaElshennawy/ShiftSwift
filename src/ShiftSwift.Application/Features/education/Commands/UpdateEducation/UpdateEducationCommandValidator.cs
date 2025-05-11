@@ -4,6 +4,10 @@ namespace ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 
 public sealed class UpdateEducationCommandValidator : AbstractValidator<UpdateEducationCommand>
 {
+    private static readonly string[] ValidLevels =
+    [
+        "High School", "Associate", "Bachelor", "Master", "Doctorate", "Professional"
+    ];
     public UpdateEducationCommandValidator()
     {
         RuleFor(x => x.MemberId)
@@ -13,7 +17,9 @@ public sealed class UpdateEducationCommandValidator : AbstractValidator<UpdateEd
         RuleFor(x => x.LevelOfEducation)
             .NotEmpty().WithMessage("Level of education is required.")
             .MaximumLength(100).WithMessage("Level of education cannot exceed 100 characters.")
-            .Must(BeValidEducationLevel).WithMessage("Invalid level of education specified.");
+            .Must(BeValidEducationLevel)
+            .WithMessage($"Invalid level of education specified. Valid values are: {string.Join(", ", ValidLevels)}");
+
 
         RuleFor(x => x.FieldOfStudy)
             .NotEmpty().WithMessage("Field of study is required.")
@@ -27,7 +33,6 @@ public sealed class UpdateEducationCommandValidator : AbstractValidator<UpdateEd
 
     private bool BeValidEducationLevel(string level)
     {
-        var validLevels = new[] { "High School", "Associate", "Bachelor", "Master", "Doctorate", "Professional" };
-        return validLevels.Contains(level);
+        return ValidLevels.Contains(level);
     }
 }
