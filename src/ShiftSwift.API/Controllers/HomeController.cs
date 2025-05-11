@@ -4,7 +4,7 @@ using ShiftSwift.Application.Features.job.Queries.GetRandomJobs;
 
 namespace ShiftSwift.API.Controllers
 {
-    public class HomeController: ApiController
+    public class HomeController : ApiController
     {
         private readonly ISender _sender;
         public HomeController(ISender sender) => _sender = sender;
@@ -14,8 +14,8 @@ namespace ShiftSwift.API.Controllers
             [FromQuery] int PageSize = 10,
             [FromQuery] string? SortBy = "JobType",
             [FromQuery] string? SortOrder = "asc",
-            [FromQuery]int JobTypeIdFilterValue= 0,
-            [FromQuery]int SalaryTypeIdFilterValue = 0,CancellationToken cancellationToken=default)
+            [FromQuery] int JobTypeIdFilterValue = 0,
+            [FromQuery] int SalaryTypeIdFilterValue = 0, CancellationToken cancellationToken = default)
         {
             var query = new GetRandomJobsQuery
             {
@@ -27,7 +27,7 @@ namespace ShiftSwift.API.Controllers
                 SalaryTypeIdFilterValue = SalaryTypeIdFilterValue
             };
 
-            var result = await _sender.Send(query,cancellationToken);
+            var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(
                 success => Ok(result.Value),
                 error => Problem(error));

@@ -8,54 +8,47 @@ using ShiftSwift.Domain.identity;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 
-namespace ShiftSwift.Application.Features.Authentication.Queries.GetCompanyInfo
+namespace ShiftSwift.Application.Features.Authentication.Queries.GetCompanyInfo;
+
+public sealed record GetCompanyInfoById(string Id) : IRequest<ErrorOr<ApiResponse<CompanyResponseInfo>>>;
+
+public sealed class GetCompanyInfoByIdHandler(IBaseRepository<Company> repository, UserManager<Account> userManager)
+    : IRequestHandler<GetCompanyInfoById, ErrorOr<ApiResponse<CompanyResponseInfo>>>
 {
-    public sealed record GetCompanyInfoById(string Id):IRequest<ErrorOr<ApiResponse<CompanyResponseInfo>>>;
-
-    public sealed class GetCompanyInfoByIdHandler : IRequestHandler<GetCompanyInfoById, ErrorOr<ApiResponse<CompanyResponseInfo>>>
+    public async Task<ErrorOr<ApiResponse<CompanyResponseInfo>>> Handle(GetCompanyInfoById request,
+        CancellationToken cancellationToken)
     {
-        private readonly IBaseRepository<Company> _repository;
-        private readonly UserManager<Account> _userManager;
-        public GetCompanyInfoByIdHandler(IBaseRepository<Company> repository, UserManager<Account> userManager)
+        var company = await repository.Entites()
+            .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
+
+        if (company is null)
         {
-            _repository = repository;
-            _userManager = userManager;
+            return Error.NotFound("User.NotFound", "User not found.");
         }
-        public async Task<ErrorOr<ApiResponse<CompanyResponseInfo>>> Handle(GetCompanyInfoById request, CancellationToken cancellationToken)
+
+        var isCompany = await userManager.IsInRoleAsync(company, "Company");
+        if (!isCompany)
         {
-
-            var company = await _repository.Entites()
-                .FirstOrDefaultAsync(u => u.Id == request.Id, cancellationToken);
-
-            if (company is null)
-            {
-                return Error.NotFound("User.NotFound", "User not found.");
-            }
-
-            var isCompany = await _userManager.IsInRoleAsync(company, "Company");
-            if (!isCompany)
-            {
-                return Error.NotFound(
-                    code: "Company.NotFound",
-                    description: "User is not a member.");
-            }
-
-            var response = new CompanyResponseInfo(
-                CompanyId: company.Id,
-                CompanyName: company.CompanyName,
-                UserName: company.UserName!,
-                PhoneNumber: company.PhoneNumber!,
-                Email: company.Email!,
-                Description: company.Description!
-);
-
-            return new ApiResponse<CompanyResponseInfo>
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "User profile retrieved successfully.",
-                Data = response
-            };
+            return Error.NotFound(
+                code: "Company.NotFound",
+                description: "User is not a member.");
         }
+
+        var response = new CompanyResponseInfo(
+            CompanyId: company.Id,
+            CompanyName: company.CompanyName,
+            UserName: company.UserName!,
+            PhoneNumber: company.PhoneNumber!,
+            Email: company.Email!,
+            Description: company.Description!
+        );
+
+        return new ApiResponse<CompanyResponseInfo>
+        {
+            IsSuccess = true,
+            StatusCode = HttpStatusCode.OK,
+            Message = "User profile retrieved successfully.",
+            Data = response
+        };
     }
 }

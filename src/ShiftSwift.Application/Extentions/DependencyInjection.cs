@@ -4,24 +4,22 @@ using Microsoft.Extensions.DependencyInjection;
 using ShiftSwift.Application.Behaviors;
 using ShiftSwift.Application.Resolver;
 
-namespace GymManagement.Application.Extention
+namespace ShiftSwift.Application.Extentions;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddApplicaion(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddApplicaion(this IServiceCollection services, IConfiguration configuration)
+        services.AddMediatR(options =>
         {
-            services.AddMediatR(options =>
-            {
-                options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
-                options.AddOpenBehavior(typeof(ValidationBehavior<,>));
-            });
-            services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
-            services.AddControllersWithViews();
+            options.RegisterServicesFromAssemblyContaining(typeof(DependencyInjection));
+            options.AddOpenBehavior(typeof(ValidationBehavior<,>));
+        });
 
-            services.AddSingleton<AccountPictureResolver>();
+        services.AddValidatorsFromAssemblyContaining(typeof(DependencyInjection));
+        services.AddSingleton<AccountPictureResolver>();
 
 
-            return services;
-        }
+        return services;
     }
 }
