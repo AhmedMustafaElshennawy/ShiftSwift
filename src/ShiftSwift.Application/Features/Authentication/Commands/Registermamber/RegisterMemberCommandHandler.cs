@@ -29,19 +29,11 @@ public sealed class RegisterMemberCommandHandler : IRequestHandler<RegisterMembe
         _roleManager = roleManager;
     }
 
-<<<<<<< HEAD
     public async Task<ErrorOr<ApiResponse<RegisterationMemberResult>>> Handle(RegisterMemberCommand request,
         CancellationToken cancellationToken)
     {
         var roleExists = await _roleManager.RoleExistsAsync(_defaultMemberRole);
         if (!roleExists)
-=======
-        public RegisterMemberCommandHandler(
-            UserManager<Account> userManager,
-            IEmailService emailService,
-            ITokenGenerator tokenGenerator,
-            RoleManager<IdentityRole> roleManager)
->>>>>>> ebaa3ef3ec038adccd13e663f0e79a280dcdc049
         {
             var roleResult = await _roleManager.CreateAsync(new IdentityRole(_defaultMemberRole));
             if (!roleResult.Succeeded)
