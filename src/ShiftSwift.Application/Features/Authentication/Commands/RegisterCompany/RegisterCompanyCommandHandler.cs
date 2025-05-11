@@ -70,8 +70,7 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.Register
                 company.CompanyName,
                 company.UserName,
                 company.PhoneNumber,
-                company.Email,
-                company.Description);
+                company.Email);
 
             var registrationCompanyResponse = new RegisterationCompanyResult(
                 CompanyResponse: companyResponse,

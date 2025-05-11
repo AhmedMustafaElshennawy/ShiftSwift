@@ -31,7 +31,7 @@ public sealed class GetCompanyInfoByIdHandler(IBaseRepository<Company> repositor
         {
             return Error.NotFound(
                 code: "Company.NotFound",
-                description: "User is not a member.");
+                description: "User is not a company.");
         }
 
         var response = new CompanyResponseInfo(
@@ -40,8 +40,12 @@ public sealed class GetCompanyInfoByIdHandler(IBaseRepository<Company> repositor
             UserName: company.UserName!,
             PhoneNumber: company.PhoneNumber!,
             Email: company.Email!,
-            Description: company.Description!
-        );
+            Overview: company.Overview,
+            Field: company.Field,
+            DateOfEstablish: company.DateOfEstablish,
+            Country: company.Country,
+            City: company.City,
+            Area: company.Area );
 
         return new ApiResponse<CompanyResponseInfo>
         {

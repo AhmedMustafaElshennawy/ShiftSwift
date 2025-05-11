@@ -12,8 +12,23 @@ namespace ShiftSwift.Presistence.EntityConfiguration
                    .HasMaxLength(255)
                    .IsRequired();
 
-            builder.Property(c => c.Description)
-                   .HasMaxLength(500);
+            builder.Property(c => c.Overview)
+                    .HasMaxLength(500);
+
+            builder.Property(c => c.Field)
+                   .HasMaxLength(155);
+
+            builder.Property(c => c.Country)
+                   .HasMaxLength(100);
+
+            builder.Property(c => c.City)
+                   .HasMaxLength(100);
+
+            builder.Property(c => c.Area)
+                   .HasMaxLength(100);
+
+            builder.Property(c => c.DateOfEstablish)
+                   .IsRequired(false);
         }
     }
 }

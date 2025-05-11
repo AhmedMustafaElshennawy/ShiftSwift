@@ -353,4 +353,39 @@ public class MemberController(ISender sender) : ApiController
         return response;
 
     }
+
+    [HttpGet("SearchJobs")]
+    public async Task<IActionResult> SearchJobs(
+    [FromQuery(Name = "search")] string? search,
+    [FromQuery(Name = "area")] string? area,
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? sortBy = "latest",
+    [FromQuery] int jobTypeIdFilterValue = 0,
+    [FromQuery] decimal? minSalary = null,
+    [FromQuery] decimal? maxSalary = null,
+    CancellationToken cancellationToken = default)
+    {
+        var query = new SearchJobsQuery
+        {
+            Search = search,
+            Location = area,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SortBy = sortBy!,
+            JobTypeIdFilterValue = jobTypeIdFilterValue,
+            MinSalary = minSalary,
+            MaxSalary = maxSalary
+        };
+
+        var result = await _sender.Send(query, cancellationToken);
+
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error)
+        );
+
+        return response;
+    }
+
 }
