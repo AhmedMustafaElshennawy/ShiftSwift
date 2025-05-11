@@ -55,9 +55,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var command = new AddEducationCommand(
             MemberId,
-            request.SchoolName,
             request.LevelOfEducation,
-            request.FieldOfStudy);
+            request.FieldOfStudy,
+            request.SchoolName);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
@@ -68,14 +68,14 @@ public class MemberController(ISender sender) : ApiController
     }
 
     [HttpPut("UpdateEducation/{MemberId}")]
-    public async Task<IActionResult> UpdateEducation([FromRoute] string MemberId, [FromForm] EducationDTO request,
+    public async Task<IActionResult> UpdateEducation([FromRoute] string MemberId, [FromBody] EducationDTO request,
         CancellationToken cancellationToken)
     {
         var command = new UpdateEducationCommand(
             MemberId,
-            request.SchoolName,
             request.LevelOfEducation,
-            request.FieldOfStudy);
+            request.FieldOfStudy,
+            request.SchoolName);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
@@ -167,10 +167,10 @@ public class MemberController(ISender sender) : ApiController
     }
 
     [HttpDelete("DeleteExperience/{MemberId}")]
-    public async Task<IActionResult> DeleteExperience([FromRoute] string MemberId,
+    public async Task<IActionResult> DeleteExperience([FromRoute] string MemberId, [FromBody] Guid experienceId,
         CancellationToken cancellationToken)
     {
-        var command = new DeleteExperienceCommand(MemberId);
+        var command = new DeleteExperienceCommand(MemberId, experienceId);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
@@ -215,7 +215,7 @@ public class MemberController(ISender sender) : ApiController
 
 
     [HttpGet("GetSkills/{MemberId}")]
-    public async Task<IActionResult> GetSkill([FromRoute] string MemberId, CancellationToken cancellationToken)
+    public async Task<IActionResult> GetSkills([FromRoute] string MemberId, CancellationToken cancellationToken)
     {
         var query = new GetSkillQuery(MemberId);
 
@@ -228,9 +228,10 @@ public class MemberController(ISender sender) : ApiController
     }
 
     [HttpDelete("DeleteSkill/{MemberId}")]
-    public async Task<IActionResult> DeleteSkill([FromRoute] string MemberId, CancellationToken cancellationToken)
+    public async Task<IActionResult> DeleteSkill([FromRoute] string MemberId, [FromBody] Guid skillId,
+        CancellationToken cancellationToken)
     {
-        var command = new DeleteSkillCommand(MemberId);
+        var command = new DeleteSkillCommand(MemberId,skillId);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
