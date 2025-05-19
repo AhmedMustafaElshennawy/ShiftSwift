@@ -255,7 +255,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("SavedJobs");
+                    b.ToTable("SavedJobs", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Accomplishment", b =>
@@ -284,7 +284,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Accomplishments");
+                    b.ToTable("Accomplishments", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Education", b =>
@@ -316,7 +316,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Educations");
+                    b.ToTable("Educations", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Experience", b =>
@@ -351,7 +351,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Experiences");
+                    b.ToTable("Experiences", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Skill", b =>
@@ -373,7 +373,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Skills");
+                    b.ToTable("Skills", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>
@@ -428,7 +428,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Jobs");
+                    b.ToTable("Jobs", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.JobApplication", b =>
@@ -495,7 +495,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("RatedById");
 
-                    b.ToTable("Ratings");
+                    b.ToTable("Ratings", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.identity.Company", b =>

@@ -4,11 +4,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
 using ShiftSwift.API.Services;
 using ShiftSwift.Application.services.Authentication;
-using ShiftSwift.Application.services.caching;
 using ShiftSwift.Application.services.Email;
 using ShiftSwift.Application.settings;
 using ShiftSwift.Infrastructure.services.Authentication;
-using ShiftSwift.Infrastructure.services.caching;
 using ShiftSwift.Infrastructure.services.Email;
 using System.Text;
 
@@ -50,7 +48,6 @@ public static class DependencyInjection
         var emailSettings = configuration.GetSection("EmailSettings").Get<EmailSettings>();
         services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
 
-        //services.AddScoped<ICacheService, RedisCacheService>();
         services.AddScoped<ICurrentUserProvider, CurrentUserProvider>();
 
         return services;
