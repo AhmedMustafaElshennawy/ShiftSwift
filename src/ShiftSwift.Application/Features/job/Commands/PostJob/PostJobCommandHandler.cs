@@ -3,7 +3,9 @@ using MediatR;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.shared;
+using ShiftSwift.Domain.Shared;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 
@@ -33,7 +35,7 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
             {
                 return Error.Forbidden(
                     code: "User.Forbidden",
-                    description: "Access denied. Only members Can Add Job Posts");
+                    description: "Access denied. Only companies Can Add Job Posts");
             }
 
             var postJob = new Job
@@ -49,7 +51,13 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 Salary = request.Salary,
                 Requirements = request.Requirements,
                 Keywords = request.Keywords,
-                SalaryTypeId = request.SalaryType
+                SalaryTypeId = request.SalaryType,
+                Questions = request.Questions.Select(q => new JobQuestion
+                {
+                    QuestionText = q.QuestionText,
+                    QuestionType = (QuestionType)q.QuestionType,
+                }).ToList()
+
             };
 
             await _unitOfWork.Jobs.AddEntityAsync(postJob);
@@ -61,7 +69,13 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 postJob.Description,
                 postJob.Location,
                 postJob.PostedOn,
-                postJob.JobTypeId);
+                postJob.JobTypeId,
+                postJob.Questions.Select(q => new JobQuestionDTO(
+                      q.Id,
+                      q.QuestionText,
+                 (int)q.QuestionType
+                  )).ToList()
+);
 
             return new ApiResponse<PostedJobResponse>
             {

@@ -292,7 +292,7 @@ public class MemberController(ISender sender) : ApiController
     public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateJobApplicationCommand(request.JobId, request.MemberId);
+        var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Answers);
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),

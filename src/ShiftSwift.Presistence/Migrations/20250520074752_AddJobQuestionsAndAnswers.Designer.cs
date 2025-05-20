@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftSwift.Presistence.Context;
 
@@ -11,9 +12,11 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    partial class ShiftSwiftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250520074752_AddJobQuestionsAndAnswers")]
+    partial class AddJobQuestionsAndAnswers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

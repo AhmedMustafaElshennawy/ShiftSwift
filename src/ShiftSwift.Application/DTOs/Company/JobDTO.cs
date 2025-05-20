@@ -10,7 +10,12 @@ namespace ShiftSwift.Application.DTOs.Company
         decimal Salary, 
         int SalaryType, 
         string Requirements,
-        string Keywords);
+        string Keywords,
+        List<JobQuestionDTO> Questions);
+
+    public sealed record JobQuestionDTO(Guid Id,
+        string QuestionText,
+        int QuestionType);
 
     public sealed record PostedJobResponse(string CompanyId,
         Guid JobId,
@@ -18,7 +23,8 @@ namespace ShiftSwift.Application.DTOs.Company
         string Description,
         string Location,
         DateTime PostedOn,
-        int JobType);
+        int JobType,
+        List<JobQuestionDTO> Questions);
 
     public sealed record ListMyJobApplicaionsResponse(Guid JobId,
         string Title,

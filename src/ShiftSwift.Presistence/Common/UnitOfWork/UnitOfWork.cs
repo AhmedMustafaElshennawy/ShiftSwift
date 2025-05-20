@@ -3,6 +3,7 @@ using ShiftSwift.Domain.identity;
 using ShiftSwift.Domain.memberprofil;
 using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Domain.shared;
+using ShiftSwift.Domain.Shared;
 using ShiftSwift.Presistence.Common.Repository;
 using ShiftSwift.Presistence.Context;
 
@@ -21,6 +22,8 @@ namespace ShiftSwift.Presistence.Common.UnitOfWork
         public IBaseRepository<Job> Jobs { get; set; }
         public IBaseRepository<JobApplication> JobApplications { get; set; }
         public IBaseRepository<Rating> Ratings { get; set; }
+        public IBaseRepository<JobQuestion> JobQuestions { get; set; }
+        public IBaseRepository<ApplicationAnswer> ApplicationAnswers { get; set; }
         public UnitOfWork(ShiftSwiftDbContext shiftSwiftDbContext)
         {
             Companies = new BaseRepository<Company>(shiftSwiftDbContext);
@@ -33,6 +36,8 @@ namespace ShiftSwift.Presistence.Common.UnitOfWork
             Jobs = new BaseRepository<Job>(shiftSwiftDbContext);
             JobApplications = new BaseRepository<JobApplication>(shiftSwiftDbContext);
             Ratings = new BaseRepository<Rating>(shiftSwiftDbContext);
+            JobQuestions = new BaseRepository<JobQuestion>(shiftSwiftDbContext);
+            ApplicationAnswers = new BaseRepository<ApplicationAnswer>(shiftSwiftDbContext);
             _shiftSwiftDbContext = shiftSwiftDbContext;
         }
 

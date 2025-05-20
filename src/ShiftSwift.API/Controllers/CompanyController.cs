@@ -58,7 +58,8 @@ namespace ShiftSwift.API.Controllers
                 request.Salary,
                 request.SalaryType,
                 request.Requirements,
-                request.Keywords);
+                request.Keywords,
+                request.Questions);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -81,7 +82,8 @@ namespace ShiftSwift.API.Controllers
                 request.Salary,
                 request.SalaryType,
                 request.Requirements,
-                request.Keywords);
+                request.Keywords,
+                request.Questions);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
