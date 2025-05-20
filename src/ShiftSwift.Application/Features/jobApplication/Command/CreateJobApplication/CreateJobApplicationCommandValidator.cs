@@ -15,7 +15,20 @@ namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplic
                 .NotEmpty().WithMessage("MemberId is required.")
                 .Must(id => Guid.TryParse(id, out _)).WithMessage("MemberId must be a valid GUID.");
 
-            //WithMessage("Invalid Application Status . Allowed values: 1 (Pending), 2 (Accepted), 3 (Rejected).");
+            RuleFor(x => x.Answers)
+                .NotNull().WithMessage("Answers are required.")
+                .Must(a => a.Any()).WithMessage("At least one answer is required.");
+
+            RuleForEach(x => x.Answers).ChildRules(answer =>
+            {
+                answer.RuleFor(a => a.JobQuestionId)
+                      .NotEmpty().WithMessage("JobQuestionId is required.");
+
+                answer.RuleFor(a => a)
+                      .Must(a => !string.IsNullOrWhiteSpace(a.AnswerText) || a.AnswerBool.HasValue)
+                      .WithMessage("Either AnswerText or AnswerBool must be provided.");
+            });
+
         }
     }
 }

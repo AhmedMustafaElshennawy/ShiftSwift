@@ -1,6 +1,7 @@
 ﻿using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Domain.memberprofil;
+using ShiftSwift.Domain.Shared;
 
 namespace ShiftSwift.Domain.shared
 {
@@ -20,6 +21,7 @@ namespace ShiftSwift.Domain.shared
         public DateTime PostedOn { get; set; } = DateTime.UtcNow;
         public required string Requirements { get; set; }
         public required string Keywords { get; set; }
+        public ICollection<JobQuestion> Questions { get; set; } = new List<JobQuestion>();
         public ICollection<JobApplication> JobApplications { get; set; } = new HashSet<JobApplication>();
         public ICollection<SavedJob> SavedJobs { get; set; } = new HashSet<SavedJob>();
     }

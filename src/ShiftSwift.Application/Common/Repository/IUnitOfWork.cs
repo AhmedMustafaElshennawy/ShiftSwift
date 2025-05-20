@@ -2,6 +2,7 @@
 using ShiftSwift.Domain.memberprofil;
 using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Domain.shared;
+using ShiftSwift.Domain.Shared;
 
 
 namespace ShiftSwift.Application.Common.Repository
@@ -18,6 +19,9 @@ namespace ShiftSwift.Application.Common.Repository
         public IBaseRepository<Job> Jobs { get; }
         public IBaseRepository<JobApplication> JobApplications { get; }
         public IBaseRepository<Rating> Ratings { get; }
+        public IBaseRepository<JobQuestion> JobQuestions { get; }
+        public IBaseRepository<ApplicationAnswer> ApplicationAnswers { get; }
+
         Task<int> CompleteAsync(CancellationToken cancellationToken);
         int Complete();
     }

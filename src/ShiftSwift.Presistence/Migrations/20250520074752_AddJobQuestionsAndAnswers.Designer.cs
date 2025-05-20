@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftSwift.Presistence.Context;
 
@@ -11,9 +12,11 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    partial class ShiftSwiftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250520074752_AddJobQuestionsAndAnswers")]
+    partial class AddJobQuestionsAndAnswers
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -306,7 +309,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("SavedJobs", (string)null);
+                    b.ToTable("SavedJobs");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Accomplishment", b =>
@@ -335,7 +338,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Accomplishments", (string)null);
+                    b.ToTable("Accomplishments");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Education", b =>
@@ -367,7 +370,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Educations", (string)null);
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Experience", b =>
@@ -402,7 +405,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Skill", b =>
@@ -424,7 +427,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>
@@ -479,7 +482,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.JobApplication", b =>
@@ -546,7 +549,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("RatedById");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.identity.Company", b =>
