@@ -4,6 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.Enums;
+using ShiftSwift.Domain.Shared;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 
@@ -33,7 +35,7 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
             {
                 return Error.Forbidden(
                     code: "User.Forbidden",
-                    description: "Access denied. Only members can add education.");
+                    description: "Access denied. Only companies can update job posts");
             }
 
             var job = await _unitOfWork.Jobs.Entites()
@@ -58,11 +60,50 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
                     description: "You are not allowed to Update this job.");
             }
 
-            job.Title = request.Title;
-            job.Description = request.Description;
-            job.Location = request.Location;
+            var existingQuestions = await _unitOfWork.JobQuestions
+                .Entites()
+                .Where(q => q.JobId == job.Id)
+                .ToListAsync(cancellationToken);
 
-            await _unitOfWork.Jobs.UpdateAsync(job);
+            var requestQuestionIds = request.Questions?
+                .Where(q => q.Id != Guid.Empty)
+                .Select(q => q.Id)
+                .ToList() ?? new List<Guid>();
+
+            foreach (var existingQuestion in existingQuestions)
+            {
+                if (!requestQuestionIds.Contains(existingQuestion.Id))
+                {
+                    await _unitOfWork.JobQuestions.DeleteAsync(existingQuestion);
+                }
+            }
+
+            if (request.Questions != null && request.Questions.Any())
+            {
+                foreach (var question in request.Questions)
+                {
+                    if (question.Id != Guid.Empty)
+                    {
+                        var existingQuestion = existingQuestions.FirstOrDefault(q => q.Id == question.Id);
+                        if (existingQuestion != null)
+                        {
+                            existingQuestion.QuestionText = question.QuestionText;
+                            existingQuestion.QuestionType = (QuestionType)question.QuestionType;
+                            await _unitOfWork.JobQuestions.UpdateAsync(existingQuestion);
+                        }
+                    }
+                    else
+                    {
+                        var newQuestion = new JobQuestion
+                        {
+                            JobId = job.Id,
+                            QuestionText = question.QuestionText,
+                            QuestionType = (QuestionType)question.QuestionType
+                        };
+                        await _unitOfWork.JobQuestions.AddEntityAsync(newQuestion);
+                    }
+                }
+            }
             await _unitOfWork.CompleteAsync(cancellationToken);
 
             var response = new PostedJobResponse(currentUser.UserId,
@@ -71,7 +112,12 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
                 job.Description,
                 job.Location,
                 job.PostedOn,
-                job.JobTypeId);
+                job.JobTypeId,
+                job.Questions.Select(q => new JobQuestionDTO(
+                  q.Id,
+                  q.QuestionText,
+             (int)q.QuestionType)).ToList())
+;
 
             return new ApiResponse<PostedJobResponse>
             {

@@ -4,7 +4,9 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.Shared;
 using ShiftSwift.Shared.ApiBaseResponse;
+using System.Linq;
 using System.Net;
 
 
@@ -55,7 +57,12 @@ namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts
                 job.Description,
                 job.Location ,
                 job.PostedOn,
-                job.JobTypeId
+                job.JobTypeId,
+                job.Questions.Select(q => new JobQuestionDTO(
+                  q.Id,
+                  q.QuestionText,
+               (int)q.QuestionType
+            )).ToList()
             )).ToList();
 
             return new ApiResponse<IReadOnlyList<PostedJobResponse>>

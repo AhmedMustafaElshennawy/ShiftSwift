@@ -42,6 +42,20 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
             RuleFor(x => x.Keywords)
                 .NotEmpty().WithMessage("Keywords are required.");
 
+
+            RuleForEach(x => x.Questions).ChildRules(question =>
+            {
+                question.RuleFor(q => q.QuestionText)
+                    .NotEmpty().WithMessage("Question text is required.")
+                    .MaximumLength(400).WithMessage("Question text must not exceed 400 characters.");
+
+                question.RuleFor(q => q.QuestionType)
+                    .Must(t => t == 1 || t == 2)
+                    .WithMessage("Invalid question type. Allowed values: 1 (Text), 2 (Yes/No).");
+
+            });
+
+
         }
     }
 }
