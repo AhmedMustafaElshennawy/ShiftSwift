@@ -36,6 +36,8 @@ namespace ShiftSwift.Application.Features.job.Commands.DeletePostJob
             }
 
             var job = await _unitOfWork.Jobs.Entites()
+                .Include(j => j.JobApplications)
+                .Include(j => j.Questions)
                 .Where(j => j.Id == request.JobId)
                 .FirstOrDefaultAsync(cancellationToken);
 
@@ -55,6 +57,16 @@ namespace ShiftSwift.Application.Features.job.Commands.DeletePostJob
                 return Error.Forbidden(
                     code: "Job.Forbidden",
                     description: "You are not allowed to delete this job.");
+            }
+
+            foreach (var application in job.JobApplications)
+            {
+                await _unitOfWork.JobApplications.DeleteAsync(application);
+            }
+
+            foreach (var question in job.Questions)
+            {
+                await _unitOfWork.JobQuestions.DeleteAsync(question);
             }
 
             await _unitOfWork.Jobs.DeleteAsync(job);

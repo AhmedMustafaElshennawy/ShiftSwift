@@ -6,5 +6,5 @@ using ShiftSwift.Shared.ApiBaseResponse;
 namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplicant
 {
     public sealed record GetSpecificApplicantQuery(Guid JobId, string MemberId)
-        : IRequest<ErrorOr<ApiResponse<MemberResponseInfo>>>;
+        : IRequest<ErrorOr<ApiResponse<SpecificApplicantResponse>>>;
 }

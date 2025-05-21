@@ -70,12 +70,17 @@ namespace ShiftSwift.Application.Features.job.Commands.PostJob
                 postJob.Location,
                 postJob.PostedOn,
                 postJob.JobTypeId,
-                postJob.Questions.Select(q => new JobQuestionDTO(
+                postJob.WorkModeId,
+                postJob.Salary,
+                postJob.SalaryTypeId,
+                postJob.Requirements,
+                postJob.Keywords,
+                postJob.Questions.Select(q => new JobQuestionResponse(
                       q.Id,
                       q.QuestionText,
                  (int)q.QuestionType
                   )).ToList()
-);
+            );
 
             return new ApiResponse<PostedJobResponse>
             {
