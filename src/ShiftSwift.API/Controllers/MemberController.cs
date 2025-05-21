@@ -23,6 +23,8 @@ using MediatR;
 using ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 using ShiftSwift.Application.Features.skill.Commands.UpdateSkill;
 using ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
+using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
 
 namespace ShiftSwift.API.Controllers;
 
@@ -387,6 +389,19 @@ public class MemberController(ISender sender) : ApiController
         );
 
         return response;
+    }
+
+    [HttpPost("AddRating/{CompanyId}")]
+    public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById,
+        [FromBody] RatingDTO request, CancellationToken cancellationToken)
+    {
+        var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.Match(
+            success => Ok(success),
+            error => Problem(error)
+        );
     }
 
 }

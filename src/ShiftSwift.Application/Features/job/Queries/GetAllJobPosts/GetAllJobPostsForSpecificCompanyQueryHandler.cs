@@ -41,6 +41,7 @@ namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts
 
             var jobs = await _unitOfWork.Jobs.Entites()
                   .Where(j => j.CompanyId == request.CompanyId)
+                  .Include(j => j.Questions)
                   .ToListAsync(cancellationToken);
 
             if (!jobs.Any())
@@ -58,7 +59,12 @@ namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts
                 job.Location ,
                 job.PostedOn,
                 job.JobTypeId,
-                job.Questions.Select(q => new JobQuestionDTO(
+                job.WorkModeId,
+                job.Salary,
+                job.SalaryTypeId,
+                job.Requirements,
+                job.Keywords,
+                job.Questions.Select(q => new JobQuestionResponse(
                   q.Id,
                   q.QuestionText,
                (int)q.QuestionType

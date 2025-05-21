@@ -113,7 +113,12 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
                 job.Location,
                 job.PostedOn,
                 job.JobTypeId,
-                job.Questions.Select(q => new JobQuestionDTO(
+                job.WorkModeId,
+                job.Salary,
+                job.SalaryTypeId,
+                job.Requirements,
+                job.Keywords,
+                job.Questions.Select(q => new JobQuestionResponse(
                   q.Id,
                   q.QuestionText,
              (int)q.QuestionType)).ToList())
