@@ -8,7 +8,7 @@ using System.Net;
 
 namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
 {
-    public sealed class GetJobPostByIdQueryHandler : IRequestHandler<GetJobPostByIdQuery, ErrorOr<ApiResponse<JobInfoResponse>>>
+    public sealed class GetJobPostByIdQueryHandler : IRequestHandler<GetJobPostByIdQuery, ErrorOr<ApiResponse<PostedJobResponse>>>
     {
         private readonly IUnitOfWork _unitOfWork;
 
@@ -17,7 +17,7 @@ namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<ErrorOr<ApiResponse<JobInfoResponse>>> Handle(GetJobPostByIdQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ApiResponse<PostedJobResponse>>> Handle(GetJobPostByIdQuery request, CancellationToken cancellationToken)
         {
             var job = await _unitOfWork.Jobs.Entites()
                 .Include(j => j.Questions)
@@ -30,7 +30,7 @@ namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
                     description: "Job post not found.");
             }
 
-            var jobResponse = new JobInfoResponse(
+            var jobResponse = new PostedJobResponse(
                 job.CompanyId,
                 job.Id,
                 job.Title,
@@ -43,14 +43,14 @@ namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
                 job.SalaryTypeId,
                 job.Requirements,
                 job.Keywords,
-                job.Questions.Select(q => new JobQuestionDTO(
+                job.Questions.Select(q => new JobQuestionResponse(
                     q.Id,
                     q.QuestionText,
                     (int)q.QuestionType
                 )).ToList()
             );
 
-            return new ApiResponse<JobInfoResponse>
+            return new ApiResponse<PostedJobResponse>
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,

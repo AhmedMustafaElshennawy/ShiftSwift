@@ -1,4 +1,6 @@
-﻿namespace ShiftSwift.Application.DTOs.member
+﻿using ShiftSwift.Application.DTOs.Company;
+
+namespace ShiftSwift.Application.DTOs.member
 {
     public sealed record SavedJobsResponse(
         Guid Id,
@@ -13,5 +15,6 @@
         DateTime PostedOn,
         int SalaryTypeId,
         decimal Salary,
-        int JobTypeTd);
+        int JobTypeTd,
+        List<JobQuestionResponse> Questions);
 }

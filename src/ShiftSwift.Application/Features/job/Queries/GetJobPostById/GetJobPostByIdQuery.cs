@@ -6,5 +6,5 @@ using ShiftSwift.Shared.ApiBaseResponse;
 namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
 {
     public sealed record GetJobPostByIdQuery(Guid JobId)
-        : IRequest<ErrorOr<ApiResponse<JobInfoResponse>>>;
+        : IRequest<ErrorOr<ApiResponse<PostedJobResponse>>>;
 }

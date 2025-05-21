@@ -2,9 +2,11 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
+using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Shared.ApiBaseResponse;
+using System.Linq;
 using System.Net;
 
 namespace ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs
@@ -47,6 +49,8 @@ namespace ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs
                 .Entites()
                 .Include(s => s.Job)
                 .ThenInclude(j => j.Company)
+                .Include(s => s.Job)
+                .ThenInclude(j => j.Questions)
                 .Where(s => s.MemberId == request.MemberId)
                 .Select(s => new SavedJobsResponse(
                     s.Id,
@@ -61,7 +65,13 @@ namespace ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs
                     s.Job.PostedOn,
                     s.Job.SalaryTypeId,
                     s.Job.Salary,
-                    s.Job.JobTypeId))
+                    s.Job.JobTypeId,
+                    s.Job.Questions.Select(q => new JobQuestionResponse(
+                        q.Id,
+                        q.QuestionText,
+                        (int)q.QuestionType
+                    )).ToList()
+                    ))
                 .ToListAsync(cancellationToken);
 
             return new ApiResponse<IReadOnlyList<SavedJobsResponse>>
