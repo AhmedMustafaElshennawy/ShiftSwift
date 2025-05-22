@@ -52,14 +52,14 @@ public class MemberController(ISender sender) : ApiController
     }
 
     [HttpPost("AddEducation/{MemberId}")]
-    public async Task<IActionResult> AddEducation([FromRoute] string MemberId, [FromBody] EducationDTO request,
+    public async Task<IActionResult> AddEducation([FromRoute] string MemberId, [FromBody] EducationDto request,
         CancellationToken cancellationToken)
     {
         var command = new AddEducationCommand(
             MemberId,
-            request.LevelOfEducation,
-            request.FieldOfStudy,
-            request.SchoolName);
+            request.Level,
+            request.Faculty,
+            request.UniversityName);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
@@ -70,14 +70,14 @@ public class MemberController(ISender sender) : ApiController
     }
 
     [HttpPut("UpdateEducation/{MemberId}")]
-    public async Task<IActionResult> UpdateEducation([FromRoute] string MemberId, [FromBody] EducationDTO request,
+    public async Task<IActionResult> UpdateEducation([FromRoute] string MemberId, [FromBody] EducationDto request,
         CancellationToken cancellationToken)
     {
         var command = new UpdateEducationCommand(
             MemberId,
-            request.LevelOfEducation,
-            request.FieldOfStudy,
-            request.SchoolName);
+            request.Level,
+            request.Faculty,
+            request.UniversityName);
 
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(

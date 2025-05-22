@@ -41,9 +41,9 @@ namespace ShiftSwift.Application.DTOs.member
 
     public sealed record MemberEducationResponse(
         Guid Id,
-        string SchoolName,
-        string LevelOfEducation,
-        string FieldOfStudy);
+        string Level,
+        string Faculty,
+        string UniversityName);
 
     public sealed record MemberExperienceResponse(
         string Title,

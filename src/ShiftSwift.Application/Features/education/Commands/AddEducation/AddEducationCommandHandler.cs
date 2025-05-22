@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
-using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 using System.Security.Claims;
+using ShiftSwift.Domain.memberprofil;
 
 namespace ShiftSwift.Application.Features.education.Commands.AddEducation;
 
@@ -53,9 +53,9 @@ public sealed class AddEducationCommandHandler(
         {
             Id = Guid.NewGuid(),
             MemberId = userId,
-            SchoolName = request.SchoolName,
-            FieldOfStudy = request.FieldOfStudy,
-            LevelOfEducation = request.LevelOfEducation
+            Level = request.Level,
+            Faculty = request.Faculty,
+            UniversityName = request.UniversityName
         };
 
         await unitOfWork.Educations.AddEntityAsync(education);
@@ -63,9 +63,9 @@ public sealed class AddEducationCommandHandler(
 
         var educationResponse = new EducationRespone(
             education.Id,
-            education.SchoolName,
-            education.LevelOfEducation,
-            education.FieldOfStudy);
+            education.Level,
+            education.Faculty,
+            education.UniversityName);
 
         return new ApiResponse<EducationRespone>
         {
