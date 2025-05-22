@@ -41,6 +41,17 @@ namespace ShiftSwift.Application.Features.job.Queries.GetShortlistedMembers
                     description: "Access denied. Only companies can manage applicants.");
             }
 
+            var job = await _unitOfWork.Jobs.Entites()
+               .Where(j => j.Id == request.JobId && j.CompanyId == currentUserResult.Value.UserId)
+               .FirstOrDefaultAsync(cancellationToken);
+
+            if (job is null)
+            {
+                return Error.Forbidden(
+                    code: "Job.Forbidden",
+                    description: "You are not authorized to Get Short listed Members.");
+            }
+
             var shortlistedMembers = await _unitOfWork.JobApplications.Entites()
                 .Where(ja => ja.JobId == request.JobId
                              && ja.Status == (int)ApplicationStatus.Shortlisted)

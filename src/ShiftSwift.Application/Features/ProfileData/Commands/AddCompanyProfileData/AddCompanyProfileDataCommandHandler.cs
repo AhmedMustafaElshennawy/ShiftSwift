@@ -9,7 +9,7 @@ using System.Net;
 
 namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData
 {
-    public sealed class AddCompanyProfileDataCommandHandler : IRequestHandler<AddCompanyProfileDataCommand, ErrorOr<ApiResponse<CompanyResponse>>>
+    public sealed class AddCompanyProfileDataCommandHandler : IRequestHandler<AddCompanyProfileDataCommand, ErrorOr<ApiResponse<CompanyResponseInfo>>>
     {
         private readonly IUnitOfWork _unitOfWork;
         private readonly ICurrentUserProvider _currentUserProvider;
@@ -18,7 +18,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
             _unitOfWork = unitOfWork;
             _currentUserProvider = currentUserProvider;
         }
-        public async Task<ErrorOr<ApiResponse<CompanyResponse>>> Handle(AddCompanyProfileDataCommand request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ApiResponse<CompanyResponseInfo>>> Handle(AddCompanyProfileDataCommand request, CancellationToken cancellationToken)
         {
             var currentUserResult = await _currentUserProvider.GetCurrentUser();
             if (currentUserResult.IsError)
@@ -33,7 +33,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
             {
                 return Error.Forbidden(
                     code: "User.Forbidden",
-                    description: "Access denied. Only members can add education.");
+                    description: "Access denied. Only companies can add profile data.");
             }
             if (currentUser.UserId != request.CompanyId)
             {
@@ -51,19 +51,30 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfile
                     code: "User.NotFound",
                     description: $"Access denied. The MemberId You Entered Is Wrong {request.CompanyId}");
             }
-            company.Description =request.Description;
+
             company.CompanyName = request.CompanyName;
+            company.Overview = request.Overview;
+            company.Field = request.Field;
+            company.DateOfEstablish = request.DateOfEstablish;
+            company.Country = request.Country;
+            company.City = request.City;
+            company.Area = request.Area;
             await _unitOfWork.Companies.UpdateAsync(company);
             await _unitOfWork.CompleteAsync(cancellationToken);
 
-            var companyResponse = new CompanyResponse(company.Id,
+            var companyResponse = new CompanyResponseInfo(company.Id,
                 company.CompanyName,
                 company.UserName!,
                 company.PhoneNumber!,
                 company.Email!,
-                company.Description);
+                company.Overview,
+                company.Field,
+                company.DateOfEstablish,
+                company.Country,
+                company.City,
+                company.Area);
 
-            return new ApiResponse<CompanyResponse>
+            return new ApiResponse<CompanyResponseInfo>
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,

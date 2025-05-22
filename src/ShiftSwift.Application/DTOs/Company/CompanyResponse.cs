@@ -4,13 +4,18 @@
         string CompanyName,
         string UserName,
         string PhoneNumber,
-        string Email,
-        string Description);
+        string Email);
 
     public sealed record CompanyResponseInfo(string CompanyId,
     string CompanyName,
     string UserName,
     string PhoneNumber,
     string Email,
-    string Description);
+    string? Overview,
+    string? Field,
+    DateTime? DateOfEstablish,
+    string? Country,
+    string? City,
+    string? Area);
+
 }

@@ -23,6 +23,8 @@ using MediatR;
 using ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 using ShiftSwift.Application.Features.skill.Commands.UpdateSkill;
 using ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
+using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
 
 namespace ShiftSwift.API.Controllers;
 
@@ -292,7 +294,7 @@ public class MemberController(ISender sender) : ApiController
     public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateJobApplicationCommand(request.JobId, request.MemberId);
+        var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Answers);
         var result = await _sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
@@ -354,4 +356,52 @@ public class MemberController(ISender sender) : ApiController
         return response;
 
     }
+
+    [HttpGet("SearchJobs")]
+    public async Task<IActionResult> SearchJobs(
+    [FromQuery(Name = "search")] string? search,
+    [FromQuery(Name = "area")] string? area,
+    [FromQuery] int pageNumber = 1,
+    [FromQuery] int pageSize = 10,
+    [FromQuery] string? sortBy = "latest",
+    [FromQuery] int jobTypeIdFilterValue = 0,
+    [FromQuery] decimal? minSalary = null,
+    [FromQuery] decimal? maxSalary = null,
+    CancellationToken cancellationToken = default)
+    {
+        var query = new SearchJobsQuery
+        {
+            Search = search,
+            Location = area,
+            PageNumber = pageNumber,
+            PageSize = pageSize,
+            SortBy = sortBy!,
+            JobTypeIdFilterValue = jobTypeIdFilterValue,
+            MinSalary = minSalary,
+            MaxSalary = maxSalary
+        };
+
+        var result = await _sender.Send(query, cancellationToken);
+
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error)
+        );
+
+        return response;
+    }
+
+    [HttpPost("AddRating/{CompanyId}")]
+    public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById,
+        [FromBody] RatingDTO request, CancellationToken cancellationToken)
+    {
+        var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
+        var result = await _sender.Send(command, cancellationToken);
+
+        return result.Match(
+            success => Ok(success),
+            error => Problem(error)
+        );
+    }
+
 }

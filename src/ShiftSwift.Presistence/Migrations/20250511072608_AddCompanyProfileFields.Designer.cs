@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using ShiftSwift.Presistence.Context;
 
@@ -11,9 +12,11 @@ using ShiftSwift.Presistence.Context;
 namespace ShiftSwift.Presistence.Migrations
 {
     [DbContext(typeof(ShiftSwiftDbContext))]
-    partial class ShiftSwiftDbContextModelSnapshot : ModelSnapshot
+    [Migration("20250511072608_AddCompanyProfileFields")]
+    partial class AddCompanyProfileFields
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -155,57 +158,6 @@ namespace ShiftSwift.Presistence.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.ApplicationAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("AnswerBool")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("JobApplicationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("JobQuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobApplicationId");
-
-                    b.HasIndex("JobQuestionId");
-
-                    b.ToTable("ApplicationAnswers");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<int>("QuestionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("JobQuestions", (string)null);
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.identity.Account", b =>
                 {
                     b.Property<string>("Id")
@@ -284,39 +236,6 @@ namespace ShiftSwift.Presistence.Migrations
                     b.UseTphMappingStrategy();
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Education", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Faculty")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("Level")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("UniversityName")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("Educations");
-                    b.ToTable("SavedJobs", (string)null);
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.memberprofil.SavedJob", b =>
                 {
                     b.Property<Guid>("Id")
@@ -340,7 +259,6 @@ namespace ShiftSwift.Presistence.Migrations
                     b.HasIndex("MemberId");
 
                     b.ToTable("SavedJobs");
-                    b.ToTable("Accomplishments", (string)null);
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Accomplishment", b =>
@@ -369,10 +287,39 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-
                     b.ToTable("Accomplishments");
-                    b.ToTable("Educations", (string)null);
+                });
 
+            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Education", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("FieldOfStudy")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("LevelOfEducation")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("SchoolName")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Educations");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Experience", b =>
@@ -407,7 +354,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Experiences", (string)null);
+                    b.ToTable("Experiences");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Skill", b =>
@@ -429,7 +376,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("MemberId");
 
-                    b.ToTable("Skills", (string)null);
+                    b.ToTable("Skills");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>
@@ -484,7 +431,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("CompanyId");
 
-                    b.ToTable("Jobs", (string)null);
+                    b.ToTable("Jobs");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.shared.JobApplication", b =>
@@ -551,7 +498,7 @@ namespace ShiftSwift.Presistence.Migrations
 
                     b.HasIndex("RatedById");
 
-                    b.ToTable("Ratings", (string)null);
+                    b.ToTable("Ratings");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.identity.Company", b =>
@@ -675,48 +622,6 @@ namespace ShiftSwift.Presistence.Migrations
                         .IsRequired();
                 });
 
-
-            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Education", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
-                        .WithMany("Educations")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.ApplicationAnswer", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.shared.JobApplication", "JobApplication")
-                        .WithMany("Answers")
-                        .HasForeignKey("JobApplicationId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.HasOne("ShiftSwift.Domain.Shared.JobQuestion", "JobQuestion")
-                        .WithMany("Answers")
-                        .HasForeignKey("JobQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobApplication");
-
-                    b.Navigation("JobQuestion");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.shared.Job", "Job")
-                        .WithMany("Questions")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Job");
-
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.memberprofil.SavedJob", b =>
                 {
                     b.HasOne("ShiftSwift.Domain.shared.Job", "Job")
@@ -740,6 +645,17 @@ namespace ShiftSwift.Presistence.Migrations
                 {
                     b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
                         .WithMany("Accomplishments")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Education", b =>
+                {
+                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
+                        .WithMany("Educations")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -818,23 +734,11 @@ namespace ShiftSwift.Presistence.Migrations
                     b.Navigation("RatedBy");
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>
                 {
                     b.Navigation("JobApplications");
 
-                    b.Navigation("Questions");
-
                     b.Navigation("SavedJobs");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.shared.JobApplication", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.identity.Company", b =>

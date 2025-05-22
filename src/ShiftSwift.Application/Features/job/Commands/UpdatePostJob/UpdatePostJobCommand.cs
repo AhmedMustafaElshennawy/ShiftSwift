@@ -14,5 +14,6 @@ namespace ShiftSwift.Application.Features.job.Commands.UpdatePostJob
         decimal Salary,
         int SalaryType,
         string Requirements,
-        string Keywords): IRequest<ErrorOr<ApiResponse<PostedJobResponse>>>;
+        string Keywords,
+       List<UpdateJobQuestionDTO> Questions) : IRequest<ErrorOr<ApiResponse<PostedJobResponse>>>;
 }

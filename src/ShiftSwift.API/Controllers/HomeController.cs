@@ -1,5 +1,6 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using ShiftSwift.Application.Features.job.Queries.GetJobPostById;
 using ShiftSwift.Application.Features.job.Queries.GetRandomJobs;
 
 namespace ShiftSwift.API.Controllers
@@ -26,6 +27,19 @@ namespace ShiftSwift.API.Controllers
                 JobTypeIdFilterValue = JobTypeIdFilterValue,
                 SalaryTypeIdFilterValue = SalaryTypeIdFilterValue
             };
+
+            var result = await _sender.Send(query, cancellationToken);
+            var response = result.Match(
+                success => Ok(result.Value),
+                error => Problem(error));
+
+            return response;
+        }
+
+        [HttpGet("GetJobPostById/{JobId}")]
+        public async Task<IActionResult> GetJobPostById([FromRoute] Guid JobId, CancellationToken cancellationToken)
+        {
+            var query = new GetJobPostByIdQuery(JobId);
 
             var result = await _sender.Send(query, cancellationToken);
             var response = result.Match(

@@ -1,5 +1,6 @@
 ﻿using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
+using ShiftSwift.Domain.Shared;
 
 
 namespace ShiftSwift.Domain.shared
@@ -14,5 +15,6 @@ namespace ShiftSwift.Domain.shared
         public DateTime AppliedOn { get; set; } = DateTime.UtcNow;
         public string? Location { get; set; }
         public int Status { get; set; }
+        public ICollection<ApplicationAnswer> Answers { get; set; } = new List<ApplicationAnswer>();
     }
 }

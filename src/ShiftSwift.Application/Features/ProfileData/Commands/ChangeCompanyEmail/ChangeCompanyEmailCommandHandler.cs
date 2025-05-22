@@ -60,8 +60,7 @@ namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmai
                 company.CompanyName,
                 company.UserName!,
                 company.PhoneNumber!,
-                company.Email!,
-                company.Description!);
+                company.Email!);
 
             return new ApiResponse<CompanyResponse>
             {
