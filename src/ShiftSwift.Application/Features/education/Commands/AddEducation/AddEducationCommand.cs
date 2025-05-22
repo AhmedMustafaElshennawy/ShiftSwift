@@ -7,6 +7,6 @@ using ShiftSwift.Shared.ApiBaseResponse;
 namespace ShiftSwift.Application.Features.education.Commands.AddEducation;
 
 public sealed record AddEducationCommand(string MemberId,
-    string LevelOfEducation,
-    string FieldOfStudy,
-    string SchoolName) :IRequest<ErrorOr<ApiResponse<EducationRespone>>>;
+    string Level,
+    string Faculty,
+    string UniversityName) :IRequest<ErrorOr<ApiResponse<EducationRespone>>>;

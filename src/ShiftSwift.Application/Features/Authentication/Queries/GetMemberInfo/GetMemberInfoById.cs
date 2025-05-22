@@ -41,9 +41,9 @@ public sealed class GetMemberInfoByIdHandler(
 
         var educationResponses = memberData.Educations.Select(e => new MemberEducationResponse(
             e.Id,
-            e.SchoolName,
-            e.LevelOfEducation,
-            e.FieldOfStudy
+            e.Level,
+            e.Faculty,
+            e.UniversityName
         )).ToList();
 
         var experienceResponses = memberData.Experiences.Select(e => new MemberExperienceResponse(
@@ -64,7 +64,7 @@ public sealed class GetMemberInfoByIdHandler(
             UserName: memberData.UserName!,
             PhoneNumber: memberData.PhoneNumber!,
             Email: memberData.Email!,
-            GenderId: memberData.GenderId.Value,
+            GenderId: memberData.GenderId!.Value,
             Location: memberData.Location,
             Educations: educationResponses,
             Experiences: experienceResponses,

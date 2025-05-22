@@ -3,10 +3,10 @@ using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
 using System.Security.Claims;
+using ShiftSwift.Domain.memberprofil;
 
 namespace ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 
@@ -59,18 +59,18 @@ internal sealed class UpdateEducationCommandHandler(
                 description: "Education record not found for this member.");
         }
 
-        education.SchoolName = request.SchoolName;
-        education.FieldOfStudy = request.FieldOfStudy;
-        education.LevelOfEducation = request.LevelOfEducation;
+        education.Level = request.Level;
+        education.Faculty = request.Faculty;
+        education.UniversityName = request.UniversityName;
 
         await unitOfWork.Educations.UpdateAsync(education);
         await unitOfWork.CompleteAsync(cancellationToken);
 
         var response = new UpdateEducationRespone(
             education.Id,
-            education.SchoolName,
-            education.LevelOfEducation,
-            education.FieldOfStudy);
+            education.Level,
+            education.Faculty,
+            education.UniversityName);
 
         return new ApiResponse<UpdateEducationRespone>
         {

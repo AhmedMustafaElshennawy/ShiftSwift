@@ -12,19 +12,19 @@ public class AddEducationCommandValidator : AbstractValidator<AddEducationComman
     public AddEducationCommandValidator()
     {
         RuleFor(X=>X.MemberId).NotEmpty().WithMessage("MemberId Is required.");
-        RuleFor(x => x.SchoolName)
+        RuleFor(x => x.Level)
             .NotEmpty().WithMessage("Institution is required.")
             .MaximumLength(100).WithMessage("Institution name must not exceed 100 characters.");
 
 
-        RuleFor(x => x.LevelOfEducation)
+        RuleFor(x => x.Faculty)
             .NotEmpty().WithMessage("Level of education is required.")
             .MaximumLength(100).WithMessage("Level of education cannot exceed 100 characters.")
             .Must(BeValidEducationLevel)
             .WithMessage($"Invalid level of education specified. Valid values are: {string.Join(", ", ValidLevels)}");
 
 
-        RuleFor(x => x.FieldOfStudy)
+        RuleFor(x => x.UniversityName)
             .NotEmpty().WithMessage("Degree is required.")
             .MaximumLength(100).WithMessage("Degree name must not exceed 100 characters.");
     }
