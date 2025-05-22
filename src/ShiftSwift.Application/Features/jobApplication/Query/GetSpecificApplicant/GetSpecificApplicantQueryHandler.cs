@@ -64,9 +64,9 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
 
             var educationResponses = applicant.Educations.Select(e => new MemberEducationResponse(
                 e.Id,
-                e.SchoolName,
-                e.LevelOfEducation,
-                e.FieldOfStudy
+                e.Level,
+                e.Faculty,
+                e.UniversityName
             )).ToList();
 
             var experienceResponses = applicant.Experiences.Select(e => new MemberExperienceResponse(
