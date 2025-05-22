@@ -7,7 +7,7 @@ using ShiftSwift.Application.Features.ProfileData.Commands.AddCompanyProfileData
 using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants;
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.jobApplication.Query.GetApplicants;
-using ShiftSwift.Application.Features.rating.Commands.AddRating;
+
 using ShiftSwift.Application.Features.rating.Queries.GetRating;
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
@@ -58,7 +58,8 @@ namespace ShiftSwift.API.Controllers
                 request.Salary,
                 request.SalaryType,
                 request.Requirements,
-                request.Keywords);
+                request.Keywords,
+                request.Questions);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -69,7 +70,7 @@ namespace ShiftSwift.API.Controllers
         }
 
         [HttpPut("UpdateJobPost/{JobId}")]
-        public async Task<IActionResult> UpdateJobPost(Guid JobId, [FromBody] JobDTO request,
+        public async Task<IActionResult> UpdateJobPost(Guid JobId, [FromBody] UpdateJobDTO request,
             CancellationToken cancellationToken)
         {
             var command = new UpdatePostJobCommand(JobId,
@@ -81,7 +82,8 @@ namespace ShiftSwift.API.Controllers
                 request.Salary,
                 request.SalaryType,
                 request.Requirements,
-                request.Keywords);
+                request.Keywords,
+                request.Questions);
 
             var result = await _sender.Send(command, cancellationToken);
             var response = result.Match(
@@ -204,19 +206,6 @@ namespace ShiftSwift.API.Controllers
             return response;
         }
 
-        [HttpPost("AddRating/{CompanyId}")]
-        public async Task<IActionResult> AddRating([FromRoute] string CompanyId, [FromQuery] string RatedById,
-            [FromBody] RatingDTO request, CancellationToken cancellationToken)
-        {
-            var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
-            var result = await _sender.Send(command, cancellationToken);
-
-            return result.Match(
-                success => Ok(success),
-                error => Problem(error)
-            );
-        }
-
         [HttpGet("GetRating/{CompanyId}")]
         public async Task<IActionResult> GetAverageRating([FromRoute] string CompanyId,
             CancellationToken cancellationToken)
@@ -244,5 +233,6 @@ namespace ShiftSwift.API.Controllers
 
             return response;
         }
+
     }
 }

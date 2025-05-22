@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace ShiftSwift.Presistence.Migrations
 {
     /// <inheritdoc />
-    public partial class InitialCreate : Migration
+    public partial class initialCreate : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -19,7 +19,12 @@ namespace ShiftSwift.Presistence.Migrations
                     ImageUrl = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Discriminator = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: false),
                     CompanyName = table.Column<string>(type: "nvarchar(255)", maxLength: 255, nullable: true),
-                    Description = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    Field = table.Column<string>(type: "nvarchar(155)", maxLength: 155, nullable: true),
+                    Overview = table.Column<string>(type: "nvarchar(500)", maxLength: 500, nullable: true),
+                    DateOfEstablish = table.Column<DateTime>(type: "datetime2", nullable: true),
+                    Country = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    City = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
+                    Area = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     Rating = table.Column<double>(type: "float", nullable: true),
                     FirstName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
                     LastName = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: true),
@@ -88,9 +93,9 @@ namespace ShiftSwift.Presistence.Migrations
                 {
                     Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    LevelOfEducation = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    FieldOfStudy = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
-                    SchoolName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
+                    Level = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    Faculty = table.Column<string>(type: "nvarchar(100)", maxLength: 100, nullable: false),
+                    UniversityName = table.Column<string>(type: "nvarchar(150)", maxLength: 150, nullable: false)
                 },
                 constraints: table =>
                 {
@@ -315,7 +320,7 @@ namespace ShiftSwift.Presistence.Migrations
                     JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     MemberId = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     AppliedOn = table.Column<DateTime>(type: "datetime2", nullable: false),
-                    Location = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Location = table.Column<string>(type: "nvarchar(max)", nullable: true),
                     Status = table.Column<int>(type: "int", nullable: false)
                 },
                 constraints: table =>
@@ -333,6 +338,26 @@ namespace ShiftSwift.Presistence.Migrations
                         principalTable: "Jobs",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "JobQuestions",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    QuestionText = table.Column<string>(type: "nvarchar(400)", maxLength: 400, nullable: false),
+                    QuestionType = table.Column<int>(type: "int", nullable: false),
+                    JobId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_JobQuestions", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_JobQuestions_Jobs_JobId",
+                        column: x => x.JobId,
+                        principalTable: "Jobs",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Restrict);
                 });
 
             migrationBuilder.CreateTable(
@@ -361,6 +386,33 @@ namespace ShiftSwift.Presistence.Migrations
                         onDelete: ReferentialAction.Cascade);
                 });
 
+            migrationBuilder.CreateTable(
+                name: "ApplicationAnswers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobApplicationId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    JobQuestionId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    AnswerText = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    AnswerBool = table.Column<bool>(type: "bit", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_ApplicationAnswers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_ApplicationAnswers_JobApplications_JobApplicationId",
+                        column: x => x.JobApplicationId,
+                        principalTable: "JobApplications",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                    table.ForeignKey(
+                        name: "FK_ApplicationAnswers_JobQuestions_JobQuestionId",
+                        column: x => x.JobQuestionId,
+                        principalTable: "JobQuestions",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
             migrationBuilder.CreateIndex(
                 name: "IX_Accomplishments_MemberId",
                 table: "Accomplishments",
@@ -377,6 +429,16 @@ namespace ShiftSwift.Presistence.Migrations
                 column: "NormalizedUserName",
                 unique: true,
                 filter: "[NormalizedUserName] IS NOT NULL");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationAnswers_JobApplicationId",
+                table: "ApplicationAnswers",
+                column: "JobApplicationId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_ApplicationAnswers_JobQuestionId",
+                table: "ApplicationAnswers",
+                column: "JobQuestionId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Educations_MemberId",
@@ -397,6 +459,11 @@ namespace ShiftSwift.Presistence.Migrations
                 name: "IX_JobApplications_MemberId",
                 table: "JobApplications",
                 column: "MemberId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_JobQuestions_JobId",
+                table: "JobQuestions",
+                column: "JobId");
 
             migrationBuilder.CreateIndex(
                 name: "IX_Jobs_CompanyId",
@@ -463,13 +530,13 @@ namespace ShiftSwift.Presistence.Migrations
                 name: "Accomplishments");
 
             migrationBuilder.DropTable(
+                name: "ApplicationAnswers");
+
+            migrationBuilder.DropTable(
                 name: "Educations");
 
             migrationBuilder.DropTable(
                 name: "Experiences");
-
-            migrationBuilder.DropTable(
-                name: "JobApplications");
 
             migrationBuilder.DropTable(
                 name: "Ratings");
@@ -496,10 +563,16 @@ namespace ShiftSwift.Presistence.Migrations
                 name: "UserTokens");
 
             migrationBuilder.DropTable(
-                name: "Jobs");
+                name: "JobApplications");
+
+            migrationBuilder.DropTable(
+                name: "JobQuestions");
 
             migrationBuilder.DropTable(
                 name: "Roles");
+
+            migrationBuilder.DropTable(
+                name: "Jobs");
 
             migrationBuilder.DropTable(
                 name: "Accounts");

@@ -1,5 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
+using ShiftSwift.Domain.memberprofil;
 using ShiftSwift.Domain.models.memberprofil;
 
 namespace ShiftSwift.Presistence.EntityConfiguration
@@ -10,15 +11,15 @@ namespace ShiftSwift.Presistence.EntityConfiguration
         {
             builder.HasKey(e => e.Id);
 
-            builder.Property(e => e.FieldOfStudy)
+            builder.Property(e => e.Level)
                 .IsRequired()
                 .HasMaxLength(100); 
 
-            builder.Property(e => e.LevelOfEducation)
+            builder.Property(e => e.Faculty)
                 .IsRequired()
                 .HasMaxLength(100);
 
-            builder.Property(e => e.SchoolName)
+            builder.Property(e => e.UniversityName)
                 .IsRequired()
                 .HasMaxLength(150);
         }

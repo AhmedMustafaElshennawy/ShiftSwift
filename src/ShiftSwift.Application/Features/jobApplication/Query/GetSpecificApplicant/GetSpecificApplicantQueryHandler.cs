@@ -10,7 +10,7 @@ using System.Net;
 
 namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplicant
 {
-    public sealed class GetSpecificApplicantQueryHandler : IRequestHandler<GetSpecificApplicantQuery, ErrorOr<ApiResponse<MemberResponseInfo>>>
+    public sealed class GetSpecificApplicantQueryHandler : IRequestHandler<GetSpecificApplicantQuery, ErrorOr<ApiResponse<SpecificApplicantResponse>>>
     {
         private readonly ICurrentUserProvider _currentUserProvider;
         private readonly IBaseRepository<Member> _memberRepository;
@@ -21,7 +21,7 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
             _memberRepository = memberRepository;
         }
 
-        public async Task<ErrorOr<ApiResponse<MemberResponseInfo>>> Handle(GetSpecificApplicantQuery request, CancellationToken cancellationToken)
+        public async Task<ErrorOr<ApiResponse<SpecificApplicantResponse>>> Handle(GetSpecificApplicantQuery request, CancellationToken cancellationToken)
         {
             var currentUserResult = await _currentUserProvider.GetCurrentUser();
 
@@ -46,13 +46,16 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
                 .Include(m => m.Experiences)
                 .Include(m => m.Skills)
                 .Include(m => m.JobApplications)
-                    .ThenInclude(ja => ja.Job)
+                .ThenInclude(ja => ja.Answers)
+                .Include(m => m.JobApplications)
+                .ThenInclude(ja => ja.Job)
+                .ThenInclude(j => j.Questions)
                 .Where(m => m.Id == request.MemberId &&
                             m.JobApplications.Any(ja => ja.JobId == request.JobId && ja.Job.CompanyId == currentUserResult.Value.UserId))
                 .FirstOrDefaultAsync(cancellationToken);
 
             if (applicant is null)
-                return new ApiResponse<MemberResponseInfo>
+                return new ApiResponse<SpecificApplicantResponse>
                 {
                     IsSuccess = false,
                     StatusCode = HttpStatusCode.NotFound,
@@ -61,9 +64,9 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
 
             var educationResponses = applicant.Educations.Select(e => new MemberEducationResponse(
                 e.Id,
-                e.SchoolName,
-                e.LevelOfEducation,
-                e.FieldOfStudy
+                e.Level,
+                e.Faculty,
+                e.UniversityName
             )).ToList();
 
             var experienceResponses = applicant.Experiences.Select(e => new MemberExperienceResponse(
@@ -78,7 +81,16 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
                 s.Name
             )).ToList();
 
-            var response = new MemberResponseInfo(
+            var jobApplication = applicant.JobApplications.FirstOrDefault(ja => ja.JobId == request.JobId);
+            var answers = jobApplication?.Answers?.Select(a => new JobApplicationAnswerResponse(
+                a.JobQuestionId,
+                jobApplication.Job!.Questions.FirstOrDefault(q => q.Id == a.JobQuestionId)?.QuestionText ?? string.Empty,
+                (int)(jobApplication.Job!.Questions.FirstOrDefault(q => q.Id == a.JobQuestionId)?.QuestionType ?? 0),
+                a.AnswerText,
+                a.AnswerBool
+            )).ToList() ?? new();
+
+            var response = new SpecificApplicantResponse(
                 applicant.Id,
                 applicant.FullName,
                 applicant.UserName!,
@@ -88,10 +100,11 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplic
                 applicant.Location ?? string.Empty,
                 educationResponses,
                 experienceResponses,
-                skillResponses
+                skillResponses,
+                answers
             );
 
-            return new ApiResponse<MemberResponseInfo>
+            return new ApiResponse<SpecificApplicantResponse>
             {
                 IsSuccess = true,
                 StatusCode = HttpStatusCode.OK,
