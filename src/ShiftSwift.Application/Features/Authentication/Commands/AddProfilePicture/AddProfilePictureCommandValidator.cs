@@ -6,7 +6,7 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.AddProfilePict
 {
     public sealed class AddProfilePictureCommandValidator : AbstractValidator<AddProfilePictureCommand>
     {
-        private readonly string[] _permittedExtensions = { ".jpg", ".jpeg", ".png" };
+        private readonly string[] _permittedExtensions = [".jpg", ".jpeg", ".png"];
         private bool BeAValidImageFile(IFormFile file)
         {
             if (file == null) return false;
@@ -17,7 +17,7 @@ namespace ShiftSwift.Application.Features.Authentication.Commands.AddProfilePict
         }
         public AddProfilePictureCommandValidator()
         {
-            RuleFor(x => x.FormFile)
+            RuleFor(x => x.Image)
                 .NotNull().WithMessage("Profile picture is required.")
                 .Must(file => file.Length > 0).WithMessage("File cannot be empty.")
                 .Must(BeAValidImageFile).WithMessage("Product image must be a valid image file (jpg, JPEG, PNG).")

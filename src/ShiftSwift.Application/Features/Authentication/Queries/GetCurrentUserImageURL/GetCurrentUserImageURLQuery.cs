@@ -1,10 +1,7 @@
-﻿
-
-using ErrorOr;
+﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImageURL
-{
-    public sealed record GetCurrentUserImageURLQuery(string UserId):IRequest<ErrorOr<ApiResponse<string>>>;
-}
+namespace ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImageURL;
+
+public sealed record GetCurrentUserImageURLQuery(string UserId) : IRequest<ErrorOr<ApiResponse<string>>>;

@@ -1,10 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
 using Microsoft.AspNetCore.Http;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.Authentication.Commands.AddProfilePicture
-{
-    public sealed record AddProfilePictureCommand(IFormFile FormFile):IRequest<ErrorOr<ApiResponse<string>>>;
-    
-}
+namespace ShiftSwift.Application.Features.Authentication.Commands.AddProfilePicture;
+
+public sealed record AddProfilePictureCommand(IFormFile Image):IRequest<ErrorOr<ApiResponse<string>>>;

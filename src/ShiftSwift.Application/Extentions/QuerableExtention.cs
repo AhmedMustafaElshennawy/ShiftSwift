@@ -1,5 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using ShiftSwift.Shared.paging;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Extentions;
 
@@ -11,10 +11,10 @@ public static class QuerableExtension
         int pageSize,
         CancellationToken cancellationToken) where TEntity : class
     {
-        int count = await source.CountAsync();
+        var count = await source.CountAsync(cancellationToken: cancellationToken);
         pageSize = pageSize == 0 ? 10 : pageSize;
 
-        List<TEntity> items = pageNumber > 1 ? await source
+        var items = pageNumber > 1 ? await source
                 .Skip((pageNumber - 1) * pageSize)
                 .Take(pageSize).ToListAsync(cancellationToken)
             : await source.Take(pageSize).ToListAsync(cancellationToken);

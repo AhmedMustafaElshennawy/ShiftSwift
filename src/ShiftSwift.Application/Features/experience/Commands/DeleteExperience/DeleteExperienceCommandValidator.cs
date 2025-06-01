@@ -1,13 +1,11 @@
 ﻿using FluentValidation;
-using ShiftSwift.Application.Features.experience.Commands.DeleteEducation;
 
-namespace ShiftSwift.Application.Features.experience.Commands.DeleteExperience
+namespace ShiftSwift.Application.Features.experience.Commands.DeleteExperience;
+
+public sealed class DeleteExperienceCommandValidator:AbstractValidator<DeleteExperienceCommand>
 {
-    public sealed class DeleteExperienceCommandValidator:AbstractValidator<DeleteExperienceCommand>
+    public DeleteExperienceCommandValidator()
     {
-        public DeleteExperienceCommandValidator()
-        {
-            RuleFor(X => X.MemberId).NotEmpty().WithMessage("MemberId Is required.");
-        }
+        RuleFor(x => x.MemberId).NotEmpty().WithMessage("MemberId Is required.");
     }
 }

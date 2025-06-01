@@ -30,11 +30,11 @@
     <ProjectReference Include="..\ShiftSwift.Application\ShiftSwift.Application.csproj" />
     <ProjectReference Include="..\ShiftSwift.Infrastructure\ShiftSwift.Infrastructure.csproj" />
     <ProjectReference Include="..\ShiftSwift.Presistence\ShiftSwift.Presistence.csproj" />
-    <ProjectReference Include="..\ShiftSwift.Shared\ShiftSwift.Shared.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\" />
+    <Folder Include="wwwroot\images\" />
+    <Folder Include="wwwroot\videos\" />
   </ItemGroup>
 
 </Project>

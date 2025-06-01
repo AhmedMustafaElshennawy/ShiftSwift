@@ -1,12 +1,11 @@
 ﻿using FluentValidation;
 
-namespace ShiftSwift.Application.Features.education.Queries.GetEducation
+namespace ShiftSwift.Application.Features.education.Queries.GetEducation;
+
+public sealed class GetEducationQueryValidator:AbstractValidator<GetEducationQuery>
 {
-    public sealed class GetEducationQueryValidator:AbstractValidator<GetEducationQuery>
+    public GetEducationQueryValidator()
     {
-        public GetEducationQueryValidator()
-        {
-            RuleFor(X => X.MemberId).NotEmpty().WithMessage("MemberId Is required.");
-        }
+        RuleFor(X => X.MemberId).NotEmpty().WithMessage("MemberId Is required.");
     }
 }

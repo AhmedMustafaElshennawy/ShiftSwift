@@ -2,9 +2,7 @@
 using ShiftSwift.Application.Features.education.Commands.DeleteEducation;
 using ShiftSwift.Application.Features.education.Queries.GetEducation;
 using ShiftSwift.Application.Features.experience.Commands.AddExperience;
-using ShiftSwift.Application.Features.experience.Commands.DeleteEducation;
 using ShiftSwift.Application.Features.experience.Queries.GetExperience;
-using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication;
 using ShiftSwift.Application.Features.jobApplication.Query.ListMyJobApplicaions;
 using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
 using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
@@ -24,13 +22,14 @@ using ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 using ShiftSwift.Application.Features.skill.Commands.UpdateSkill;
 using ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
 using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.experience.Commands.DeleteExperience;
+using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplicationWithoutQuestion;
 using ShiftSwift.Application.Features.rating.Commands.AddRating;
 
 namespace ShiftSwift.API.Controllers;
 
 public class MemberController(ISender sender) : ApiController
 {
-    private readonly ISender _sender = sender;
 
     [HttpPost("AddOrUpdateMamberProfileData/{MemberId}")]
     public async Task<IActionResult> AddMamberProfileData([FromRoute] string MemberId,
@@ -43,10 +42,10 @@ public class MemberController(ISender sender) : ApiController
             request.LastName,
             request.GenderId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -61,10 +60,9 @@ public class MemberController(ISender sender) : ApiController
             request.Faculty,
             request.UniversityName);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -79,10 +77,9 @@ public class MemberController(ISender sender) : ApiController
             request.Faculty,
             request.UniversityName);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -92,10 +89,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new GetEducationQuery(MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -106,10 +102,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var command = new DeleteEducationCommand(MemberId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -125,10 +120,9 @@ public class MemberController(ISender sender) : ApiController
             request.EndDate,
             request.Description);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -138,7 +132,6 @@ public class MemberController(ISender sender) : ApiController
         [FromBody] UpdateExperienceDTO request,
         CancellationToken cancellationToken)
     {
-
         var command = new UpdateExperienceCommand(request.ExperienceId,
             MemberId,
             request.Title,
@@ -147,10 +140,9 @@ public class MemberController(ISender sender) : ApiController
             request.EndDate,
             request.Description);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -160,10 +152,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var command = new GetExperienceQuery(MemberId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -174,10 +165,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var command = new DeleteExperienceCommand(MemberId, experienceId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -190,10 +180,9 @@ public class MemberController(ISender sender) : ApiController
             MemberId,
             request.Name);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -207,10 +196,9 @@ public class MemberController(ISender sender) : ApiController
             request.SkillId,
             request.Name);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -221,10 +209,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new GetSkillQuery(MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -233,12 +220,11 @@ public class MemberController(ISender sender) : ApiController
     public async Task<IActionResult> DeleteSkill([FromRoute] string MemberId, [FromBody] Guid skillId,
         CancellationToken cancellationToken)
     {
-        var command = new DeleteSkillCommand(MemberId,skillId);
+        var command = new DeleteSkillCommand(MemberId, skillId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -253,10 +239,9 @@ public class MemberController(ISender sender) : ApiController
             request.Description,
             request.DateAchieved);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -267,10 +252,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new GetAccomplishmentQuery(MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -281,10 +265,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var command = new DeleteAccomplishmentCommand(MemberId);
 
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -294,11 +277,10 @@ public class MemberController(ISender sender) : ApiController
     public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
         CancellationToken cancellationToken)
     {
-        var command = new CreateJobApplicationCommand(request.JobId, request.MemberId, request.Answers);
-        var result = await _sender.Send(command, cancellationToken);
+        var command = new CreateJobApplicationWithoutJobQuestionCommand(request.JobId, request.MemberId);
+        var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -308,10 +290,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new ListMyJobApplicaionsQuery(MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -322,10 +303,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new SaveJobCommand(JobId, MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -335,10 +315,9 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new GetSavedJobsQuery(MemberId);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -348,26 +327,24 @@ public class MemberController(ISender sender) : ApiController
     {
         var query = new ChangeMemberEmailCommand(MemberId, Email);
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
-
     }
 
     [HttpGet("SearchJobs")]
     public async Task<IActionResult> SearchJobs(
-    [FromQuery(Name = "search")] string? search,
-    [FromQuery(Name = "area")] string? area,
-    [FromQuery] int pageNumber = 1,
-    [FromQuery] int pageSize = 10,
-    [FromQuery] string? sortBy = "latest",
-    [FromQuery] int jobTypeIdFilterValue = 0,
-    [FromQuery] decimal? minSalary = null,
-    [FromQuery] decimal? maxSalary = null,
-    CancellationToken cancellationToken = default)
+        [FromQuery(Name = "search")] string? search,
+        [FromQuery(Name = "area")] string? area,
+        [FromQuery] int pageNumber = 1,
+        [FromQuery] int pageSize = 10,
+        [FromQuery] string? sortBy = "latest",
+        [FromQuery] int jobTypeIdFilterValue = 0,
+        [FromQuery] decimal? minSalary = null,
+        [FromQuery] decimal? maxSalary = null,
+        CancellationToken cancellationToken = default)
     {
         var query = new SearchJobsQuery
         {
@@ -381,12 +358,10 @@ public class MemberController(ISender sender) : ApiController
             MaxSalary = maxSalary
         };
 
-        var result = await _sender.Send(query, cancellationToken);
+        var result = await sender.Send(query, cancellationToken);
 
         var response = result.Match(
-            success => Ok(result.Value),
-            error => Problem(error)
-        );
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -396,12 +371,8 @@ public class MemberController(ISender sender) : ApiController
         [FromBody] RatingDTO request, CancellationToken cancellationToken)
     {
         var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
-        var result = await _sender.Send(command, cancellationToken);
+        var result = await sender.Send(command, cancellationToken);
 
-        return result.Match(
-            success => Ok(success),
-            error => Problem(error)
-        );
+        return result.Match(success => Ok(success), Problem);
     }
-
 }

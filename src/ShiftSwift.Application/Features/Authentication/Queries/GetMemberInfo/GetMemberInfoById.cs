@@ -5,8 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Domain.identity;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.GetMemberInfo;
 
@@ -39,24 +39,24 @@ public sealed class GetMemberInfoByIdHandler(
                 description: "User is not a member.");
         }
 
-        var educationResponses = memberData.Educations.Select(e => new MemberEducationResponse(
+        var educationResponses = memberData
+            .Educations.Select(e => new MemberEducationResponse(
             e.Id,
             e.Level,
             e.Faculty,
-            e.UniversityName
-        )).ToList();
+            e.UniversityName)).ToList();
 
-        var experienceResponses = memberData.Experiences.Select(e => new MemberExperienceResponse(
+        var experienceResponses = memberData
+            .Experiences.Select(e => new MemberExperienceResponse(
             e.Title,
             e.CompanyName,
             e.StartDate,
             e.EndDate,
-            e.Description
-        )).ToList();
+            e.Description)).ToList();
 
-        var skillResponses = memberData.Skills.Select(s => new MemberSkillResponse(
-            s.Name
-        )).ToList();
+        var skillResponses = memberData
+            .Skills.Select(s => new MemberSkillResponse(
+            s.Name)).ToList();
 
         var response = new MemberResponseInfo(
             MemberId: memberData.Id,

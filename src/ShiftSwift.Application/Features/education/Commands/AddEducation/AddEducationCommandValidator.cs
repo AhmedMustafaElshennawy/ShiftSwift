@@ -9,27 +9,26 @@ public class AddEducationCommandValidator : AbstractValidator<AddEducationComman
     [
         "High School", "Associate", "Bachelor", "Master", "Doctorate", "Professional"
     ];
+
     public AddEducationCommandValidator()
     {
-        RuleFor(X=>X.MemberId).NotEmpty().WithMessage("MemberId Is required.");
-        RuleFor(x => x.Level)
-            .NotEmpty().WithMessage("Institution is required.")
-            .MaximumLength(100).WithMessage("Institution name must not exceed 100 characters.");
+        const int maxLength = 100;
 
+        RuleFor(x => x.MemberId)
+            .NotEmpty().WithMessage("MemberId is required.");
 
         RuleFor(x => x.Faculty)
-            .NotEmpty().WithMessage("Level of education is required.")
-            .MaximumLength(100).WithMessage("Level of education cannot exceed 100 characters.")
-            .Must(BeValidEducationLevel)
-            .WithMessage($"Invalid level of education specified. Valid values are: {string.Join(", ", ValidLevels)}");
+            .NotEmpty().WithMessage("Institution is required.")
+            .MaximumLength(maxLength).WithMessage($"Institution name must not exceed {maxLength} characters.");
 
+        RuleFor(x => x.Level)
+            .NotEmpty().WithMessage("Level of education is required.")
+            .MaximumLength(maxLength).WithMessage($"Level of education cannot exceed {maxLength} characters.")
+            .Must(level => ValidLevels.Contains(level))
+            .WithMessage($"Invalid education level. Valid values: {string.Join(", ", ValidLevels)}");
 
         RuleFor(x => x.UniversityName)
             .NotEmpty().WithMessage("Degree is required.")
-            .MaximumLength(100).WithMessage("Degree name must not exceed 100 characters.");
-    }
-    private bool BeValidEducationLevel(string level)
-    {
-        return ValidLevels.Contains(level);
+            .MaximumLength(maxLength).WithMessage($"Degree name must not exceed {maxLength} characters.");
     }
 }

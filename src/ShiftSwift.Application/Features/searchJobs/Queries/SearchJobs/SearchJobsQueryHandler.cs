@@ -5,9 +5,8 @@ using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.identity;
-using ShiftSwift.Shared.ApiBaseResponse;
-using ShiftSwift.Shared.paging;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs
 {

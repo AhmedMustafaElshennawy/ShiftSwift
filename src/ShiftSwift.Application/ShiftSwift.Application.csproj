@@ -8,6 +8,8 @@
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
+    <PackageReference Include="Mapster" Version="7.4.0" />
+    <PackageReference Include="Mapster.DependencyInjection" Version="1.0.1" />
     <PackageReference Include="MediatR" Version="12.4.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="9.0.0" />
     <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="9.0.0" />
@@ -16,7 +18,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ShiftSwift.Domain\ShiftSwift.Domain.csproj" />
-    <ProjectReference Include="..\ShiftSwift.Shared\ShiftSwift.Shared.csproj" />
   </ItemGroup>
 
 </Project>

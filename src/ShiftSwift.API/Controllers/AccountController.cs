@@ -1,5 +1,4 @@
 ﻿using ShiftSwift.Application.Features.Authentication.Commands.LogOut;
-using ShiftSwift.Application.Features.Authentication.Commands.Register;
 using ShiftSwift.Application.Features.Authentication.Commands.Registermamber;
 using ShiftSwift.Application.Features.Authentication.Queries.LogInCompany;
 using ShiftSwift.Application.Features.Authentication.Queries.LogInMember;
@@ -9,161 +8,158 @@ using ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImage
 using ShiftSwift.Application.DTOs.identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ShiftSwift.Application.Features.Authentication.Commands.RegisterCompany;
 using ShiftSwift.Application.Features.Authentication.Queries.GetCompanyInfo;
 using ShiftSwift.Application.Features.Authentication.Queries.GetMemberInfo;
 
-namespace ShiftSwift.API.Controllers
+namespace ShiftSwift.API.Controllers;
+
+public class AccountController(ISender sender) : ApiController
 {
-    public class AccountController : ApiController
+    [HttpPost("RegisterMember")]
+    public async Task<IActionResult> RegisterMember([FromForm] RegisterMemberRequest request,
+        CancellationToken cancellationToken)
     {
-        private readonly ISender _sender;
-        public AccountController(ISender sender) => _sender = sender;
+        var command = new RegisterMemberCommand(
+            request.Email,
+            request.UserName,
+            request.Password,
+            request.PhoneNumber);
 
-        [HttpPost("RegisterMember")]
-        public async Task<IActionResult> RegisterMember([FromForm] RegisterMemberRequest request,
-            CancellationToken cancellationToken)
-        {
-            var command = new RegisterMemberCommand(
-                request.Email,
-                request.UserName,
-                request.Password,
-                request.PhoneNumber);
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpPost("RegisterCompany")]
+    public async Task<IActionResult> RegisterCompany([FromForm] RegisterCompanyRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new RegisterCompanyCommand(
+            request.Email,
+            request.UserName,
+            request.Password,
+            request.PhoneNumber);
 
-        [HttpPost("RegisterCompany")]
-        public async Task<IActionResult> RegisterCompany([FromForm] RegisterCompanyRequest request,
-            CancellationToken cancellationToken)
-        {
-            var command = new RegisterCompanyCommand(
-                request.Email,
-                request.UserName,
-                request.Password,
-                request.PhoneNumber);
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpPost("LoginCompany")]
+    public async Task<IActionResult> LoginCompany([FromBody] LoginAccountRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new LoginCompanyQuery(
+            request.UserName,
+            request.Password);
 
-        [HttpPost("LoginCompany")]
-        public async Task<IActionResult> LoginCompany([FromBody] LoginAccountRequest request,
-            CancellationToken cancellationToken)
-        {
-            var command = new LoginCompanyQuery(
-                request.UserName,
-                request.Password);
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpPost("LoginMember")]
+    public async Task<IActionResult> LoginMember([FromBody] LoginAccountRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new LoginMemberQuery(
+            request.UserName,
+            request.Password);
 
-        [HttpPost("LoginMember")]
-        public async Task<IActionResult> LoginMember([FromBody] LoginAccountRequest request,
-            CancellationToken cancellationToken)
-        {
-            var command = new LoginMemberQuery(
-                request.UserName,
-                request.Password);
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpPost("LogOutAccoount")]
+    public async Task<IActionResult> LogOutAccount(CancellationToken cancellationToken)
+    {
+        var command = new LogoutCommand();
 
-        [HttpPost("LogOutAccoount")]
-        public async Task<IActionResult> LogOutAccount(CancellationToken cancellationToken)
-        {
-            var command = new LogoutCommand();
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpGet("GetCurrentUserInformation")]
+    public async Task<IActionResult> GetCurrentUserInformation(CancellationToken cancellationToken)
+    {
+        var query = new GetCurrentUserInformationQuery();
 
-        [HttpGet("GetCurrentUserInformation")]
-        public async Task<IActionResult> GetCurrentUserInformation(CancellationToken cancellationToken)
-        {
-            var query = new GetCurrentUserInformationQuery();
+        var result = await sender.Send(query, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(query, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpPost("AddOrUpdateProfilePicture")]
+    public async Task<IActionResult> AddProfilePicture([FromForm] AddProfilePictureRequest request,
+        CancellationToken cancellationToken)
+    {
+        var command = new AddProfilePictureCommand(request.FormFile);
 
-        [HttpPost("AddOrUpdateProfilePicture")]
-        public async Task<IActionResult> AddProfilePicture([FromForm] AddProfilePictureRequest request,
-            CancellationToken cancellationToken)
-        {
-            var command = new AddProfilePictureCommand(request.FormFile);
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(command, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpGet("GetProfilePicture/{Id}")]
+    public async Task<IActionResult> GetProfilePicture(string Id, CancellationToken cancellationToken)
+    {
+        var query = new GetCurrentUserImageURLQuery(Id);
 
-        [HttpGet("GetProfilePicture/{Id}")]
-        public async Task<IActionResult> GetProfilePicture(string Id, CancellationToken cancellationToken)
-        {
-            var query = new GetCurrentUserImageURLQuery(Id);
+        var result = await sender.Send(query, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(query, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpGet("GetCompanyInfoById/{Id}")]
+    public async Task<IActionResult> GetCompanyInfoById(string Id, CancellationToken cancellationToken)
+    {
+        var query = new GetCompanyInfoById(Id);
 
-        [HttpGet("GetCompanyInfoById/{Id}")]
-        public async Task<IActionResult> GetCompanyInfoById(string Id, CancellationToken cancellationToken)
-        {
-            var query = new GetCompanyInfoById(Id);
+        var result = await sender.Send(query, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(query, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
+        return response;
+    }
 
-            return response;
-        }
+    [HttpGet("GetMemberInfoById/{Id}")]
+    public async Task<IActionResult> GetMemberInfoById(string Id, CancellationToken cancellationToken)
+    {
+        var query = new GetMemberInfoById(Id);
 
-        [HttpGet("GetMemberInfoById/{Id}")]
-        public async Task<IActionResult> GetMemberInfoById(string Id, CancellationToken cancellationToken)
-        {
-            var query = new GetMemberInfoById(Id);
+        var result = await sender.Send(query, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            error => Problem(error));
 
-            var result = await _sender.Send(query, cancellationToken);
-            var response = result.Match(
-                success => Ok(result.Value),
-                error => Problem(error));
-
-            return response;
-        }
+        return response;
     }
 }

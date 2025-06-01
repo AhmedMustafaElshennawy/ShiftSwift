@@ -6,8 +6,8 @@ using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplicants
 {

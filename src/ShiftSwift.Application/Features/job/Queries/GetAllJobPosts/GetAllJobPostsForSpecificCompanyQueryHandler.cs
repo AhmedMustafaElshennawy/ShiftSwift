@@ -5,9 +5,9 @@ using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.Shared;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Linq;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 
 namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts

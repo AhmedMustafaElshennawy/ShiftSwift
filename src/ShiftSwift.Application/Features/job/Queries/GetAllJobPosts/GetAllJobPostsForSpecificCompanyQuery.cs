@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.DTOs.Company;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.job.Queries.GetAllJobPosts
 {

@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 
 namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail

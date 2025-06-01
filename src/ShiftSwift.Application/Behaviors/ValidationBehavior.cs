@@ -2,7 +2,6 @@
 using FluentValidation;
 using MediatR;
 
-
 namespace ShiftSwift.Application.Behaviors;
 
 internal sealed class ValidationBehavior<TRequest, TResponse>(IValidator<TRequest>? validator = null)

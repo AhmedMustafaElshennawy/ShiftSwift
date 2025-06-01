@@ -1,12 +1,11 @@
-﻿namespace ShiftSwift.Application.Common.Repository
+﻿namespace ShiftSwift.Application.Common.Repository;
+
+public interface IBaseRepository<TEntity> where TEntity : class
 {
-    public interface IBaseRepository<TEntity> where TEntity : class
-    {
-        IQueryable<TEntity> Entites();
-        Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
-        Task<int> CountAsync(IQueryable<TEntity> query, CancellationToken cancellationToken = default);
-        Task<TEntity> AddEntityAsync(TEntity entity);
-        Task<TEntity> UpdateAsync(TEntity entity);
-        Task<bool> DeleteAsync(TEntity entity);
-    }
+    IQueryable<TEntity> Entites();
+    Task<List<TEntity>> GetAllAsync(CancellationToken cancellationToken = default);
+    Task<int> CountAsync(IQueryable<TEntity> query, CancellationToken cancellationToken = default);
+    Task<TEntity> AddEntityAsync(TEntity entity);
+    Task<TEntity> UpdateAsync(TEntity entity);
+    Task<bool> DeleteAsync(TEntity entity);
 }

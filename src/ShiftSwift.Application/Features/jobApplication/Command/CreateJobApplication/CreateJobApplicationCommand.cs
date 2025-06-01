@@ -1,7 +1,7 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.DTOs.member;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication
 {

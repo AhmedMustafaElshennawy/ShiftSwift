@@ -5,8 +5,8 @@ using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Application.services.Email;
 using ShiftSwift.Domain.identity;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber;
 
@@ -87,7 +87,7 @@ public sealed class RegisterMemberCommandHandler : IRequestHandler<RegisterMembe
         }
 
         var memberToken = await _tokenGenerator.GenerateToken(member, _defaultMemberRole);
-        var MemberResponse = new MemberResponse(member.Id,
+        var memberResponse = new MemberResponse(member.Id,
             member.FullName,
             member.UserName,
             member.PhoneNumber!,
@@ -96,8 +96,8 @@ public sealed class RegisterMemberCommandHandler : IRequestHandler<RegisterMembe
             member.Location);
 
         var registerationMemberResponse = new RegisterationMemberResult(
-            MemberResponse: MemberResponse,
-            token: memberToken);
+            MemberResponse: memberResponse,
+            Token: memberToken);
 
         return new ApiResponse<RegisterationMemberResult>
         {

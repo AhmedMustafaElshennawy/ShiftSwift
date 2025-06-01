@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.Enums;
-using ShiftSwift.Shared.ApiBaseResponse;
 
 namespace ShiftSwift.Application.Features.job.Commands.PostJob
 {

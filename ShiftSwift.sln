@@ -15,8 +15,6 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Infrastructure",
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Presistence", "src\ShiftSwift.Presistence\ShiftSwift.Presistence.csproj", "{2E76C217-2A1C-4835-9773-1D1905DCA6EF}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ShiftSwift.Shared", "src\ShiftSwift.Shared\ShiftSwift.Shared.csproj", "{BB381A3E-767D-4570-A2F0-C81706C44916}"
-EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -43,10 +41,6 @@ Global
 		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{2E76C217-2A1C-4835-9773-1D1905DCA6EF}.Release|Any CPU.Build.0 = Release|Any CPU
-		{BB381A3E-767D-4570-A2F0-C81706C44916}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{BB381A3E-767D-4570-A2F0-C81706C44916}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{BB381A3E-767D-4570-A2F0-C81706C44916}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{BB381A3E-767D-4570-A2F0-C81706C44916}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -57,6 +51,5 @@ Global
 		{132761F1-9DFC-4334-BDF8-9EF2C5F75D7F} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
 		{C03C89FB-053F-4819-AFA1-25BC3167D074} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
 		{2E76C217-2A1C-4835-9773-1D1905DCA6EF} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
-		{BB381A3E-767D-4570-A2F0-C81706C44916} = {F3E0A8B1-44E3-4F81-AF31-A55AE68426BC}
 	EndGlobalSection
 EndGlobal

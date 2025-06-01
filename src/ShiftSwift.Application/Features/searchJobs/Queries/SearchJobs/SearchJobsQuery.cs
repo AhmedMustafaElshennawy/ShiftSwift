@@ -1,8 +1,8 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.DTOs.member;
-using ShiftSwift.Shared.ApiBaseResponse;
-using ShiftSwift.Shared.paging;
+using ShiftSwift.Domain.ApiResponse;
+
 namespace ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs
 {
    public sealed record SearchJobsQuery : PaginatedRequest, IRequest<ErrorOr<ApiResponse<PaginatedResponse<SearchJobsResponse>>>>

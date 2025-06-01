@@ -1,17 +1,16 @@
 ﻿using ErrorOr;
 using MediatR;
 using ShiftSwift.Application.DTOs.member;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber
-{
-    public record RegisterMemberCommand(
-        string Email,
-        string UserName,
-        string Password,
-        string PhoneNumber) : IRequest<ErrorOr<ApiResponse<RegisterationMemberResult>>>;
+namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber;
 
-    public sealed record RegisterationMemberResult(
-        MemberResponse MemberResponse,
-        string token);
-}
+public record RegisterMemberCommand(
+    string Email,
+    string UserName,
+    string Password,
+    string PhoneNumber) : IRequest<ErrorOr<ApiResponse<RegisterationMemberResult>>>;
+
+public sealed record RegisterationMemberResult(
+    MemberResponse MemberResponse,
+    string Token);

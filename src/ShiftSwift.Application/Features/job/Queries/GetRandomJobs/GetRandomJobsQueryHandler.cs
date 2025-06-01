@@ -2,11 +2,10 @@
 using ShiftSwift.Application.DTOs.Company;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Extentions;
-using ShiftSwift.Shared.ApiBaseResponse;
-using ShiftSwift.Shared.paging;
 using System.Net;
 using ErrorOr;
 using MediatR;
+using ShiftSwift.Domain.ApiResponse;
 
 
 namespace ShiftSwift.Application.Features.job.Queries.GetRandomJobs

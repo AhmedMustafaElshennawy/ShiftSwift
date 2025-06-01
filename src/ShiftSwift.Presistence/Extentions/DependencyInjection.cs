@@ -9,27 +9,37 @@ using ShiftSwift.Presistence.Common.UnitOfWork;
 using ShiftSwift.Presistence.Context;
 
 
-namespace ShiftSwift.Presistence.Extentions
+namespace ShiftSwift.Presistence.Extentions;
+
+public static class DependencyInjection
 {
-    public static class DependencyInjection
+    public static IServiceCollection AddPresistence(this IServiceCollection services, IConfiguration configuration)
     {
-        public static IServiceCollection AddPresistence(this IServiceCollection services, IConfiguration configuration)
-        {
-            services.AddDbContext<ShiftSwiftDbContext>(options =>
-                options.UseSqlServer(
-                    configuration.GetConnectionString("DefaultConnection"),
-                        sqlOptions => sqlOptions.MigrationsAssembly(typeof(ShiftSwiftDbContext).Assembly.FullName)
-                ));
+        services.AddSqlDbConfiguration(configuration)
+            .AddDataAcessTypesToDiContainer();
 
-            services.AddIdentity<Account, IdentityRole>()
-                .AddEntityFrameworkStores<ShiftSwiftDbContext>()
-                .AddDefaultTokenProviders();
+        return services;
+    }
 
-            services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
-            services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+    private static IServiceCollection AddSqlDbConfiguration(this IServiceCollection services,IConfiguration configuration)
+    {
+        services.AddDbContext<ShiftSwiftDbContext>(options =>
+            options.UseSqlServer(
+                configuration.GetConnectionString("DefaultConnection"),
+                sqlOptions => sqlOptions.MigrationsAssembly(typeof(ShiftSwiftDbContext).Assembly.FullName)
+            ));
 
+        services.AddIdentity<Account, IdentityRole>()
+            .AddEntityFrameworkStores<ShiftSwiftDbContext>()
+            .AddDefaultTokenProviders();
 
-            return services;
-        }
+        return services;
+    }
+    private static IServiceCollection AddDataAcessTypesToDiContainer(this IServiceCollection services)
+    {
+        services.AddScoped(typeof(IBaseRepository<>), typeof(BaseRepository<>));
+        services.AddScoped(typeof(IUnitOfWork), typeof(UnitOfWork));
+
+        return services;
     }
 }

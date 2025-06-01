@@ -4,8 +4,8 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.Enums;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.job.Commands.RemoveFromShortlist
 {

@@ -4,8 +4,8 @@ using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.models.memberprofil;
-using ShiftSwift.Shared.ApiBaseResponse;
 using System.Net;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.experience.Commands.AddExperience;
 

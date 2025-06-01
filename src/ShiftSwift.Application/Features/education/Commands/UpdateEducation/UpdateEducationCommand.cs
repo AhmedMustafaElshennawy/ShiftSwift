@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Shared.ApiBaseResponse;
+using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 
