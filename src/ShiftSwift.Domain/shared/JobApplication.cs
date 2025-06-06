@@ -1,5 +1,4 @@
 ﻿using ShiftSwift.Domain.identity;
-using ShiftSwift.Domain.Shared;
 
 
 namespace ShiftSwift.Domain.shared;
@@ -14,5 +13,4 @@ public class JobApplication
     public DateTime AppliedOn { get; set; } = DateTime.UtcNow;
     public string? Location { get; set; }
     public int Status { get; set; }
-    public ICollection<ApplicationAnswer> Answers { get; set; } = new List<ApplicationAnswer>();
 }

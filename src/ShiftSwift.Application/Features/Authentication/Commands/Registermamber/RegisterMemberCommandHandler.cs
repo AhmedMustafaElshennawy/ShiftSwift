@@ -1,12 +1,12 @@
 ﻿using ErrorOr;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Application.services.Email;
+using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.identity;
 using System.Net;
-using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber;
 
@@ -85,26 +85,17 @@ public sealed class RegisterMemberCommandHandler : IRequestHandler<RegisterMembe
                 code: "RoleAssignment.Failure",
                 description: $"Failed to assign role: {errorMessages}");
         }
+        var token = await _tokenGenerator.GenerateToken(member, _defaultMemberRole);
 
-        var memberToken = await _tokenGenerator.GenerateToken(member, _defaultMemberRole);
-        var memberResponse = new MemberResponse(member.Id,
-            member.FullName,
-            member.UserName,
-            member.PhoneNumber!,
-            member.Email,
-            member.GenderId.Value,
-            member.Location);
-
-        var registerationMemberResponse = new RegisterationMemberResult(
-            MemberResponse: memberResponse,
-            Token: memberToken);
+        var mappedResponse = member.Adapt<RegisterMemberResponse>();
+        var registerationResult = new RegisterationMemberResult(mappedResponse, token);
 
         return new ApiResponse<RegisterationMemberResult>
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.OK,
             Message = "User registered successfully",
-            Data = registerationMemberResponse
+            Data = registerationResult
         };
     }
 }

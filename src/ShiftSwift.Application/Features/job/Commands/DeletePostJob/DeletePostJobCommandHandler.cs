@@ -8,10 +8,13 @@ using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.job.Commands.DeletePostJob;
 
-public sealed class DeletePostJobCommandHandler(IUnitOfWork unitOfWork, ICurrentUserProvider currentUserProvider)
+public sealed class DeletePostJobCommandHandler(
+    IUnitOfWork unitOfWork,
+    ICurrentUserProvider currentUserProvider)
     : IRequestHandler<DeletePostJobCommand, ErrorOr<ApiResponse<Deleted>>>
 {
-    public async Task<ErrorOr<ApiResponse<Deleted>>> Handle(DeletePostJobCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ApiResponse<Deleted>>> Handle(DeletePostJobCommand request,
+        CancellationToken cancellationToken)
     {
         var currentUserResult = await currentUserProvider.GetCurrentUser();
         if (currentUserResult.IsError)
@@ -31,18 +34,15 @@ public sealed class DeletePostJobCommandHandler(IUnitOfWork unitOfWork, ICurrent
 
         var job = await unitOfWork.Jobs.Entites()
             .Include(j => j.JobApplications)
-            .Include(j => j.Questions)
-            .Where(j => j.Id == request.JobId)
-            .FirstOrDefaultAsync(cancellationToken);
+            .FirstOrDefaultAsync(j => j.Id == request.JobId, cancellationToken);
 
         if (job is null)
         {
             return new ApiResponse<Deleted>
             {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = $"No Jobs Found To Your Company With Id You Entered: {request.JobId}",
-                Data = null
+                IsSuccess = false,
+                StatusCode = HttpStatusCode.NotFound,
+                Message = $"No job found with Id: {request.JobId}"
             };
         }
 
@@ -53,15 +53,10 @@ public sealed class DeletePostJobCommandHandler(IUnitOfWork unitOfWork, ICurrent
                 description: "You are not allowed to delete this job.");
         }
 
-        foreach (var application in job.JobApplications)
-        {
-            await unitOfWork.JobApplications.DeleteAsync(application);
-        }
-
-        foreach (var question in job.Questions)
-        {
-            await unitOfWork.JobQuestions.DeleteAsync(question);
-        }
+        //foreach (var application in job.JobApplications)
+        //{
+        //    await unitOfWork.JobApplications.DeleteAsync(application);
+        //}
 
         await unitOfWork.Jobs.DeleteAsync(job);
         await unitOfWork.CompleteAsync(cancellationToken);
@@ -70,7 +65,7 @@ public sealed class DeletePostJobCommandHandler(IUnitOfWork unitOfWork, ICurrent
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.OK,
-            Message = "Your Job is Deleted successfully.",
+            Message = "Job deleted successfully.",
             Data = null
         };
     }

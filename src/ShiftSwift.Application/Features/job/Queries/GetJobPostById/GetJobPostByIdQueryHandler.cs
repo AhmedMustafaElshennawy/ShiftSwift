@@ -2,61 +2,36 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Application.DTOs.Company;
 using System.Net;
+using Mapster;
 using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
+namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById;
+
+internal sealed class GetJobPostByIdQueryHandler(IUnitOfWork unitOfWork)
+    : IRequestHandler<GetJobPostByIdQuery, ErrorOr<ApiResponse<PostedJobByIdResponse>>>
 {
-    public sealed class GetJobPostByIdQueryHandler : IRequestHandler<GetJobPostByIdQuery, ErrorOr<ApiResponse<PostedJobResponse>>>
+    public async Task<ErrorOr<ApiResponse<PostedJobByIdResponse>>> Handle(GetJobPostByIdQuery request,
+        CancellationToken cancellationToken)
     {
-        private readonly IUnitOfWork _unitOfWork;
+        var job = await unitOfWork.Jobs.Entites()
+            .FirstOrDefaultAsync(j => j.Id == request.JobId, cancellationToken);
 
-        public GetJobPostByIdQueryHandler(IUnitOfWork unitOfWork)
+        if (job is null)
         {
-            _unitOfWork = unitOfWork;
+            return Error.NotFound(
+                code: "Job.NotFound",
+                description: "Job post not found.");
         }
 
-        public async Task<ErrorOr<ApiResponse<PostedJobResponse>>> Handle(GetJobPostByIdQuery request, CancellationToken cancellationToken)
+        var jobResponse = job.Adapt<PostedJobByIdResponse>();
+
+        return new ApiResponse<PostedJobByIdResponse>
         {
-            var job = await _unitOfWork.Jobs.Entites()
-                .Include(j => j.Questions)
-                .FirstOrDefaultAsync(j => j.Id == request.JobId, cancellationToken);
-
-            if (job is null)
-            {
-                return Error.NotFound(
-                    code: "Job.NotFound",
-                    description: "Job post not found.");
-            }
-
-            var jobResponse = new PostedJobResponse(
-                job.CompanyId,
-                job.Id,
-                job.Title,
-                job.Description,
-                job.Location,
-                job.PostedOn,
-                job.JobTypeId,
-                job.WorkModeId,
-                job.Salary,
-                job.SalaryTypeId,
-                job.Requirements,
-                job.Keywords,
-                job.Questions.Select(q => new JobQuestionResponse(
-                    q.Id,
-                    q.QuestionText,
-                    (int)q.QuestionType
-                )).ToList()
-            );
-
-            return new ApiResponse<PostedJobResponse>
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Job post retrieved successfully.",
-                Data = jobResponse
-            };
-        }
+            IsSuccess = true,
+            StatusCode = HttpStatusCode.OK,
+            Message = "Job post retrieved successfully.",
+            Data = jobResponse
+        };
     }
 }

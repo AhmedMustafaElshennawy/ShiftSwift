@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.Authentication.Commands.RegisterCompany;
 using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany;
@@ -10,5 +10,10 @@ public sealed record LoginCompanyQuery(
     string Password) : IRequest<ErrorOr<ApiResponse<LoginCompanyResult>>>;
 
 public sealed record LoginCompanyResult(
-    CompanyResponse CompanyResponse,
-    string token);
+    LoginCompanyResponse CompanyResponse,
+    string Token);
+
+public sealed record LoginCompanyResponse(string CompanyId,
+    string UserName,
+    string PhoneNumber,
+    string Email);

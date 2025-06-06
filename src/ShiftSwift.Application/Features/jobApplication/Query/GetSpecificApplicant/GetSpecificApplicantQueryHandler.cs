@@ -2,20 +2,19 @@
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
-using ShiftSwift.Domain.identity;
 using System.Net;
+using Mapster;
 using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplicant;
 
 public sealed class GetSpecificApplicantQueryHandler(
     ICurrentUserProvider currentUserProvider,
-    IBaseRepository<Member> memberRepository)
-    : IRequestHandler<GetSpecificApplicantQuery, ErrorOr<ApiResponse<SpecificApplicantResponse>>>
+    IUnitOfWork unitOfWork)
+    : IRequestHandler<GetSpecificApplicantQuery, ErrorOr<ApiResponse<SpecificApplicantForSpecificJobResponse>>>
 {
-    public async Task<ErrorOr<ApiResponse<SpecificApplicantResponse>>> Handle(GetSpecificApplicantQuery request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ApiResponse<SpecificApplicantForSpecificJobResponse>>> Handle(GetSpecificApplicantQuery request, CancellationToken cancellationToken)
     {
         var currentUserResult = await currentUserProvider.GetCurrentUser();
 
@@ -34,76 +33,30 @@ public sealed class GetSpecificApplicantQueryHandler(
                 description: "companies can access applicant details.");
         }
 
-        var applicant = await memberRepository.Entites()
+        var applicant = await unitOfWork.JobApplications.Entites()
             .AsNoTracking()
-            .Include(m => m.Educations)
-            .Include(m => m.Experiences)
-            .Include(m => m.Skills)
-            .Include(m => m.JobApplications)
-            .ThenInclude(ja => ja.Answers)
-            .Include(m => m.JobApplications)
-            .ThenInclude(ja => ja.Job)
-            .ThenInclude(j => j.Questions)
-            .Where(m => m.Id == request.MemberId &&
-                        m.JobApplications.Any(ja => ja.JobId == request.JobId && ja.Job.CompanyId == currentUserResult.Value.UserId))
+            .Include(ja => ja.Job)
+            .Include(ja => ja.Member).ThenInclude(m => m.Educations)
+            .Include(ja => ja.Member).ThenInclude(m => m.Experiences)
+            .Where(ja => ja.JobId == request.JobId && ja.MemberId == request.MemberId)
+            .Where(ja => ja.Job.CompanyId == currentUser.UserId)
+            .Select(ja => ja.Member) // only need the Member part
+            .ProjectToType<SpecificApplicantForSpecificJobResponse>()
             .FirstOrDefaultAsync(cancellationToken);
 
         if (applicant is null)
-            return new ApiResponse<SpecificApplicantResponse>
-            {
-                IsSuccess = false,
-                StatusCode = HttpStatusCode.NotFound,
-                Message = "Applicant not found or not authorized."
-            };
+        {
+            return Error.NotFound(
+                code: "Application.NotFound",
+                description: "No such application for this member and job under your company.");
+        }
 
-        var educationResponses = applicant.Educations.Select(e => new MemberEducationResponse(
-            e.Id,
-            e.Level,
-            e.Faculty,
-            e.UniversityName
-        )).ToList();
-
-        var experienceResponses = applicant.Experiences.Select(e => new MemberExperienceResponse(
-            e.Title,
-            e.CompanyName,
-            e.StartDate,
-            e.EndDate,
-            e.Description
-        )).ToList();
-
-        var skillResponses = applicant.Skills.Select(s => new MemberSkillResponse(
-            s.Name
-        )).ToList();
-
-        var jobApplication = applicant.JobApplications.FirstOrDefault(ja => ja.JobId == request.JobId);
-        var answers = jobApplication?.Answers?.Select(a => new JobApplicationAnswerResponse(
-            a.JobQuestionId,
-            jobApplication.Job!.Questions.FirstOrDefault(q => q.Id == a.JobQuestionId)?.QuestionText ?? string.Empty,
-            (int)(jobApplication.Job!.Questions.FirstOrDefault(q => q.Id == a.JobQuestionId)?.QuestionType ?? 0),
-            a.AnswerText,
-            a.AnswerBool
-        )).ToList() ?? new();
-
-        var response = new SpecificApplicantResponse(
-            applicant.Id,
-            applicant.FullName,
-            applicant.UserName!,
-            applicant.PhoneNumber!,
-            applicant.Email!,
-            applicant.GenderId.HasValue ? (int)applicant.GenderId.Value : 0,
-            applicant.Location ?? string.Empty,
-            educationResponses,
-            experienceResponses,
-            skillResponses,
-            answers
-        );
-
-        return new ApiResponse<SpecificApplicantResponse>
+        return new ApiResponse<SpecificApplicantForSpecificJobResponse>
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.OK,
             Message = "Applicant details retrieved successfully.",
-            Data = response
+            Data = applicant
         };
     }
 }

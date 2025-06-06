@@ -8,42 +8,38 @@ using ShiftSwift.Domain.identity;
 using System.Net;
 using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
+namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants;
+
+public sealed class GetApplicantsQueryHandler(
+    ICurrentUserProvider currentUserProvider,
+    IBaseRepository<Member> memberRepository)
+    : IRequestHandler<GetApplicantsQuery, ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>>
 {
-    public sealed class GetApplicantsQueryHandler : IRequestHandler<GetApplicantsQuery, ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>>
+    public async Task<ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>> Handle(GetApplicantsQuery request, CancellationToken cancellationToken)
     {
-        private readonly ICurrentUserProvider _currentUserProvider;
-        private readonly IBaseRepository<Member> _memberRepository;
-        public GetApplicantsQueryHandler(ICurrentUserProvider currentUserProvider, IBaseRepository<Member> memberRepository)
+        var currentUserResult = await currentUserProvider.GetCurrentUser();
+        if (currentUserResult.IsError)
         {
-            _currentUserProvider = currentUserProvider;
-            _memberRepository = memberRepository;
+            return Error.Unauthorized(
+                code: "User.Unauthorized",
+                description: currentUserResult.Errors.FirstOrDefault().Description ?? "User is not authenticated.");
         }
-        public async Task<ErrorOr<ApiResponse<IReadOnlyList<GetApplicantsResponse>>>> Handle(GetApplicantsQuery request, CancellationToken cancellationToken)
+
+        var currentUser = currentUserResult.Value;
+        if (!currentUser.Roles.Contains("Company"))
         {
-            var currentUserResult = await _currentUserProvider.GetCurrentUser();
-            if (currentUserResult.IsError)
-            {
-                return Error.Unauthorized(
-                    code: "User.Unauthorized",
-                    description: currentUserResult.Errors.FirstOrDefault().Description ?? "User is not authenticated.");
-            }
+            return Error.Forbidden(
+                code: "User.Forbidden",
+                description: "Access denied. Only Company can add education.");
+        }
 
-            var currentUser = currentUserResult.Value;
-            if (!currentUser.Roles.Contains("Company"))
-            {
-                return Error.Forbidden(
-                    code: "User.Forbidden",
-                    description: "Access denied. Only Company can add education.");
-            }
-
-            var response = await _memberRepository.Entites()
+        var response = await memberRepository.Entites()
             .AsQueryable()
             .AsNoTracking()
             .Include(m => m.JobApplications)
             .ThenInclude(ja => ja.Job)
             .Where(m => m.JobApplications.Any(ja =>
-                 ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId))
+                ja.JobId == request.JobId && ja.Job.CompanyId == currentUser.UserId))
             .Select(m => new GetApplicantsResponse(
                 m.Id,
                 m.FullName,
@@ -52,24 +48,12 @@ namespace ShiftSwift.Application.Features.jobApplication.Query.GetApplicants
                 m.Email!
             )).ToListAsync(cancellationToken);
 
-            if (!response.Any())
-            {
-                return new ApiResponse<IReadOnlyList<GetApplicantsResponse>>
-                {
-                    IsSuccess = false,
-                    StatusCode = HttpStatusCode.NotFound,
-                    Message = "No applicants found.",
-                    Data = Array.Empty<GetApplicantsResponse>()
-                };
-            }
-
-            return new ApiResponse<IReadOnlyList<GetApplicantsResponse>>
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Employed Applicants retrieved successfully.",
-                Data = response
-            };
-        }
+        return new ApiResponse<IReadOnlyList<GetApplicantsResponse>>
+        {
+            IsSuccess = true,
+            StatusCode = HttpStatusCode.OK,
+            Message = "Employed Applicants retrieved successfully.",
+            Data = response
+        };
     }
 }

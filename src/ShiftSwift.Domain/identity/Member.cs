@@ -1,5 +1,4 @@
 ﻿using ShiftSwift.Domain.memberprofil;
-using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Domain.shared;
 
 namespace ShiftSwift.Domain.identity;

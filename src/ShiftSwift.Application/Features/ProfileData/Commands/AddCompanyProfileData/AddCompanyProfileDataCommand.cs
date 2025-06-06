@@ -13,13 +13,13 @@ public sealed record AddCompanyProfileDataCommand(
     DateTime? DateOfEstablish,
     string? Country,
     string? City,
-    string? Area) : IRequest<ErrorOr<ApiResponse<AddOrUpdateCompanyProfileInformationResponse>>>;
+    string? Area,
+    string PhoneNumber) : IRequest<ErrorOr<ApiResponse<AddOrUpdateCompanyProfileInformationResponse>>>;
 
 
 public sealed record AddOrUpdateCompanyProfileInformationResponse(string CompanyId,
     string FirstName,
     string LastName,
-    string CompanyName,
     string UserName,
     string PhoneNumber,
     string Email,

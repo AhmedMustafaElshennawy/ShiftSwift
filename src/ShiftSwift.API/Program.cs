@@ -23,28 +23,13 @@ app.UseSwagger();
 app.UseSwaggerUI();
 
 
-// Serve static files from wwwroot (e.g., http://shiftswift.tryasp.net/images/file.jpg)
-app.UseStaticFiles(new StaticFileOptions
-{
-    OnPrepareResponse = ctx =>
-    {
-        // Cache static files for 30 days in production
-        if (!app.Environment.IsDevelopment())
-        {
-            ctx.Context.Response.Headers.Append(
-                "Cache-Control",
-                "public,max-age=2592000" // 30 days
-            );
-        }
-    }
-});
-
-
 app.UseCors(c => c
     .AllowAnyOrigin()
     .AllowAnyMethod()
     .AllowAnyHeader());
 
+
+app.UseStaticFiles();
 app.UseHttpsRedirection();
 
 app.UseAuthentication();
@@ -53,8 +38,5 @@ app.UseAuthorization();
 app.UseMiddleware<GlobalExceptionHandlerMiddleWare>();
 
 app.MapControllers();
-
-var webRootPath = Path.Combine(builder.Environment.WebRootPath ?? "wwwroot");
-Directory.CreateDirectory(Path.Combine(webRootPath, "images"));
 
 app.Run();

@@ -26,6 +26,11 @@ public sealed class AddCompanyProfileDataCommandValidator:AbstractValidator<AddC
         RuleFor(x => x.DateOfEstablish)
             .NotNull().WithMessage("DateOfEstablish is required.");
 
+        RuleFor(x => x.PhoneNumber)
+            .NotEmpty().WithMessage("PhoneNumber is required.")
+            .MaximumLength(20).WithMessage("PhoneNumber cannot exceed 20 characters.")
+            .Matches(@"^\+?[0-9\s\-]{7,}$").WithMessage("Invalid PhoneNumber format.");
+
         RuleFor(x => x.Country)
             .MaximumLength(100).WithMessage("Country cannot exceed 100 characters.");
 

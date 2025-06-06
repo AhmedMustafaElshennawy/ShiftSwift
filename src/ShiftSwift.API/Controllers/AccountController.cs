@@ -8,13 +8,14 @@ using ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImage
 using ShiftSwift.Application.DTOs.identity;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
+using ShiftSwift.Application.Features.Authentication.Commands.DeleteCurrentUserImage;
 using ShiftSwift.Application.Features.Authentication.Commands.RegisterCompany;
 using ShiftSwift.Application.Features.Authentication.Queries.GetCompanyInfo;
 using ShiftSwift.Application.Features.Authentication.Queries.GetMemberInfo;
 
 namespace ShiftSwift.API.Controllers;
 
-public class AccountController(ISender sender) : ApiController
+public sealed class AccountController(ISender sender) : ApiController
 {
     [HttpPost("RegisterMember")]
     public async Task<IActionResult> RegisterMember([FromForm] RegisterMemberRequest request,
@@ -29,7 +30,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -47,7 +48,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -63,7 +64,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -79,7 +80,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -92,7 +93,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -105,13 +106,13 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
 
     [HttpPost("AddOrUpdateProfilePicture")]
-    public async Task<IActionResult> AddProfilePicture([FromForm] AddProfilePictureRequest request,
+    public async Task<IActionResult> AddOrUpdateProfilePicture([FromForm] AddProfilePictureRequest request,
         CancellationToken cancellationToken)
     {
         var command = new AddProfilePictureCommand(request.FormFile);
@@ -119,7 +120,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -132,7 +133,19 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
+
+        return response;
+    }
+
+    [HttpDelete("DeleteProfilePicture")]
+    public async Task<IActionResult> DeleteProfilePicture(DeleteCurrentUserImageUrlCommand command,
+        CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(command, cancellationToken);
+        var response = result.Match(
+            success => Ok(result.Value),
+            Problem);
 
         return response;
     }
@@ -140,12 +153,12 @@ public class AccountController(ISender sender) : ApiController
     [HttpGet("GetCompanyInfoById/{Id}")]
     public async Task<IActionResult> GetCompanyInfoById(string Id, CancellationToken cancellationToken)
     {
-        var query = new GetCompanyInfoById(Id);
+        var query = new GetCompanyInfoByIdQuery(Id);
 
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -158,7 +171,7 @@ public class AccountController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }

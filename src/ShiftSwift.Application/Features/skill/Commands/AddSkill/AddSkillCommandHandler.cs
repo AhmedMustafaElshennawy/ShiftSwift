@@ -3,9 +3,9 @@ using MediatR;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
-using ShiftSwift.Domain.models.memberprofil;
 using System.Net;
 using ShiftSwift.Domain.ApiResponse;
+using ShiftSwift.Domain.memberprofil;
 
 namespace ShiftSwift.Application.Features.skill.Commands.AddSkill;
 

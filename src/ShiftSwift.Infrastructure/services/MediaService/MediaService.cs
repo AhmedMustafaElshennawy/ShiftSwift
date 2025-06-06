@@ -14,13 +14,25 @@ internal sealed class MediaService(
     private readonly string _baseUrl = configuration["MediaBaseUrl"]?.TrimEnd('/') ?? string.Empty;
     private string GetMediaFolder(MediaTypes mediaType) => mediaType == MediaTypes.Image ? "images" : "videos";
 
-    public void Delete(string filePath)
+    public void Delete(string fileName, MediaTypes mediaType)
     {
-        var fullPath = Path.Combine(_mediaBasePath, filePath.TrimStart('/'));
+        var folder = GetMediaFolder(mediaType);
+        var fullPath = Path.Combine(_mediaBasePath, folder, Path.GetFileName(fileName));
 
         if (File.Exists(fullPath))
         {
             File.Delete(fullPath);
+        }
+    }
+
+    public async Task DeleteAsync(string fileName, MediaTypes mediaType)
+    {
+        var folder = GetMediaFolder(mediaType);
+        var fullPath = Path.Combine(_mediaBasePath, folder, Path.GetFileName(fileName));
+
+        if (File.Exists(fullPath))
+        {
+            await Task.Run(() => File.Delete(fullPath));
         }
     }
 
@@ -49,11 +61,11 @@ internal sealed class MediaService(
 
     public async Task<string?> UpdateAsync(MediaFileDto media, MediaTypes mediaType, string oldUrl)
     {
-        if (media == null)
+        if (media is null)
             return oldUrl;
 
         if (!string.IsNullOrEmpty(oldUrl))
-            Delete(oldUrl);
+            Delete(oldUrl, mediaType);
 
         return await SaveAsync(media, mediaType);
     }

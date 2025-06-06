@@ -2,7 +2,6 @@
 using MediatR;
 using ShiftSwift.Domain.ApiResponse;
 
-namespace ShiftSwift.Application.Features.job.Commands.DeletePostJob
-{
-    public sealed record DeletePostJobCommand(Guid JobId):IRequest<ErrorOr<ApiResponse<Deleted>>>;
-}
+namespace ShiftSwift.Application.Features.job.Commands.DeletePostJob;
+
+public sealed record DeletePostJobCommand(Guid JobId):IRequest<ErrorOr<ApiResponse<Deleted>>>;

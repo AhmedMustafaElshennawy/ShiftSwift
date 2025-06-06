@@ -5,14 +5,17 @@ using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.identity;
 using System.Net;
+using ShiftSwift.Application.services.MediaService;
 using ShiftSwift.Domain.ApiResponse;
+using ShiftSwift.Domain.Enums;
 
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserImageURL;
 
-public sealed class GetCurrentUserImageUrlQueryHndler(
+internal sealed class GetCurrentUserImageUrlQueryHndler(
     ICurrentUserProvider currentUserProvider,
-    IBaseRepository<Account> accountRepository)
+    IBaseRepository<Account> accountRepository,
+    IMediaService mediaService)
     : IRequestHandler<GetCurrentUserImageURLQuery, ErrorOr<ApiResponse<string>>>
 {
     public async Task<ErrorOr<ApiResponse<string>>> Handle(GetCurrentUserImageURLQuery request,
@@ -49,7 +52,7 @@ public sealed class GetCurrentUserImageUrlQueryHndler(
             IsSuccess = true,
             StatusCode = HttpStatusCode.OK,
             Message = "User profile picture URL retrieved successfully.",
-            Data = null
+            Data = mediaService.GetUrl(account.ImageUrl,MediaTypes.Image)
         };
     }
 }

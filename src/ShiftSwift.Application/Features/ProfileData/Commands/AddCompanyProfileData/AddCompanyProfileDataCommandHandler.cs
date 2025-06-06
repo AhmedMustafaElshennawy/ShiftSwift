@@ -59,6 +59,7 @@ public sealed class AddCompanyProfileDataCommandHandler(
         company.Country = request.Country;
         company.City = request.City;
         company.Area = request.Area;
+        company.PhoneNumber = request.PhoneNumber;
         await unitOfWork.Companies.UpdateAsync(company);
         await unitOfWork.CompleteAsync(cancellationToken);
 

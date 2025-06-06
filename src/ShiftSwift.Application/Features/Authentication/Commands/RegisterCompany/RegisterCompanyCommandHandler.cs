@@ -1,8 +1,8 @@
 ﻿using System.Net;
 using ErrorOr;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
-using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.identity;
@@ -69,12 +69,8 @@ public sealed class RegisterCompanyCommandHandler(
         }
 
         var memberToken = await tokenGenerator.GenerateToken(company, DefaultCompanyRole);
-        var companyResponse = new CompanyResponse(company.Id,
-            company.CompanyName,
-            company.UserName,
-            company.PhoneNumber,
-            company.Email);
 
+        var companyResponse = company.Adapt<CompanyResponse>();
         var registrationCompanyResponse = new RegisterationCompanyResult(
             CompanyResponse: companyResponse,
             Token: memberToken);

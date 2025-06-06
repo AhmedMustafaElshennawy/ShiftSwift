@@ -9,6 +9,9 @@ namespace ShiftSwift.API.Controllers;
 [ApiController]
 public class ApiController : ControllerBase
 {
+    protected IActionResult HandleMediatorResult<TResult>(ErrorOr<TResult> result) 
+        => result.Match(success => Ok(success), Problem);
+
     protected IActionResult Problem(List<Error> errors)
     {
         if (errors is null || errors.Count is 0)
@@ -63,7 +66,7 @@ public class ApiController : ControllerBase
 
     private HttpStatusCode MapErrorToStatusCode(ErrorType errorType)
     {
-        var Type = errorType switch
+        var type = errorType switch
         {
             ErrorType.Validation => HttpStatusCode.BadRequest,
             ErrorType.Unauthorized => HttpStatusCode.Unauthorized,
@@ -73,6 +76,6 @@ public class ApiController : ControllerBase
             ErrorType.Unexpected => HttpStatusCode.InternalServerError,
             _ => HttpStatusCode.InternalServerError
         };
-        return Type;
+        return type;
     }
 }

@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Domain.ApiResponse;
 
 
@@ -11,5 +10,14 @@ public sealed record LoginMemberQuery(
     string Password) : IRequest<ErrorOr<ApiResponse<LoginMemberResult>>>;
 
 public sealed record LoginMemberResult(
-    MemberResponse MemberResponse,
+    LoginMemberResponse MemberResponse,
     string Token);
+
+public sealed record LoginMemberResponse(
+    string MemberId,
+    string FullName,
+    string UserName,
+    string PhoneNumber,
+    string Email,
+    int GenderId,
+    string Location);

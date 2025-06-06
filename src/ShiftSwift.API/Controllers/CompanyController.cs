@@ -8,7 +8,6 @@ using ShiftSwift.Application.Features.jobApplication.Query.GetMyLastWorkApplican
 using ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;
 using ShiftSwift.Application.Features.jobApplication.Query.GetApplicants;
 using ShiftSwift.Application.Features.rating.Queries.GetRating;
-using ShiftSwift.Application.DTOs.Company;
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
 using ShiftSwift.Application.Features.job.Commands.RemoveFromShortlist;
@@ -18,7 +17,7 @@ using ShiftSwift.Application.Features.jobApplication.Query.GetSpecificApplicant;
 
 namespace ShiftSwift.API.Controllers;
 
-public class CompanyController(ISender sender) : ApiController
+public sealed class CompanyController(ISender sender) : ApiController
 {
     [HttpPost("AddOrUpdateCompanyProfileData")]
     public async Task<IActionResult> AddOrCompanyProfileData([FromBody] AddCompanyProfileDataCommand command,
@@ -31,49 +30,26 @@ public class CompanyController(ISender sender) : ApiController
         return response;
     }
 
-    [HttpPost("CreateJobPost/{CompanyId}")]
-    public async Task<IActionResult> CreateJobPost([FromRoute] string CompanyId, [FromBody] JobDTO request,
+    [HttpPost("CreateJobPost")]
+    public async Task<IActionResult> CreateJobPost([FromBody] PostJobCommand command,
         CancellationToken cancellationToken)
     {
-        var command = new PostJobCommand(request.Title,
-            request.Description,
-            request.Location,
-            request.JobType,
-            request.WorkMode,
-            request.Salary,
-            request.SalaryType,
-            request.Requirements,
-            request.Keywords,
-            request.Questions);
-
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
 
-    [HttpPut("UpdateJobPost/{JobId}")]
-    public async Task<IActionResult> UpdateJobPost(Guid JobId, [FromBody] UpdateJobDTO request,
+    [HttpPut("UpdateJobPost")]
+    public async Task<IActionResult> UpdateJobPost([FromBody] UpdatePostJobCommand command,
         CancellationToken cancellationToken)
     {
-        var command = new UpdatePostJobCommand(JobId,
-            request.Title,
-            request.Description,
-            request.Location,
-            request.JobType,
-            request.WorkMode,
-            request.Salary,
-            request.SalaryType,
-            request.Requirements,
-            request.Keywords,
-            request.Questions);
-
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -86,7 +62,7 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -99,22 +75,18 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
 
-    [HttpGet("GetSpecificApplicantForSpecificJob/{JobId}/{MemberId}")]
-    public async Task<IActionResult> GetSpecificApplicantForSpecificJob(Guid JobId, string MemberId,
+    [HttpGet("GetSpecificApplicantForSpecificJob")]
+    public async Task<IActionResult> GetSpecificApplicantForSpecificJob([FromQuery]GetSpecificApplicantQuery query,
         CancellationToken cancellationToken)
     {
-        var query = new GetSpecificApplicantQuery(JobId, MemberId);
-
         var result = await sender.Send(query, cancellationToken);
-
         var response = result.Match(
-            success => Ok(success),
-            error => Problem(error));
+            success => Ok(result.Value), Problem);
 
         return response;
     }
@@ -128,7 +100,7 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -142,7 +114,7 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(command, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -157,7 +129,7 @@ public class CompanyController(ISender sender) : ApiController
 
         var response = result.Match(
             success => Ok(success),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -169,11 +141,7 @@ public class CompanyController(ISender sender) : ApiController
         var command = new RemoveFromShortlistCommand(JobId, MemberId);
 
         var result = await sender.Send(command, cancellationToken);
-
-        var response = result.Match(
-            success => Ok(success),
-            error => Problem(error)
-        );
+        var response = result.Match(success => Ok(success), Problem);
 
         return response;
     }
@@ -187,7 +155,7 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
@@ -201,21 +169,19 @@ public class CompanyController(ISender sender) : ApiController
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }
 
-    [HttpGet("GetMyLastWorkApplicants/{CompanyId}")]
-    public async Task<IActionResult> GetMyLastWorkApplicants([FromRoute] string CompanyId,
+    [HttpGet("GetMyLastWorkApplicants")]
+    public async Task<IActionResult> GetMyLastWorkApplicants([FromQuery] GetMyLastWorkApplicantsQuery query,
         CancellationToken cancellationToken)
     {
-        var query = new GetMyLastWorkApplicantsQuery(CompanyId);
-
         var result = await sender.Send(query, cancellationToken);
         var response = result.Match(
             success => Ok(result.Value),
-            error => Problem(error));
+            Problem);
 
         return response;
     }

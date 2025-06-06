@@ -3,10 +3,7 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Domain.memberprofil;
-using ShiftSwift.Domain.models.memberprofil;
 using ShiftSwift.Domain.shared;
-using ShiftSwift.Domain.Shared;
-
 
 namespace ShiftSwift.Presistence.Context;
 
@@ -35,7 +32,5 @@ public class ShiftSwiftDbContext(DbContextOptions<ShiftSwiftDbContext> options)
     public virtual DbSet<Education> Educations { get; set; }
     public virtual DbSet<Skill> Skills { get; set; }
     public virtual DbSet<Accomplishment> Accomplishments { get; set; }
-    public virtual DbSet<JobQuestion> JobQuestions { get; set; }
-    public virtual DbSet<ApplicationAnswer> ApplicationAnswers { get; set; }
     public virtual DbSet<Account> Accounts { get; set; }
 }

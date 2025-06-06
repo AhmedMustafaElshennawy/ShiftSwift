@@ -1,6 +1,6 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.Authentication.Commands.RegisterCompany;
 using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.ProfileData.Commands.ChangeCompanyEmail;

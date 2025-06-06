@@ -5,7 +5,7 @@ using ShiftSwift.Application.Features.job.Queries.GetRandomJobs;
 
 namespace ShiftSwift.API.Controllers;
 
-public class HomeController(ISender sender) : ApiController
+public sealed class HomeController(ISender sender) : ApiController
 {
     [HttpGet("GetRandomJobs")]
     public async Task<IActionResult> GetRandomJobs([FromQuery] int PageNumber = 1,

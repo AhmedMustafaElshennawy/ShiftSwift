@@ -1,13 +1,12 @@
 ﻿using FluentValidation;
 
-namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById
+namespace ShiftSwift.Application.Features.job.Queries.GetJobPostById;
+
+public sealed class GetJobPostByIdQueryValidator : AbstractValidator<GetJobPostByIdQuery>
 {
-    public sealed class GetJobPostByIdQueryValidator : AbstractValidator<GetJobPostByIdQuery>
+    public GetJobPostByIdQueryValidator()
     {
-        public GetJobPostByIdQueryValidator()
-        {
-            RuleFor(x => x.JobId)
-                .NotEmpty().WithMessage("JobId is required.");
-        }
+        RuleFor(x => x.JobId)
+            .NotEmpty().WithMessage("JobId is required.");
     }
 }

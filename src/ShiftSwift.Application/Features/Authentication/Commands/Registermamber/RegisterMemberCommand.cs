@@ -1,6 +1,5 @@
 ﻿using ErrorOr;
 using MediatR;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Commands.Registermamber;
@@ -12,5 +11,14 @@ public record RegisterMemberCommand(
     string PhoneNumber) : IRequest<ErrorOr<ApiResponse<RegisterationMemberResult>>>;
 
 public sealed record RegisterationMemberResult(
-    MemberResponse MemberResponse,
+    RegisterMemberResponse MemberResponse,
     string Token);
+
+public sealed record RegisterMemberResponse(
+    string MemberId,
+    string FullName,
+    string UserName,
+    string PhoneNumber,
+    string Email,
+    int GenderId,
+    string Location);

@@ -1,52 +1,42 @@
-﻿using ShiftSwift.Application.Features.education.Commands.AddEducation;
-using ShiftSwift.Application.Features.education.Commands.DeleteEducation;
-using ShiftSwift.Application.Features.education.Queries.GetEducation;
-using ShiftSwift.Application.Features.experience.Commands.AddExperience;
-using ShiftSwift.Application.Features.experience.Queries.GetExperience;
-using ShiftSwift.Application.Features.jobApplication.Query.ListMyJobApplicaions;
-using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
-using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+﻿using MediatR;
+using Microsoft.AspNetCore.Mvc;
+using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.Features.accomplishment.Commands.AddAccomplishment;
 using ShiftSwift.Application.Features.accomplishment.Commands.DeleteAccomplishment;
 using ShiftSwift.Application.Features.accomplishment.Queries.GetAccomplishment;
+using ShiftSwift.Application.Features.education.Commands.AddEducation;
+using ShiftSwift.Application.Features.education.Commands.DeleteEducation;
+using ShiftSwift.Application.Features.education.Commands.UpdateEducation;
+using ShiftSwift.Application.Features.education.Queries.GetEducation;
+using ShiftSwift.Application.Features.experience.Commands.AddExperience;
+using ShiftSwift.Application.Features.experience.Commands.DeleteExperience;
+using ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
+using ShiftSwift.Application.Features.experience.Queries.GetExperience;
+using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplication;
+using ShiftSwift.Application.Features.jobApplication.Query.GetLastWorkJobsForMember;
+using ShiftSwift.Application.Features.jobApplication.Query.ListMyJobApplicaions;
+using ShiftSwift.Application.Features.ProfileData.Commands.AddMemberProfileData;
+using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
+using ShiftSwift.Application.Features.rating.Commands.AddRating;
+using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
+using ShiftSwift.Application.Features.savedJobs.Queries.GetSavedJobs;
+using ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs;
 using ShiftSwift.Application.Features.skill.Commands.AddSkill;
 using ShiftSwift.Application.Features.skill.Commands.DeleteSkill;
-using ShiftSwift.Application.Features.skill.Queries.GetSkill;
-using ShiftSwift.Application.Features.ProfileData.Commands.ChangeMemberEmail;
-using ShiftSwift.Application.Features.savedJobs.Commands.SaveJob;
-using ShiftSwift.Application.Features.searchJobs.Queries.SearchJobs;
-using ShiftSwift.Application.DTOs.member;
-using Microsoft.AspNetCore.Mvc;
-using MediatR;
-using ShiftSwift.Application.Features.education.Commands.UpdateEducation;
 using ShiftSwift.Application.Features.skill.Commands.UpdateSkill;
-using ShiftSwift.Application.Features.experience.Commands.UpdateExperience;
-using ShiftSwift.Application.DTOs.Company;
-using ShiftSwift.Application.Features.experience.Commands.DeleteExperience;
-using ShiftSwift.Application.Features.jobApplication.Command.CreateJobApplicationWithoutQuestion;
-using ShiftSwift.Application.Features.rating.Commands.AddRating;
+using ShiftSwift.Application.Features.skill.Queries.GetSkill;
 
 namespace ShiftSwift.API.Controllers;
 
-public class MemberController(ISender sender) : ApiController
+public sealed class MemberController(ISender sender) : ApiController
 {
-
-    [HttpPost("AddOrUpdateMamberProfileData/{MemberId}")]
-    public async Task<IActionResult> AddMamberProfileData([FromRoute] string MemberId,
-        [FromBody] ProfileDTO request, CancellationToken cancellationToken)
+    [HttpPost("AddOrUpdateMamberProfileData")]
+    public async Task<IActionResult> AddMamberProfileData([FromBody] AddMemberProfileDataCommand command,
+        CancellationToken cancellationToken)
     {
-        var command = new AddMemberProfileDataCommand(
-            MemberId,
-            request.FirstName,
-            request.Location,
-            request.LastName,
-            request.GenderId);
-
         var result = await sender.Send(command, cancellationToken);
-        var response = result.Match(
-            success => Ok(result.Value),
-            Problem);
-
+        var response = result.Match(success => Ok(result.Value),Problem);
         return response;
     }
 
@@ -274,14 +264,11 @@ public class MemberController(ISender sender) : ApiController
 
 
     [HttpPost("AddJobApplication")]
-    public async Task<IActionResult> AddJobApplication(JobApplicationDTO request,
+    public async Task<IActionResult> AddJobApplication(CreateJobApplicationCommand command,
         CancellationToken cancellationToken)
     {
-        var command = new CreateJobApplicationWithoutJobQuestionCommand(request.JobId, request.MemberId);
         var result = await sender.Send(command, cancellationToken);
-        var response = result.Match(
-            success => Ok(result.Value), Problem);
-
+        var response = result.Match(success => Ok(result.Value), Problem);
         return response;
     }
 
@@ -373,6 +360,13 @@ public class MemberController(ISender sender) : ApiController
         var command = new AddRatingCommand(CompanyId, RatedById, request.Score, request.Comment);
         var result = await sender.Send(command, cancellationToken);
 
-        return result.Match(success => Ok(success), Problem);
+        return result.Match(success => Ok(result.Value), Problem);
+    }
+
+    [HttpPost("GetLastWork")]
+    public async Task<IActionResult> GetLastWork(GetMyLastWorkJobsQuery query, CancellationToken cancellationToken)
+    {
+        var result = await sender.Send(query, cancellationToken);
+        return result.Match(success => Ok(result.Value), Problem);
     }
 }

@@ -6,7 +6,7 @@ using ShiftSwift.Application.services.Authentication;
 
 namespace ShiftSwift.Infrastructure.services.Authentication;
 
-public class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICurrentUserProvider
+public sealed class CurrentUserProvider(IHttpContextAccessor httpContextAccessor) : ICurrentUserProvider
 {
     public Task<ErrorOr<CurrentUser>> GetCurrentUser()
     {

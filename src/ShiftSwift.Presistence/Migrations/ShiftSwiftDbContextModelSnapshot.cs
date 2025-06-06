@@ -155,57 +155,6 @@ namespace ShiftSwift.Presistence.Migrations
                     b.ToTable("UserTokens", (string)null);
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.ApplicationAnswer", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<bool?>("AnswerBool")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("AnswerText")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<Guid>("JobApplicationId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("JobQuestionId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobApplicationId");
-
-                    b.HasIndex("JobQuestionId");
-
-                    b.ToTable("ApplicationAnswers");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("QuestionText")
-                        .IsRequired()
-                        .HasMaxLength(400)
-                        .HasColumnType("nvarchar(400)");
-
-                    b.Property<int>("QuestionType")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.ToTable("JobQuestions", (string)null);
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.identity.Account", b =>
                 {
                     b.Property<string>("Id")
@@ -231,17 +180,13 @@ namespace ShiftSwift.Presistence.Migrations
                         .HasColumnType("bit");
 
                     b.Property<string>("FirstName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ImageUrl")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(100)
-                        .HasColumnType("nvarchar(100)");
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -293,6 +238,35 @@ namespace ShiftSwift.Presistence.Migrations
                     b.UseTphMappingStrategy();
                 });
 
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Accomplishment", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<DateTime?>("DateAchieved")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .HasMaxLength(500)
+                        .HasColumnType("nvarchar(500)");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("Accomplishments");
+                });
+
             modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Education", b =>
                 {
                     b.Property<Guid>("Id")
@@ -325,61 +299,7 @@ namespace ShiftSwift.Presistence.Migrations
                     b.ToTable("Educations");
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.SavedJob", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<Guid>("JobId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<DateTime>("SavedOn")
-                        .HasColumnType("datetime2");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("JobId");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("SavedJobs");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Accomplishment", b =>
-                {
-                    b.Property<Guid>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<DateTime?>("DateAchieved")
-                        .HasColumnType("datetime2");
-
-                    b.Property<string>("Description")
-                        .HasMaxLength(500)
-                        .HasColumnType("nvarchar(500)");
-
-                    b.Property<string>("MemberId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(450)");
-
-                    b.Property<string>("Title")
-                        .IsRequired()
-                        .HasMaxLength(150)
-                        .HasColumnType("nvarchar(150)");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("MemberId");
-
-                    b.ToTable("Accomplishments");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Experience", b =>
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Experience", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -414,7 +334,32 @@ namespace ShiftSwift.Presistence.Migrations
                     b.ToTable("Experiences");
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Skill", b =>
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.SavedJob", b =>
+                {
+                    b.Property<Guid>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<string>("MemberId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("SavedOn")
+                        .HasColumnType("datetime2");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("MemberId");
+
+                    b.ToTable("SavedJobs");
+                });
+
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Skill", b =>
                 {
                     b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
@@ -667,40 +612,32 @@ namespace ShiftSwift.Presistence.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.ApplicationAnswer", b =>
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Accomplishment", b =>
                 {
-                    b.HasOne("ShiftSwift.Domain.shared.JobApplication", "JobApplication")
-                        .WithMany("Answers")
-                        .HasForeignKey("JobApplicationId")
+                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
+                        .WithMany("Accomplishments")
+                        .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("ShiftSwift.Domain.Shared.JobQuestion", "JobQuestion")
-                        .WithMany("Answers")
-                        .HasForeignKey("JobQuestionId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("JobApplication");
-
-                    b.Navigation("JobQuestion");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.shared.Job", "Job")
-                        .WithMany("Questions")
-                        .HasForeignKey("JobId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
-                    b.Navigation("Job");
+                    b.Navigation("Member");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Education", b =>
                 {
                     b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
                         .WithMany("Educations")
+                        .HasForeignKey("MemberId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Member");
+                });
+
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Experience", b =>
+                {
+                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
+                        .WithMany("Experiences")
                         .HasForeignKey("MemberId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
@@ -727,29 +664,7 @@ namespace ShiftSwift.Presistence.Migrations
                     b.Navigation("Member");
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Accomplishment", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
-                        .WithMany("Accomplishments")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Experience", b =>
-                {
-                    b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
-                        .WithMany("Experiences")
-                        .HasForeignKey("MemberId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("Member");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.models.memberprofil.Skill", b =>
+            modelBuilder.Entity("ShiftSwift.Domain.memberprofil.Skill", b =>
                 {
                     b.HasOne("ShiftSwift.Domain.identity.Member", "Member")
                         .WithMany("Skills")
@@ -809,23 +724,11 @@ namespace ShiftSwift.Presistence.Migrations
                     b.Navigation("RatedBy");
                 });
 
-            modelBuilder.Entity("ShiftSwift.Domain.Shared.JobQuestion", b =>
-                {
-                    b.Navigation("Answers");
-                });
-
             modelBuilder.Entity("ShiftSwift.Domain.shared.Job", b =>
                 {
                     b.Navigation("JobApplications");
 
-                    b.Navigation("Questions");
-
                     b.Navigation("SavedJobs");
-                });
-
-            modelBuilder.Entity("ShiftSwift.Domain.shared.JobApplication", b =>
-                {
-                    b.Navigation("Answers");
                 });
 
             modelBuilder.Entity("ShiftSwift.Domain.identity.Company", b =>

@@ -1,12 +1,13 @@
 ﻿using ErrorOr;
+using Mapster;
 using MediatR;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
-using ShiftSwift.Application.DTOs.Company;
+using ShiftSwift.Application.Features.Authentication.Commands.RegisterCompany;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.identity;
 using System.Net;
-using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.LogInCompany;
 
@@ -46,22 +47,15 @@ public sealed class LoginCompanyQueryHandler(
         }
 
         var token = await tokenGenerator.GenerateToken(company, roles.FirstOrDefault()!);
-        var companyResponse = new CompanyResponse(company.Id,
-            company.CompanyName,
-            company.UserName!,
-            company.PhoneNumber!,
-            company.Email!);
-
-        var loginCompanyResponse = new LoginCompanyResult(
-            CompanyResponse: companyResponse,
-            token: token);
+        var mappedResponse = company.Adapt<LoginCompanyResponse>();
+        var result = new LoginCompanyResult(mappedResponse, token);
 
         return new ApiResponse<LoginCompanyResult>
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.OK,
             Message = "Login successful",
-            Data = loginCompanyResponse
+            Data = result
         };
     }
 }

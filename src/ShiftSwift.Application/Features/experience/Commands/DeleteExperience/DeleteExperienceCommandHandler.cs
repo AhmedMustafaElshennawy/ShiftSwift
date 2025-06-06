@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Domain.ApiResponse;
-using ShiftSwift.Domain.models.memberprofil;
+using ShiftSwift.Domain.memberprofil;
 
 namespace ShiftSwift.Application.Features.experience.Commands.DeleteExperience;
 

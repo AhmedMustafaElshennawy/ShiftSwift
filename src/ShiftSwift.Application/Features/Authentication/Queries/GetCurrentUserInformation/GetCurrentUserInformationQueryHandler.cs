@@ -1,13 +1,12 @@
 ﻿using ErrorOr;
+using Mapster;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Application.DTOs.Company;
-using ShiftSwift.Application.DTOs.member;
 using ShiftSwift.Application.services.Authentication;
+using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.identity;
 using System.Net;
-using ShiftSwift.Domain.ApiResponse;
 
 
 namespace ShiftSwift.Application.Features.Authentication.Queries.GetCurrentUserInformation;
@@ -40,43 +39,19 @@ public sealed class GetCurrentUserInformationQueryHandler(
                 description: "User not found.");
         }
 
-        if (account is Company company)
+        object response = account switch
         {
-            var companyResponse = new CompanyResponse(currentUser.UserId,
-                company.CompanyName,
-                company.UserName!,
-                company.PhoneNumber!,
-                company.Email!);
+            Company company => company.Adapt<CurrentCompanyResponse>(),
+            Member member => member.Adapt<CurrentMemberResponse>(),
+            _ => null!
+        };
 
-            return new ApiResponse<object>
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Company information retrieved successfully.",
-                Data = companyResponse
-            };
-        }
-        else if (account is Member member)
+        return new ApiResponse<object>
         {
-            var memberResponse = new MemberResponse(currentUser.UserId,
-                member.FullName,
-                member.UserName!,
-                member.PhoneNumber!,
-                member.Email!,
-                member.GenderId!.Value,
-                member.Location);
-
-            return new ApiResponse<object>
-            {
-                IsSuccess = true,
-                StatusCode = HttpStatusCode.OK,
-                Message = "Member information retrieved successfully.",
-                Data = memberResponse
-            };
-        }
-
-        return Error.Unexpected(
-            code: "User.UnknownType",
-            description: "Unknown account type.");
+            IsSuccess = true,
+            StatusCode = HttpStatusCode.OK,
+            Message = "User information retrieved successfully.",
+            Data = response
+        };
     }
 }

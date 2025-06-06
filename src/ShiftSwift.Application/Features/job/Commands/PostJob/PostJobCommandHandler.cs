@@ -1,20 +1,18 @@
 ﻿using ErrorOr;
+using Mapster;
 using MediatR;
 using ShiftSwift.Application.Common.Repository;
-using ShiftSwift.Application.DTOs.Company;
 using ShiftSwift.Application.services.Authentication;
-using ShiftSwift.Domain.Enums;
-using ShiftSwift.Domain.shared;
-using ShiftSwift.Domain.Shared;
-using System.Net;
 using ShiftSwift.Domain.ApiResponse;
+using ShiftSwift.Domain.shared;
+using System.Net;
 
 namespace ShiftSwift.Application.Features.job.Commands.PostJob;
 
 public sealed class PostJobCommandHandler(IUnitOfWork unitOfWork, ICurrentUserProvider currentUserProvider)
-    : IRequestHandler<PostJobCommand, ErrorOr<ApiResponse<PostedJobResponse>>>
+    : IRequestHandler<PostJobCommand, ErrorOr<ApiResponse<CompanyPostedJobResponse>>>
 {
-    public async Task<ErrorOr<ApiResponse<PostedJobResponse>>> Handle(PostJobCommand request, CancellationToken cancellationToken)
+    public async Task<ErrorOr<ApiResponse<CompanyPostedJobResponse>>> Handle(PostJobCommand request, CancellationToken cancellationToken)
     {
         var currentUserResult = await currentUserProvider.GetCurrentUser();
         if (currentUserResult.IsError)
@@ -46,37 +44,13 @@ public sealed class PostJobCommandHandler(IUnitOfWork unitOfWork, ICurrentUserPr
             Requirements = request.Requirements,
             Keywords = request.Keywords,
             SalaryTypeId = request.SalaryType,
-            Questions = request.Questions.Select(q => new JobQuestion
-            {
-                QuestionText = q.QuestionText,
-                QuestionType = (QuestionType)q.QuestionType,
-            }).ToList()
-
         };
 
         await unitOfWork.Jobs.AddEntityAsync(postJob);
         await unitOfWork.CompleteAsync(cancellationToken);
 
-        var response = new PostedJobResponse(currentUser.UserId,
-            postJob.Id,
-            postJob.Title,
-            postJob.Description,
-            postJob.Location,
-            postJob.PostedOn,
-            postJob.JobTypeId,
-            postJob.WorkModeId,
-            postJob.Salary,
-            postJob.SalaryTypeId,
-            postJob.Requirements,
-            postJob.Keywords,
-            postJob.Questions.Select(q => new JobQuestionResponse(
-                q.Id,
-                q.QuestionText,
-                (int)q.QuestionType
-            )).ToList()
-        );
-
-        return new ApiResponse<PostedJobResponse>
+        var response = postJob.Adapt<CompanyPostedJobResponse>();
+        return new ApiResponse<CompanyPostedJobResponse>
         {
             IsSuccess = true,
             StatusCode = HttpStatusCode.Created,

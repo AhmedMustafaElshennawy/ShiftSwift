@@ -2,7 +2,7 @@
 
 namespace ShiftSwift.Domain.ApiResponse;
 
-public class ApiResponse<TRsult>
+public class ApiResponse<TResult>
 {
     public bool IsSuccess { get; set; }
     public HttpStatusCode StatusCode { get; set; }

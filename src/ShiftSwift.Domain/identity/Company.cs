@@ -1,13 +1,10 @@
 ﻿using ShiftSwift.Domain.shared;
-using System.ComponentModel.DataAnnotations.Schema;
 
 
 namespace ShiftSwift.Domain.identity;
 
 public class Company : Account
 {
-    [NotMapped]
-    public string CompanyName => $"{FirstName} {LastName}";
     public string? Field { get; set; }
     public string? Overview { get; set; }
     public DateTime? DateOfEstablish { get; set; }

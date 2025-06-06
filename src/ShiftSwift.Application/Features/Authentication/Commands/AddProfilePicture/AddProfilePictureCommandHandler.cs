@@ -4,11 +4,11 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using ShiftSwift.Application.services.Authentication;
 using ShiftSwift.Application.services.MediaService;
+using ShiftSwift.Domain.ApiResponse;
 using ShiftSwift.Domain.Enums;
 using ShiftSwift.Domain.identity;
 using ShiftSwift.Domain.Media;
 using System.Net;
-using ShiftSwift.Domain.ApiResponse;
 
 namespace ShiftSwift.Application.Features.Authentication.Commands.AddProfilePicture;
 
@@ -56,41 +56,15 @@ public sealed class AddProfilePictureCommandHandler(
             IsSuccess = true,
             StatusCode = HttpStatusCode.Created,
             Message = "Profile picture updated successfully.",
-            Data = imageUrl 
+            Data = mediaService.GetUrl(imageUrl, MediaTypes.Image)
         };
     }
 
     private async Task<string?> ProcessProfilePictureUpload(IFormFile formFile, string? currentImageUrl)
     {
-        // Delete old image if exists
-        if (!string.IsNullOrEmpty(currentImageUrl))
-        {
-            await TryDeleteOldImage(currentImageUrl);
-        }
-
-        // Convert and save new image
         var mediaFile = await ConvertToMediaFile(formFile);
-        var fileName = await mediaService.SaveAsync(mediaFile, MediaTypes.Image);
-
-        return mediaService.GetUrl(fileName, MediaTypes.Image);
+        return await mediaService.UpdateAsync(mediaFile, MediaTypes.Image, currentImageUrl ?? string.Empty);
     }
-
-    private Task TryDeleteOldImage(string imageUrl)
-    {
-        try
-        {
-            mediaService.Delete(imageUrl);
-        }
-        catch
-        {
-            // Log error if deletion fails
-            // Consider logging the exception here
-            throw;
-        }
-
-        return Task.CompletedTask;
-    }
-
     private async Task<MediaFileDto> ConvertToMediaFile(IFormFile formFile)
     {
         using var memoryStream = new MemoryStream();

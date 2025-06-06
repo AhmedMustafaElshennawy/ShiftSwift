@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using Microsoft.EntityFrameworkCore;
-using ShiftSwift.Domain.models.memberprofil;
+using ShiftSwift.Domain.memberprofil;
 
 namespace ShiftSwift.Presistence.EntityConfiguration
 {
